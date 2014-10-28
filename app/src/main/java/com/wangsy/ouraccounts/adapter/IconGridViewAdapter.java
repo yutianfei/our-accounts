@@ -53,7 +53,7 @@ public class IconGridViewAdapter extends BaseAdapter {
 
         ViewHolder viewHolder;
         if (convertView == null) {
-            convertView = mInflater.inflate(R.layout.icon_item_layout, null);
+            convertView = mInflater.inflate(R.layout.icon_item_layout, parent, false);
 
             viewHolder = new ViewHolder();
             viewHolder.tvIcon = (TextView) convertView.findViewById(R.id.icon_item);

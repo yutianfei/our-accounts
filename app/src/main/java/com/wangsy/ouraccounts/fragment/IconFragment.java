@@ -52,7 +52,7 @@ public class IconFragment extends Fragment {
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.icons_page_fragment, null);
+        View view = inflater.inflate(R.layout.icons_page_fragment, container, false);
 
         iconSelectedCallback = (IconSelectedCallback) getParentFragment();
         gridViewIcons = (GridView) view.findViewById(R.id.icon_grid_view);

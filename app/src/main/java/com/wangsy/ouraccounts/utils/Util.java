@@ -1,5 +1,7 @@
 package com.wangsy.ouraccounts.utils;
 
+import android.content.Context;
+
 import java.util.Calendar;
 
 /**
@@ -58,6 +60,14 @@ public class Util {
                 result = srcStr.substring(location + 1, srcStr.length()); // 截取子串
         }
         return result;
+    }
+
+    /**
+     * dp转px
+     */
+    public static int dp2px(Context context, float dp) {
+        final float scale = context.getResources().getDisplayMetrics().density;
+        return (int) (dp * scale + 0.5f);
     }
 
 }

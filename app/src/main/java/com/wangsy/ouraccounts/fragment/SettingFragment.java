@@ -19,7 +19,7 @@ public class SettingFragment extends Fragment {
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_setting, null);
+        View view = inflater.inflate(R.layout.fragment_setting, container, false);
 
         TextView title = (TextView) view.findViewById(R.id.id_title);
         title.setText(R.string.title_setting);

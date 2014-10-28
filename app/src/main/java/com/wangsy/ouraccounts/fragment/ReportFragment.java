@@ -42,7 +42,7 @@ public class ReportFragment extends Fragment implements View.OnClickListener {
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_report, null);
+        View view = inflater.inflate(R.layout.fragment_report, container, false);
 
         view.findViewById(R.id.id_title).setVisibility(View.INVISIBLE);
         view.findViewById(R.id.id_report_title).setVisibility(View.VISIBLE);

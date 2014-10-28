@@ -4,6 +4,7 @@ import android.app.Dialog;
 import android.content.Context;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.support.annotation.Nullable;
@@ -16,11 +17,15 @@ import android.widget.Button;
 import com.handmark.pulltorefresh.library.PullToRefreshBase;
 import com.wangsy.ouraccounts.R;
 import com.wangsy.ouraccounts.adapter.AccountAdapter;
+import com.wangsy.ouraccounts.model.AccountModel;
 import com.wangsy.ouraccounts.swipeMenuListView.SwipeMenu;
 import com.wangsy.ouraccounts.swipeMenuListView.SwipeMenuCreator;
 import com.wangsy.ouraccounts.swipeMenuListView.SwipeMenuItem;
 import com.wangsy.ouraccounts.swipeMenuListView.SwipeMenuListView;
+import com.wangsy.ouraccounts.utils.Util;
 import com.wangsy.ouraccounts.view.PullToRefreshSlideListView;
+
+import org.litepal.crud.DataSupport;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -32,88 +37,56 @@ import java.util.List;
  */
 public class ReportListFragment extends Fragment {
 
-    private PullToRefreshSlideListView lvListHaveAnim;
-    private List<String> data;
+    private PullToRefreshSlideListView listViewAccounts;
+    private List<AccountModel> data;
     MyCounter myCounter;
     AccountAdapter adapter;
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_report_list, null);
-
-        lvListHaveAnim = (PullToRefreshSlideListView) view.findViewById(R.id.lvListHaveAnim);
+        View view = inflater.inflate(R.layout.fragment_report_list, container, false);
+        listViewAccounts = (PullToRefreshSlideListView) view.findViewById(R.id.id_account_list);
 
         myCounter = new MyCounter(3 * 1000, 3 * 1000);
-        data = new ArrayList<>();
-        data.add("start");
-        data.add("aa");
-        data.add("bb");
-        data.add("cc");
-        data.add("dd");
-        data.add("ee");
-        data.add("ff");
-        data.add("gg");
-        data.add("hh");
-        data.add("ii");
-        data.add("jj");
-        data.add("kk");
-        data.add("lll");
-        data.add("mm");
-        data.add("nn");
-        data.add("oo");
-        data.add("pp");
-        data.add("qq");
-        data.add("rr");
-        data.add("ss");
-        data.add("tt");
-        data.add("uu");
-        data.add("vv");
-        data.add("ww");
-        data.add("ss");
-        data.add("yy");
-        data.add("zz");
-        data.add("end");
+        data = DataSupport.order("datetime desc").find(AccountModel.class);
         adapter = new AccountAdapter(data, getActivity());
+        listViewAccounts.setAdapter(adapter);
 
-        lvListHaveAnim.setAdapter(adapter);
-
+        // 设置滑动选项
         SwipeMenuCreator creator = new SwipeMenuCreator() {
-
             @Override
             public void create(SwipeMenu menu) {
                 // 创建按钮
-                SwipeMenuItem deleteItem = new SwipeMenuItem(getActivity().getApplicationContext());
+                SwipeMenuItem editItem = new SwipeMenuItem(getActivity().getApplicationContext());
                 // 设置按钮背景
-                deleteItem.setBackground(new ColorDrawable(Color.rgb(0xF9, 0x3F, 0x25)));
-                // 设置按钮宽度
-                deleteItem.setWidth(dp2px(getActivity(), 90));
-                deleteItem.setHeight(dp2px(getActivity(), 100));
+                editItem.setBackground(R.drawable.item_edit);
+                // 设置按钮宽高
+                editItem.setWidth(Util.dp2px(getActivity(), 80));
+                editItem.setHeight(Util.dp2px(getActivity(), 80));
                 // 给按钮添加图片
-                deleteItem.setIcon(R.mipmap.normal_add);
+                editItem.setIcon(R.mipmap.icon_edit);
                 // 添加进按钮
-                menu.addMenuItem(deleteItem);
+                menu.addMenuItem(editItem);
 
-                // 创建按钮
-                SwipeMenuItem item2 = new SwipeMenuItem(getActivity().getApplicationContext());
-                // 设置按钮背景
-                item2.setBackground(R.color.color_text_selected);
-                // 设置按钮宽度
-                item2.setWidth(dp2px(getActivity(), 90));
-                item2.setHeight(dp2px(getActivity(), 100));
-                // 给按钮添加图片
-                item2.setIcon(R.mipmap.normal_add);
-                // 添加进按钮
-                menu.addMenuItem(item2);
+                SwipeMenuItem deleteItem = new SwipeMenuItem(getActivity().getApplicationContext());
+                deleteItem.setBackground(R.drawable.item_delete);
+                deleteItem.setWidth(Util.dp2px(getActivity(), 80));
+                deleteItem.setHeight(Util.dp2px(getActivity(), 80));
+                deleteItem.setIcon(R.mipmap.icon_delete);
+                menu.addMenuItem(deleteItem);
             }
         };
 
-        lvListHaveAnim.getRefreshableView().setMenuCreator(creator);
-        lvListHaveAnim.getRefreshableView().setOnMenuItemClickListener(new SwipeMenuListView.OnMenuItemClickListener() {
+        listViewAccounts.getRefreshableView().setMenuCreator(creator);
+        listViewAccounts.getRefreshableView().setOnMenuItemClickListener(new SwipeMenuListView.OnMenuItemClickListener() {
             @Override
             public boolean onMenuItemClick(int position, SwipeMenu menu, int index) {
                 switch (index) {
                     case 0:
+                        // TODO
+                        break;
+                    case 1:
                         showDeleteDialog(position);
                         break;
                 }
@@ -121,7 +94,7 @@ public class ReportListFragment extends Fragment {
             }
         });
 
-        lvListHaveAnim.setOnRefreshListener(new PullToRefreshBase.OnRefreshListener2<SwipeMenuListView>() {
+        listViewAccounts.setOnRefreshListener(new PullToRefreshBase.OnRefreshListener2<SwipeMenuListView>() {
             @Override
             public void onPullDownToRefresh(PullToRefreshBase<SwipeMenuListView> refreshView) {
                 myCounter.start();
@@ -134,11 +107,6 @@ public class ReportListFragment extends Fragment {
         });
 
         return view;
-    }
-
-    public static int dp2px(Context context, float dp) {
-        final float scale = context.getResources().getDisplayMetrics().density;
-        return (int) (dp * scale + 0.5f);
     }
 
     /**
@@ -181,12 +149,32 @@ public class ReportListFragment extends Fragment {
 
         @Override
         public void onTick(long millisUntilFinished) {
-
         }
 
         @Override
         public void onFinish() {
-            lvListHaveAnim.onRefreshComplete();
+            data = null;
+            data = DataSupport.order("datetime desc").find(AccountModel.class);
+
+            adapter = new AccountAdapter(data, getActivity());
+            listViewAccounts.setAdapter(adapter);
+
+            listViewAccounts.onRefreshComplete();
         }
     }
+
+    // 查询数据
+//    class QueryAccountsTask extends AsyncTask<>{
+//
+//        @Override
+//        protected Object doInBackground(Object[] params) {
+//            return null;
+//        }
+//
+//        @Override
+//        protected void onPostExecute(Object o) {
+//            listViewAccounts.onRefreshComplete();
+//            super.onPostExecute(o);
+//        }
+//    }
 }

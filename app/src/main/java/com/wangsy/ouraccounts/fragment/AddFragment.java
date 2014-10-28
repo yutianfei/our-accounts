@@ -58,7 +58,7 @@ public class AddFragment extends Fragment implements IconSelectedCallback {
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_add, null);
+        View view = inflater.inflate(R.layout.fragment_add, container, false);
 
         TextView title = (TextView) view.findViewById(R.id.id_title);
         title.setText(R.string.title_new);
@@ -244,7 +244,7 @@ public class AddFragment extends Fragment implements IconSelectedCallback {
     private void initButtonRight(View view) {
         ImageButton imgBtn = (ImageButton) view.findViewById(R.id.id_title_right_btn);
         imgBtn.setVisibility(View.VISIBLE);
-        imgBtn.setImageResource(R.drawable.number_btn_ok);
+        imgBtn.setImageResource(R.mipmap.icon_ok);
         imgBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

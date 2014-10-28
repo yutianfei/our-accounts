@@ -62,6 +62,10 @@ public class AccountModel extends DataSupport {
     }
 
     public void setIsOut(boolean isOut) {
+        setOut(isOut);
+    }
+
+    public void setOut(boolean isOut) {
         this.isOut = isOut;
     }
 

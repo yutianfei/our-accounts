@@ -19,7 +19,7 @@ public class ReportChartFragment extends Fragment {
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_report_chart, null);
+        View view = inflater.inflate(R.layout.fragment_report_chart, container, false);
 
         return view;
     }
