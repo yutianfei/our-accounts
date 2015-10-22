@@ -1,0 +1,51 @@
+<resources>
+    <string name="app_name">周周账目</string>
+
+    <string name="title_new">记一笔</string>
+
+    <!-- tab标题 -->
+    <string name="tab_add">新的</string>
+    <string name="tab_report">统计</string>
+    <string name="tab_setting">设置</string>
+
+    <!-- 金额字符 -->
+    <string name="rmb_symbol">¥</string>
+    <string name="rmb_unit">元</string>
+
+    <!-- 数字键盘 -->
+    <string name="num_1">1</string>
+    <string name="num_2">2</string>
+    <string name="num_3">3</string>
+    <string name="num_4">4</string>
+    <string name="num_5">5</string>
+    <string name="num_6">6</string>
+    <string name="num_7">7</string>
+    <string name="num_8">8</string>
+    <string name="num_9">9</string>
+    <string name="num_0">0</string>
+    <string name="num_dot">.</string>
+    <string name="num_del">DEL</string>
+    <string name="num_ok">OK</string>
+
+    <!-- imageView contentDescription -->
+    <string name="icon_content_description">icon for accounts type</string>
+
+    <!-- icon title -->
+    <string name="icon_food">美食</string>
+    <string name="icon_apps">Apps</string>
+    <string name="icon_car">爱车</string>
+    <string name="icon_clothes">衣物</string>
+    <string name="icon_film">电影</string>
+    <string name="icon_general">其他</string>
+    <string name="icon_hair_cut">理发</string>
+    <string name="icon_hotel">酒店</string>
+    <string name="icon_income">收入</string>
+    <string name="icon_kids">孩子</string>
+    <string name="icon_leisure">休闲</string>
+    <string name="icon_medicine">医药</string>
+    <string name="icon_mobile">手机</string>
+    <string name="icon_pet">宠物</string>
+    <string name="icon_shopping">购物</string>
+    <string name="icon_traffic">交通</string>
+
+</resources>

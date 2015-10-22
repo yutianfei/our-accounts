@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- app主题颜色 -->
+    <color name="color_theme_light_normal">#FFD704</color>
+    <color name="color_theme_light_selected">#FFDB1D</color>
+    <color name="color_theme_dark_normal">#FCA407</color>
+    <color name="color_theme_dark_selected">#FCAD20</color>
+
+    <color name="color_text_normal">#767676</color>
+    <color name="color_text_selected">#F5A623</color>
+
+    <color name="color_icon_normal">#767676</color>
+    <color name="color_icon_selected">#F5A623</color>
+
+    <color name="lighter_gray">#ddd</color>
+    <color name="darker_gray">#aaa</color>
+
+    <color name="colorPrimary">#3F51B5</color>
+    <color name="colorPrimaryDark">#303F9F</color>
+    <color name="colorAccent">#FF4081</color>
+</resources>

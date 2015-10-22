@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:orientation="vertical">
+
+        <!-- 标题栏 -->
+        <include layout="@layout/title_bar_layout" />
+
+        <!-- 输入框 -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:paddingBottom="8dp"
+            android:paddingEnd="16dp"
+            android:paddingTop="8dp"
+            android:paddingStart="16dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="start|center_vertical"
+                android:layout_marginEnd="@dimen/dp_16"
+                android:text="@string/rmb_symbol"
+                android:textSize="@dimen/sp_24"
+                android:textStyle="bold" />
+
+            <EditText
+                android:id="@+id/id_money_amount"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:clickable="false"
+                android:editable="false"
+                android:focusable="false"
+                android:gravity="center"
+                android:inputType="none"
+                android:text="@string/num_0"
+                android:textColor="@android:color/holo_green_light"
+                android:textSize="@dimen/sp_24" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="end|center_vertical"
+                android:layout_marginStart="@dimen/dp_16"
+                android:text="@string/rmb_unit"
+                android:textSize="@dimen/sp_24"
+                android:textStyle="bold" />
+
+        </LinearLayout>
+
+        <!-- 分割线 -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_marginEnd="@dimen/dp_16"
+            android:layout_marginStart="@dimen/dp_16"
+            android:background="@android:color/darker_gray" />
+
+        <!-- icon显示 -->
+        <include
+            layout="@layout/icons_viewpager_layout"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+
+    </LinearLayout>
+
+    <!-- 数字键盘 -->
+    <include
+        style="@style/style_number_button_layout"
+        layout="@layout/number_button_layout" />
+
+</LinearLayout>
