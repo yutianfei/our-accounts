@@ -1,194 +1,168 @@
 package com.wangsy.ouraccounts.ui;
 
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
-import android.support.v4.view.ViewPager;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.view.View;
-import android.widget.Button;
-import android.widget.EditText;
-import android.widget.ImageButton;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import com.viewpagerindicator.CirclePageIndicator;
 import com.wangsy.ouraccounts.R;
-import com.wangsy.ouraccounts.adapter.IconPageAdapter;
-import com.wangsy.ouraccounts.callback.IconSelectedCallback;
-import com.wangsy.ouraccounts.model.AccountModel;
+import com.wangsy.ouraccounts.fragment.AddFragment;
+import com.wangsy.ouraccounts.fragment.ReportFragment;
+import com.wangsy.ouraccounts.fragment.SettingFragment;
 
-import java.util.Date;
+public class MainActivity extends FragmentActivity implements View.OnClickListener {
 
-public class MainActivity extends FragmentActivity implements IconSelectedCallback {
+    // 每个标签对应的索引
+    public static final int TAB_ADD_INDEX = 0;
+    public static final int TAB_REPORT_INDEX = 1;
+    public static final int TAB_SETTING_INDEX = 2;
 
-    private EditText etMoneyAmount;
-    private StringBuilder sbMoneyAmount;
+    //标签图标
+    private ImageView imgAddView;
+    private ImageView imgReportView;
+    private ImageView imgSettingView;
 
-    private String accountType;
-    private boolean accountIsOut;
+    // 标签名称
+    private TextView tvAddName;
+    private TextView tvReportName;
+    private TextView tvSettingName;
+
+    // 标签页fragment
+    private Fragment mTabAddFragment;
+    private Fragment mTabReportFragment;
+    private Fragment mTabSettingFragment;
+
+    private FragmentManager fm;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.add_fragment);
+        setContentView(R.layout.activity_main);
 
-        TextView title = (TextView) findViewById(R.id.id_title);
-        title.setText(R.string.title_new);
+        initViews();
+        fm = getSupportFragmentManager();
 
-        // 主界面显示右侧按钮：保存数据
-        initButtonRight();
-
-        // 初始化 viewpager
-        initViewPager();
-
-        // 初始化数字键盘
-        initNumberButtons();
-
-        etMoneyAmount = (EditText) findViewById(R.id.id_money_amount);
-        sbMoneyAmount = new StringBuilder();
+        //默认第一次进入时显示第一个标签页
+        setSelectFragment(TAB_ADD_INDEX);
     }
 
     @Override
-    public void onIconSelected(boolean isOut, String type) {
-        accountIsOut = isOut;
-        accountType = type;
-    }
-
-    private void saveData() {
-
-        // 根据显示的金额进行数据处理
-        StringBuilder moneyString = new StringBuilder();
-        moneyString.append(etMoneyAmount.getText().toString());
-
-        // 没有金额或没有类型，不进行保存
-        if (moneyString.toString().isEmpty() || accountType == null) {
-            Toast.makeText(this, "null", Toast.LENGTH_LONG).show();
-            return;
-        }
-
-        // 输入多位金额，第一个数字是0时，在保存数据的时候，自动将0去除
-        if (moneyString.length() > 1 &&
-                moneyString.charAt(0) == '0' &&
-                moneyString.charAt(1) != '.') {
-            moneyString.deleteCharAt(0);
-        }
-
-        // 设置要保存的数据
-        AccountModel accountData = new AccountModel();
-        accountData.setAmount(Float.parseFloat(moneyString.toString()));
-        accountData.setDate(new Date());
-        accountData.setIsOut(accountIsOut);
-        accountData.setType(accountType);
-
-        // 保存数据
-        boolean saveFlag = accountData.save();
-        if (saveFlag) {
-            Toast.makeText(this, accountData.toString(), Toast.LENGTH_LONG).show();
-            // 保存完成后，清除当前状态
-            clearStates();
+    public void onClick(View view) {
+        switch (view.getId()) {
+            case R.id.id_tab_add:
+                setSelectFragment(TAB_ADD_INDEX);
+                break;
+            case R.id.id_tab_report:
+                setSelectFragment(TAB_REPORT_INDEX);
+                break;
+            case R.id.id_tab_setting:
+                setSelectFragment(TAB_SETTING_INDEX);
+                break;
         }
     }
 
-    private void clearStates() {
-        sbMoneyAmount.delete(0, sbMoneyAmount.length());
-        etMoneyAmount.setText("0");
+    private void setSelectFragment(int tabIndex) {
+        FragmentTransaction ft = fm.beginTransaction();
+
+        // 清除标签状态，将标签图标和标签名称设置为未选中的状态
+        resetTabStates();
+
+        // 隐藏所有标签页
+        hideAllFragments(ft);
+
+        // 设置标签状态和显示的标签页
+        switch (tabIndex) {
+            case TAB_ADD_INDEX:
+                imgAddView.setImageResource(R.mipmap.selected_add);
+                tvAddName.setTextColor(getResources().getColor(R.color.color_text_selected));
+                if (mTabAddFragment == null) {
+                    mTabAddFragment = new AddFragment();
+                    ft.add(R.id.tab_container, mTabAddFragment);
+                } else {
+                    ft.show(mTabAddFragment);
+                }
+                break;
+
+            case TAB_REPORT_INDEX:
+                imgReportView.setImageResource(R.mipmap.selected_report);
+                tvReportName.setTextColor(getResources().getColor(R.color.color_text_selected));
+                if (mTabReportFragment == null) {
+                    mTabReportFragment = new ReportFragment();
+                    ft.add(R.id.tab_container, mTabReportFragment);
+                } else {
+                    ft.show(mTabReportFragment);
+                }
+                break;
+
+            case TAB_SETTING_INDEX:
+                imgSettingView.setImageResource(R.mipmap.selected_setting);
+                tvSettingName.setTextColor(getResources().getColor(R.color.color_text_selected));
+                if (mTabSettingFragment == null) {
+                    mTabSettingFragment = new SettingFragment();
+                    ft.add(R.id.tab_container, mTabSettingFragment);
+                } else {
+                    ft.show(mTabSettingFragment);
+                }
+                break;
+
+            default:
+                break;
+        }
+        ft.commit();
     }
 
-    class NumberButtonClickListener implements View.OnClickListener {
-        @Override
-        public void onClick(View v) {
-            switch (v.getId()) {
-                case R.id.btn_number_0:
-                    // 第一个数字是0时，不允许继续添加数字0
-                    if (sbMoneyAmount.length() == 1 && sbMoneyAmount.indexOf("0") == 0) {
-                        return;
-                    } else {
-                        sbMoneyAmount.append("0");
-                    }
-                    etMoneyAmount.setText(sbMoneyAmount.toString());
-                    break;
-                case R.id.btn_number_dot:
-                    // 保证只有一个小数点
-                    if (sbMoneyAmount.length() == 0) {
-                        sbMoneyAmount.append("0.");
-                    } else if (!(sbMoneyAmount.indexOf(".") > -1)) {
-                        sbMoneyAmount.append('.');
-                    }
-                    etMoneyAmount.setText(sbMoneyAmount.toString());
-                    break;
-                case R.id.btn_number_del:
-                    if (!sbMoneyAmount.toString().isEmpty()) {
-                        sbMoneyAmount.deleteCharAt(sbMoneyAmount.length() - 1);
-                    }
-                    etMoneyAmount.setText(sbMoneyAmount.toString());
-                    break;
-                default:
-                    Button btn = (Button) v;
-                    sbMoneyAmount.append(btn.getText().toString());
-                    etMoneyAmount.setText(sbMoneyAmount.toString());
-                    break;
-            }
-            etMoneyAmount.setSelection(sbMoneyAmount.length());
+    private void hideAllFragments(FragmentTransaction ft) {
+        if (mTabAddFragment != null) {
+            ft.hide(mTabAddFragment);
+        }
+        if (mTabReportFragment != null) {
+            ft.hide(mTabReportFragment);
+        }
+        if (mTabSettingFragment != null) {
+            ft.hide(mTabSettingFragment);
         }
     }
 
-    private void initViewPager() {
-        IconPageAdapter mAdapter = new IconPageAdapter(getSupportFragmentManager());
-        CirclePageIndicator mIndicator = (CirclePageIndicator) findViewById(R.id.id_viewpager_indicator);
-        ViewPager mViewPager = (ViewPager) findViewById(R.id.id_viewpager);
-        mViewPager.setAdapter(mAdapter);
-        mIndicator.setViewPager(mViewPager, 0);
+    private void resetTabStates() {
+        imgAddView.setImageResource(R.mipmap.normal_add);
+        imgReportView.setImageResource(R.mipmap.normal_report);
+        imgSettingView.setImageResource(R.mipmap.normal_setting);
+
+        tvAddName.setTextColor(getResources().getColor(R.color.color_text_normal));
+        tvReportName.setTextColor(getResources().getColor(R.color.color_text_normal));
+        tvSettingName.setTextColor(getResources().getColor(R.color.color_text_normal));
     }
 
-    private void initButtonRight() {
-        ImageButton imgBtn = (ImageButton) findViewById(R.id.id_title_right_btn);
-        imgBtn.setVisibility(View.VISIBLE);
-        imgBtn.setImageResource(R.drawable.number_btn_ok);
-        imgBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                // 保存数据
-                saveData();
-            }
-        });
+    private void initViews() {
+        initTabViews();
+        initTabIconViews();
+        initTabNameViews();
     }
 
-    private void initNumberButtons() {
-        NumberButtonClickListener clickListener = new NumberButtonClickListener();
-
-        Button btnNum1 = (Button) findViewById(R.id.btn_number_1);
-        btnNum1.setOnClickListener(clickListener);
-
-        Button btnNum2 = (Button) findViewById(R.id.btn_number_2);
-        btnNum2.setOnClickListener(clickListener);
-
-        Button btnNum3 = (Button) findViewById(R.id.btn_number_3);
-        btnNum3.setOnClickListener(clickListener);
-
-        Button btnNum4 = (Button) findViewById(R.id.btn_number_4);
-        btnNum4.setOnClickListener(clickListener);
-
-        Button btnNum5 = (Button) findViewById(R.id.btn_number_5);
-        btnNum5.setOnClickListener(clickListener);
-
-        Button btnNum6 = (Button) findViewById(R.id.btn_number_6);
-        btnNum6.setOnClickListener(clickListener);
-
-        Button btnNum7 = (Button) findViewById(R.id.btn_number_7);
-        btnNum7.setOnClickListener(clickListener);
-
-        Button btnNum8 = (Button) findViewById(R.id.btn_number_8);
-        btnNum8.setOnClickListener(clickListener);
-
-        Button btnNum9 = (Button) findViewById(R.id.btn_number_9);
-        btnNum9.setOnClickListener(clickListener);
-
-        Button btnNum0 = (Button) findViewById(R.id.btn_number_0);
-        btnNum0.setOnClickListener(clickListener);
-
-        Button btnNumDot = (Button) findViewById(R.id.btn_number_dot);
-        btnNumDot.setOnClickListener(clickListener);
-
-        ImageButton btnNumDel = (ImageButton) findViewById(R.id.btn_number_del);
-        btnNumDel.setOnClickListener(clickListener);
+    private void initTabViews() {
+        LinearLayout mAddTab = (LinearLayout) findViewById(R.id.id_tab_add);
+        LinearLayout mReportTab = (LinearLayout) findViewById(R.id.id_tab_report);
+        LinearLayout mSettingTab = (LinearLayout) findViewById(R.id.id_tab_setting);
+        mAddTab.setOnClickListener(this);
+        mReportTab.setOnClickListener(this);
+        mSettingTab.setOnClickListener(this);
     }
+
+    private void initTabIconViews() {
+        imgAddView = (ImageView) findViewById(R.id.id_tab_add_icon);
+        imgReportView = (ImageView) findViewById(R.id.id_tab_report_icon);
+        imgSettingView = (ImageView) findViewById(R.id.id_tab_setting_icon);
+    }
+
+    private void initTabNameViews() {
+        tvAddName = (TextView) findViewById(R.id.id_tab_add_name);
+        tvReportName = (TextView) findViewById(R.id.id_tab_report_name);
+        tvSettingName = (TextView) findViewById(R.id.id_tab_setting_name);
+    }
+
 }

@@ -5,6 +5,10 @@ import org.litepal.crud.DataSupport;
 import java.util.Date;
 
 /**
+ * 账目数据模型（数据库存储）
+ * <p/>
+ * 通过继承DataSupport，使用LitePal进行数据库操作
+ * <p/>
  * Created by wangsy on 15/10/21.
  */
 public class AccountModel extends DataSupport {

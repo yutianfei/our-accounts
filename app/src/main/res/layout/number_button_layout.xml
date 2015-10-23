@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <TableLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:paddingTop="6dp">
 
     <TableRow
         style="@style/style_number_button_row"
@@ -70,8 +71,8 @@
             android:text="@string/num_9" />
     </TableRow>
 
-    <TableRow
-        style="@style/style_number_button_row">
+    <TableRow style="@style/style_number_button_row">
+
         <Button
             android:id="@+id/btn_number_dot"
             style="@style/style_number_button"
@@ -87,7 +88,7 @@
         <ImageButton
             android:id="@+id/btn_number_del"
             style="@style/style_number_button"
-            android:src="@mipmap/number_delete_button"
-            android:contentDescription="@string/icon_content_description"/>
+            android:contentDescription="@string/icon_content_description"
+            android:src="@mipmap/number_delete_button" />
     </TableRow>
 </TableLayout>

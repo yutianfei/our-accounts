@@ -2,18 +2,56 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:orientation="vertical">
+    android:orientation="horizontal"
+    android:paddingBottom="5dp"
+    android:paddingTop="5dp">
 
-    <ImageView
+    <LinearLayout
         android:id="@+id/id_tab_add"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:contentDescription="@string/icon_content_description"
-        android:src="@mipmap/ic_launcher2" />
+        style="@style/style_tab">
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="新增"/>
+        <ImageView
+            android:id="@+id/id_tab_add_icon"
+            style="@style/style_tab_general"
+            android:contentDescription="@string/icon_content_description"
+            android:src="@mipmap/normal_add" />
+
+        <TextView
+            android:id="@+id/id_tab_add_name"
+            style="@style/style_tab_text"
+            android:text="@string/tab_add" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/id_tab_report"
+        style="@style/style_tab">
+
+        <ImageView
+            android:id="@+id/id_tab_report_icon"
+            style="@style/style_tab_general"
+            android:contentDescription="@string/icon_content_description"
+            android:src="@mipmap/normal_report" />
+
+        <TextView
+            android:id="@+id/id_tab_report_name"
+            style="@style/style_tab_text"
+            android:text="@string/tab_report" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/id_tab_setting"
+        style="@style/style_tab">
+
+        <ImageView
+            android:id="@+id/id_tab_setting_icon"
+            style="@style/style_tab_general"
+            android:contentDescription="@string/icon_content_description"
+            android:src="@mipmap/normal_setting" />
+
+        <TextView
+            android:id="@+id/id_tab_setting_name"
+            style="@style/style_tab_text"
+            android:text="@string/tab_setting" />
+    </LinearLayout>
 
 </LinearLayout>

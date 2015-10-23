@@ -20,8 +20,8 @@
             android:orientation="horizontal"
             android:paddingBottom="8dp"
             android:paddingEnd="16dp"
-            android:paddingTop="8dp"
-            android:paddingStart="16dp">
+            android:paddingStart="16dp"
+            android:paddingTop="8dp">
 
             <TextView
                 android:layout_width="wrap_content"
@@ -58,12 +58,12 @@
         </LinearLayout>
 
         <!-- 分割线 -->
-        <LinearLayout
+        <View
             android:layout_width="match_parent"
             android:layout_height="1dp"
             android:layout_marginEnd="@dimen/dp_16"
             android:layout_marginStart="@dimen/dp_16"
-            android:background="@android:color/darker_gray" />
+            android:background="@color/darker_gray" />
 
         <!-- icon显示 -->
         <include
@@ -75,7 +75,9 @@
 
     <!-- 数字键盘 -->
     <include
-        style="@style/style_number_button_layout"
-        layout="@layout/number_button_layout" />
+        layout="@layout/number_button_layout"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="0.85" />
 
 </LinearLayout>

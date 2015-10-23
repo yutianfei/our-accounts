@@ -1,8 +1,4 @@
-package com.wangsy.ouraccounts;
-
-import android.content.ContentValues;
-
-import com.wangsy.ouraccounts.model.AccountModel;
+package com.wangsy.ouraccounts.utils;
 
 import java.text.SimpleDateFormat;
 
@@ -21,12 +17,4 @@ public class Util {
         return format.format(date);
     }
 
-    /**
-     * 根据Account的信息创建ContentValues
-     */
-    public static ContentValues createContentValues(AccountModel account) {
-        ContentValues values = new ContentValues();
-
-        return values;
-    }
 }

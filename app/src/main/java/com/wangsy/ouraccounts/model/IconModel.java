@@ -7,7 +7,7 @@ import java.io.Serializable;
 /**
  * Created by wangsy on 15/10/21.
  */
-public class TypeIconModel implements Serializable {
+public class IconModel implements Serializable {
 
     public boolean isOut;
     public String type;
@@ -18,10 +18,10 @@ public class TypeIconModel implements Serializable {
     public int selectedIcon;
     public int iconImageToShow;
 
-    public TypeIconModel() {
+    public IconModel() {
     }
 
-    public TypeIconModel(boolean isOut, String type, int iconName, int normalIcon, int selectedIcon) {
+    public IconModel(boolean isOut, String type, int iconName, int normalIcon, int selectedIcon) {
         this.isOut = isOut;
         this.type = type;
 
@@ -36,7 +36,7 @@ public class TypeIconModel implements Serializable {
     /***
      * 默认为支出
      */
-    public TypeIconModel(String type, int iconName, int normalIcon, int selectedIcon) {
+    public IconModel(String type, int iconName, int normalIcon, int selectedIcon) {
         this(true, type, iconName, normalIcon, selectedIcon);
     }
 }

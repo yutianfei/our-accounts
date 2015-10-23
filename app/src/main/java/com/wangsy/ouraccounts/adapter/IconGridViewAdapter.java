@@ -9,21 +9,23 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.wangsy.ouraccounts.R;
-import com.wangsy.ouraccounts.model.TypeIconModel;
+import com.wangsy.ouraccounts.model.IconModel;
 
 import java.util.List;
 
 /**
+ * 为IconFragment里的GridView提供adapter
+ * <p/>
  * Created by wangsy on 15/10/21.
  */
-public class IconGridAdapter extends BaseAdapter {
+public class IconGridViewAdapter extends BaseAdapter {
 
-    private List<TypeIconModel> iconsList;
+    private List<IconModel> iconsList;
     private Context context;
     private LayoutInflater mInflater;
 
 
-    public IconGridAdapter(List<TypeIconModel> iconsList, Context context) {
+    public IconGridViewAdapter(List<IconModel> iconsList, Context context) {
         this.iconsList = iconsList;
         this.context = context;
         this.mInflater = LayoutInflater.from(context);
@@ -47,7 +49,7 @@ public class IconGridAdapter extends BaseAdapter {
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
 
-        TypeIconModel typeIcon = (TypeIconModel) getItem(position);
+        IconModel typeIcon = (IconModel) getItem(position);
 
         ViewHolder viewHolder;
         if (convertView == null) {
