@@ -74,8 +74,7 @@ public class AddFragment extends Fragment implements IconSelectedCallback {
         accountType = type;
     }
 
-    private void saveData() {
-
+    private void saveAccountData() {
         // 没有金额，提示，不保存
         if (sbMoneyAmount.toString().isEmpty()) {
             Toast.makeText(getActivity(), "消费金额是否输入了呢？", Toast.LENGTH_LONG).show();
@@ -111,13 +110,15 @@ public class AddFragment extends Fragment implements IconSelectedCallback {
         // 保存数据
         boolean saveFlag = accountData.save();
         if (saveFlag) {
-            Toast.makeText(getActivity(), accountData.toString(), Toast.LENGTH_LONG).show();
-            // 保存完成后，清除当前状态
-            clearStates();
+            Toast.makeText(getActivity(), "保存成功！" + accountData.toString(), Toast.LENGTH_LONG).show();
+            cleanMoneyAmount();
         }
     }
 
-    private void clearStates() {
+    /**
+     * 清除已经输入的金额
+     */
+    private void cleanMoneyAmount() {
         sbMoneyAmount.delete(0, sbMoneyAmount.length());
         etMoneyAmount.setText(sbMoneyAmount.toString());
     }
@@ -173,7 +174,7 @@ public class AddFragment extends Fragment implements IconSelectedCallback {
             @Override
             public void onClick(View v) {
                 // 保存数据
-                saveData();
+                saveAccountData();
             }
         });
     }
@@ -216,6 +217,14 @@ public class AddFragment extends Fragment implements IconSelectedCallback {
 
         ImageButton btnNumDel = (ImageButton) view.findViewById(R.id.btn_number_del);
         btnNumDel.setOnClickListener(clickListener);
+        btnNumDel.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View v) {
+                // 长按删除按钮，清空已经输入的金额
+                cleanMoneyAmount();
+                return true;
+            }
+        });
     }
 
     @Override
