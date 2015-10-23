@@ -55,6 +55,24 @@ public class IconsList {
         icon = new IconModel(TypeConstants.Food, R.string.icon_clothes, R.mipmap.normal_clothes, R.mipmap.selected_clothes);
         iconsList.add(icon);
 
+        icon = new IconModel(TypeConstants.Food, R.string.icon_clothes, R.mipmap.normal_clothes, R.mipmap.selected_clothes);
+        iconsList.add(icon);
+
+        icon = new IconModel(TypeConstants.Food, R.string.icon_clothes, R.mipmap.normal_clothes, R.mipmap.selected_clothes);
+        iconsList.add(icon);
+
+        icon = new IconModel(TypeConstants.Food, R.string.icon_clothes, R.mipmap.normal_clothes, R.mipmap.selected_clothes);
+        iconsList.add(icon);
+
+        icon = new IconModel(TypeConstants.Food, R.string.icon_shopping, R.mipmap.normal_shopping, R.mipmap.selected_shopping);
+        iconsList.add(icon);
+
+        icon = new IconModel(false, TypeConstants.Food, R.string.icon_income, R.mipmap.normal_income, R.mipmap.selected_income);
+        iconsList.add(icon);
+
+        icon = new IconModel(TypeConstants.Food, R.string.icon_car, R.mipmap.normal_car, R.mipmap.selected_car);
+        iconsList.add(icon);
+
         return iconsList;
     }
 

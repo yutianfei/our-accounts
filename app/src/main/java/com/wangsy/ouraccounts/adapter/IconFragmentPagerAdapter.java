@@ -18,7 +18,7 @@ public class IconFragmentPagerAdapter extends FragmentPagerAdapter {
     /**
      * 每页显示的icon数目
      */
-    public static final int PER_PAGE_NUMBER = 10;
+    public static final int PER_PAGE_NUMBER = 15;
 
     public IconFragmentPagerAdapter(FragmentManager fm) {
         super(fm);
