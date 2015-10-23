@@ -41,8 +41,8 @@
                 android:editable="false"
                 android:focusable="false"
                 android:gravity="center"
+                android:hint="@string/num_0"
                 android:inputType="none"
-                android:text="@string/num_0"
                 android:textColor="@android:color/holo_green_light"
                 android:textSize="@dimen/sp_24" />
 

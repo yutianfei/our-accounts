@@ -76,26 +76,34 @@ public class AddFragment extends Fragment implements IconSelectedCallback {
 
     private void saveData() {
 
-        // 根据显示的金额进行数据处理
-        StringBuilder moneyString = new StringBuilder();
-        moneyString.append(etMoneyAmount.getText().toString());
-
-        // 没有金额或没有类型，不进行保存
-        if (moneyString.toString().isEmpty() || accountType == null) {
-            Toast.makeText(getActivity(), "null", Toast.LENGTH_LONG).show();
+        // 没有金额，提示，不保存
+        if (sbMoneyAmount.toString().isEmpty()) {
+            Toast.makeText(getActivity(), "消费金额是否输入了呢？", Toast.LENGTH_LONG).show();
             return;
         }
 
-        // 输入多位金额，第一个数字是0时，在保存数据的时候，自动将0去除
-        if (moneyString.length() > 1 &&
-                moneyString.charAt(0) == '0' &&
-                moneyString.charAt(1) != '.') {
-            moneyString.deleteCharAt(0);
+        // 没有类型，提示，不保存
+        if (accountType == null) {
+            Toast.makeText(getActivity(), "消费类型是否选择了呢？", Toast.LENGTH_LONG).show();
+            return;
+        }
+
+        // 输入多位金额，如果第一个数字是0，在保存数据的时候，自动将0去除
+        if (sbMoneyAmount.length() > 1 &&
+                sbMoneyAmount.charAt(0) == '0' &&
+                sbMoneyAmount.charAt(1) != '.') {
+            sbMoneyAmount.deleteCharAt(0);
+        }
+
+        // 0元提示，不保存
+        if (Float.parseFloat(sbMoneyAmount.toString()) == 0) {
+            Toast.makeText(getActivity(), "请确保消费金额输入正确哦！", Toast.LENGTH_LONG).show();
+            return;
         }
 
         // 设置要保存的数据
         AccountModel accountData = new AccountModel();
-        accountData.setAmount(Float.parseFloat(moneyString.toString()));
+        accountData.setAmount(Float.parseFloat(sbMoneyAmount.toString()));
         accountData.setDate(new Date());
         accountData.setIsOut(accountIsOut);
         accountData.setType(accountType);
@@ -111,7 +119,7 @@ public class AddFragment extends Fragment implements IconSelectedCallback {
 
     private void clearStates() {
         sbMoneyAmount.delete(0, sbMoneyAmount.length());
-        etMoneyAmount.setText("0");
+        etMoneyAmount.setText(sbMoneyAmount.toString());
     }
 
     class NumberButtonClickListener implements View.OnClickListener {
@@ -125,7 +133,6 @@ public class AddFragment extends Fragment implements IconSelectedCallback {
                     } else {
                         sbMoneyAmount.append("0");
                     }
-                    etMoneyAmount.setText(sbMoneyAmount.toString());
                     break;
                 case R.id.btn_number_dot:
                     // 保证只有一个小数点
@@ -134,20 +141,18 @@ public class AddFragment extends Fragment implements IconSelectedCallback {
                     } else if (!(sbMoneyAmount.indexOf(".") > -1)) {
                         sbMoneyAmount.append('.');
                     }
-                    etMoneyAmount.setText(sbMoneyAmount.toString());
                     break;
                 case R.id.btn_number_del:
                     if (!sbMoneyAmount.toString().isEmpty()) {
                         sbMoneyAmount.deleteCharAt(sbMoneyAmount.length() - 1);
                     }
-                    etMoneyAmount.setText(sbMoneyAmount.toString());
                     break;
                 default:
                     Button btn = (Button) v;
                     sbMoneyAmount.append(btn.getText().toString());
-                    etMoneyAmount.setText(sbMoneyAmount.toString());
                     break;
             }
+            etMoneyAmount.setText(sbMoneyAmount.toString());
             etMoneyAmount.setSelection(sbMoneyAmount.length());
         }
     }
@@ -216,7 +221,6 @@ public class AddFragment extends Fragment implements IconSelectedCallback {
     @Override
     public void onDetach() {
         super.onDetach();
-
 //        try {
 //            Field childFragment = Fragment.class.getDeclaredField("mChildFragmentManager");
 //            childFragment.setAccessible(true);
