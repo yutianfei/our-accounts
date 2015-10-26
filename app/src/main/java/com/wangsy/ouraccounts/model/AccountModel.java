@@ -2,8 +2,6 @@ package com.wangsy.ouraccounts.model;
 
 import org.litepal.crud.DataSupport;
 
-import java.util.Date;
-
 /**
  * 账目数据模型（数据库存储）
  * <p/>
@@ -15,15 +13,25 @@ public class AccountModel extends DataSupport {
     private boolean isOut = true;
     private String type = "";
     private float amount = 0;
-    private Date date = new Date();
+    private String comment = "";
+    private String datetime = "";
 
-    public Date getDate() {
-        return date;
+    public String getDatetime() {
+        return datetime;
     }
 
-    public void setDate(Date date) {
-        this.date = date;
+    public void setDatetime(String datetime) {
+        this.datetime = datetime;
     }
+
+    public String getComment() {
+        return comment;
+    }
+
+    public void setComment(String comment) {
+        this.comment = comment;
+    }
+
 
     public float getAmount() {
         return amount;
@@ -51,6 +59,7 @@ public class AccountModel extends DataSupport {
 
     @Override
     public String toString() {
-        return "isOut = " + isOut + ",type = " + type + ",amount = " + amount + ",date = " + date;
+        return "isOut = " + isOut + ",type = " + type + ",amount = " + amount
+                + ",datetime = " + datetime + ",comment = " + comment;
     }
 }

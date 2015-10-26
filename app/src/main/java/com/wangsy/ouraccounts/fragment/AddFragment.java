@@ -1,6 +1,7 @@
 package com.wangsy.ouraccounts.fragment;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -19,8 +20,12 @@ import com.wangsy.ouraccounts.R;
 import com.wangsy.ouraccounts.adapter.IconFragmentPagerAdapter;
 import com.wangsy.ouraccounts.callback.IconSelectedCallback;
 import com.wangsy.ouraccounts.model.AccountModel;
+import com.wangsy.ouraccounts.ui.SetDatetimeDialogActivity;
+import com.wangsy.ouraccounts.ui.SetCommentDialogActivity;
+import com.wangsy.ouraccounts.utils.Util;
 
-import java.util.Date;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
 
 /**
  * 新增
@@ -28,12 +33,16 @@ import java.util.Date;
  * Created by wangsy on 15/10/22.
  */
 public class AddFragment extends Fragment implements IconSelectedCallback {
+    public static final int REQUEST_SET_DATE = 1;
+    public static final int REQUEST_SET_COMMENT = 2;
 
     private EditText etMoneyAmount;
     private StringBuilder sbMoneyAmount;
 
     private String accountType;
     private boolean accountIsOut;
+    private String accountComment = "";
+    private String accountDatetime = "";
 
     @Override
     public void onAttach(Activity activity) {
@@ -62,10 +71,57 @@ public class AddFragment extends Fragment implements IconSelectedCallback {
         // 初始化数字键盘
         initNumberButtons(view);
 
+        // 初始化选择时间
+        initSetDatetime(view);
+
+        // 初始化设置备注
+        initSetComment(view);
+
         etMoneyAmount = (EditText) view.findViewById(R.id.id_money_amount);
         sbMoneyAmount = new StringBuilder();
 
         return view;
+    }
+
+    private void initSetComment(View view) {
+        TextView tvSetComment = (TextView) view.findViewById(R.id.id_set_comment);
+        tvSetComment.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getActivity(), SetCommentDialogActivity.class);
+                intent.putExtra(SetCommentDialogActivity.EXTRA_COMMENT, accountComment);
+                startActivityForResult(intent, REQUEST_SET_COMMENT);
+            }
+        });
+    }
+
+    private void initSetDatetime(View view) {
+        TextView tvSetDatetime = (TextView) view.findViewById(R.id.id_choose_date);
+        tvSetDatetime.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getActivity(), SetDatetimeDialogActivity.class);
+                intent.putExtra(SetDatetimeDialogActivity.EXTRA_DATETIME, accountDatetime);
+                startActivityForResult(intent, REQUEST_SET_DATE);
+            }
+        });
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (resultCode == Activity.RESULT_OK) {
+            switch (requestCode) {
+                case REQUEST_SET_DATE:
+                    accountDatetime = data.getStringExtra(SetDatetimeDialogActivity.EXTRA_DATETIME);
+                    break;
+                case REQUEST_SET_COMMENT:
+                    accountComment = data.getStringExtra(SetCommentDialogActivity.EXTRA_COMMENT);
+                    break;
+                default:
+                    break;
+            }
+        }
     }
 
     @Override
@@ -106,12 +162,20 @@ public class AddFragment extends Fragment implements IconSelectedCallback {
             return;
         }
 
+        // 如果没有设置时间，默认为当前时间
+        if (accountDatetime == null || "".equals(accountDatetime)) {
+            Calendar c = Calendar.getInstance();
+            SimpleDateFormat sdf = new SimpleDateFormat(Util.DATE_FORMAT);
+            accountDatetime = sdf.format(c.getTime());
+        }
+
         // 设置要保存的数据
         AccountModel accountData = new AccountModel();
         accountData.setAmount(Float.parseFloat(sbMoneyAmount.toString()));
-        accountData.setDate(new Date());
+        accountData.setDatetime(accountDatetime);
         accountData.setIsOut(accountIsOut);
         accountData.setType(accountType);
+        accountData.setComment(accountComment);
 
         // 保存数据
         boolean saveFlag = accountData.save();
@@ -122,11 +186,13 @@ public class AddFragment extends Fragment implements IconSelectedCallback {
     }
 
     /**
-     * 清除已经输入的金额
+     * 清除已经输入的金额信息
      */
     private void cleanMoneyAmount() {
         sbMoneyAmount.delete(0, sbMoneyAmount.length());
         etMoneyAmount.setText(sbMoneyAmount.toString());
+        accountComment = "";
+        accountDatetime = "";
     }
 
     class NumberButtonClickListener implements View.OnClickListener {
