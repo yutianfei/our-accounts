@@ -72,6 +72,12 @@ public class AddFragment extends Fragment implements IconSelectedCallback {
     public void onIconSelected(boolean isOut, String type) {
         accountIsOut = isOut;
         accountType = type;
+
+        if (isOut) {
+            etMoneyAmount.setTextColor(getResources().getColor(android.R.color.holo_green_light));
+        } else {
+            etMoneyAmount.setTextColor(getResources().getColor(android.R.color.holo_red_light));
+        }
     }
 
     private void saveAccountData() {
