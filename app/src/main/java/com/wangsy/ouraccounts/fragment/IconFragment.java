@@ -36,6 +36,8 @@ public class IconFragment extends Fragment {
     private IconGridViewAdapter adapter;
     private List<IconModel> iconsList;
 
+    private IconSelectedBroadcastReceiver iconSelectedBroadcastReceiver;
+
     /**
      * 从IconPageAdapter传递过来的要选择的icon所在的页面索引，
      * 用于获取当前fragment页面要显示的数据列表
@@ -123,7 +125,7 @@ public class IconFragment extends Fragment {
         super.onAttach(activity);
 
         // 注册广播
-        IconSelectedBroadcastReceiver iconSelectedBroadcastReceiver = new IconSelectedBroadcastReceiver();
+        iconSelectedBroadcastReceiver = new IconSelectedBroadcastReceiver();
         IntentFilter filter = new IntentFilter();
         filter.addAction(ICON_SELECT_BROADCAST_INTENT_FILTER);
         activity.registerReceiver(iconSelectedBroadcastReceiver, filter);
@@ -182,4 +184,9 @@ public class IconFragment extends Fragment {
         }
     }
 
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        getActivity().unregisterReceiver(iconSelectedBroadcastReceiver);
+    }
 }
