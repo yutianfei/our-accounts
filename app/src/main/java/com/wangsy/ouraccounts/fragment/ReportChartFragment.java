@@ -6,23 +6,20 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
 
 import com.wangsy.ouraccounts.R;
 
 /**
- * 设置
+ * 账目记录统计图
  * <p/>
- * Created by wangsy on 15/10/22.
+ * Created by wangsy on 15/10/26.
  */
-public class SettingFragment extends Fragment {
+public class ReportChartFragment extends Fragment {
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_setting, null);
-
-        TextView title = (TextView) view.findViewById(R.id.id_title);
-        title.setText(R.string.title_setting);
+        View view = inflater.inflate(R.layout.fragment_report_chart, null);
 
         return view;
     }

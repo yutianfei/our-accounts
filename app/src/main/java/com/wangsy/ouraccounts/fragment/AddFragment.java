@@ -139,7 +139,7 @@ public class AddFragment extends Fragment implements IconSelectedCallback {
     private void saveAccountData() {
         // 没有金额，提示，不保存
         if (sbMoneyAmount.toString().isEmpty()) {
-            Toast.makeText(getActivity(), "消费金额是否输入了呢？", Toast.LENGTH_LONG).show();
+            Toast.makeText(getActivity(), "金额是否输入了呢？", Toast.LENGTH_LONG).show();
             return;
         }
 
@@ -158,7 +158,7 @@ public class AddFragment extends Fragment implements IconSelectedCallback {
 
         // 0元提示，不保存
         if (Float.parseFloat(sbMoneyAmount.toString()) == 0) {
-            Toast.makeText(getActivity(), "请确保消费金额输入正确哦！", Toast.LENGTH_LONG).show();
+            Toast.makeText(getActivity(), "请确保金额输入正确哦！", Toast.LENGTH_LONG).show();
             return;
         }
 

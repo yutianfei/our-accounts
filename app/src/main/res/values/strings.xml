@@ -1,14 +1,15 @@
 <resources>
-    <string name="app_name">周周账目</string>
+    <string name="app_name">记一笔</string>
 
     <string name="title_new">记一笔</string>
+    <string name="title_setting">设置</string>
 
     <string name="button_ok">确定</string>
     <string name="button_cancel">取消</string>
 
     <!-- tab标题 -->
     <string name="tab_add">新的</string>
-    <string name="tab_report">统计</string>
+    <string name="tab_report">记录</string>
     <string name="tab_setting">设置</string>
 
     <!-- 金额字符 -->
@@ -57,5 +58,9 @@
     <string name="set_date">时间</string>
     <string name="set_date_title">设置时间</string>
     <string name="vertical_divider">|</string>
+
+    <!-- report titles -->
+    <string name="report_title_list">列表</string>
+    <string name="report_title_chart">统计</string>
 
 </resources>
