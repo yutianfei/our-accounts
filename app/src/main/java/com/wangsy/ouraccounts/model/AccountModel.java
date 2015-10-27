@@ -15,6 +15,15 @@ public class AccountModel extends DataSupport {
     private float amount = 0;
     private String comment = "";
     private String datetime = "";
+    private int iconToShow;
+
+    public int getIconToShow() {
+        return iconToShow;
+    }
+
+    public void setIconToShow(int iconToShow) {
+        this.iconToShow = iconToShow;
+    }
 
     public String getDatetime() {
         return datetime;
@@ -31,7 +40,6 @@ public class AccountModel extends DataSupport {
     public void setComment(String comment) {
         this.comment = comment;
     }
-
 
     public float getAmount() {
         return amount;

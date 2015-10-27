@@ -143,7 +143,7 @@ public class IconFragment extends Fragment {
             iconModel.iconImageToShow = iconModel.selectedIcon;
 
             // 将需要的数据通过回调，返回给父fragment
-            iconSelectedCallback.onIconSelected(iconModel.isOut, iconModel.type);
+            iconSelectedCallback.onIconSelected(iconModel.isOut, iconModel.type, iconModel.iconImageToShow);
         }
     }
 

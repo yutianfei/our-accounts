@@ -43,6 +43,7 @@ public class AddFragment extends Fragment implements IconSelectedCallback {
     private boolean accountIsOut;
     private String accountComment = "";
     private String accountDatetime = "";
+    private int accountIconToShow;
 
     @Override
     public void onAttach(Activity activity) {
@@ -125,9 +126,10 @@ public class AddFragment extends Fragment implements IconSelectedCallback {
     }
 
     @Override
-    public void onIconSelected(boolean isOut, String type) {
+    public void onIconSelected(boolean isOut, String type, int iconToShow) {
         accountIsOut = isOut;
         accountType = type;
+        accountIconToShow = iconToShow;
 
         if (isOut) {
             etMoneyAmount.setTextColor(getResources().getColor(android.R.color.holo_green_light));
@@ -176,6 +178,7 @@ public class AddFragment extends Fragment implements IconSelectedCallback {
         accountData.setIsOut(accountIsOut);
         accountData.setType(accountType);
         accountData.setComment(accountComment);
+        accountData.setIconToShow(accountIconToShow);
 
         // 保存数据
         boolean saveFlag = accountData.save();

@@ -4,9 +4,16 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="hello world" />
+    <com.wangsy.ouraccounts.view.PullToRefreshSlideListView
+        xmlns:ptr="http://schemas.android.com/apk/res-auto"
+        android:id="@+id/lvListHaveAnim"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:clipToPadding="false"
+        android:divider="#07457E"
+        android:dividerHeight="1px"
+        android:listSelector="#00000000"
+        ptr:ptrAnimationStyle="rotate"
+        ptr:ptrMode="both" />
 
 </LinearLayout>
