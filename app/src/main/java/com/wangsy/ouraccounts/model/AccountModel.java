@@ -2,6 +2,8 @@ package com.wangsy.ouraccounts.model;
 
 import org.litepal.crud.DataSupport;
 
+import java.io.Serializable;
+
 /**
  * 账目数据模型（数据库存储）
  * <p/>
@@ -9,13 +11,18 @@ import org.litepal.crud.DataSupport;
  * <p/>
  * Created by wangsy on 15/10/21.
  */
-public class AccountModel extends DataSupport {
+public class AccountModel extends DataSupport implements Serializable {
+    private long id;
     private boolean isOut = true;
     private String type = "";
     private float amount = 0;
     private String comment = "";
     private String datetime = "";
     private int iconToShow;
+
+    public long getId() {
+        return getBaseObjId();
+    }
 
     public int getIconToShow() {
         return iconToShow;

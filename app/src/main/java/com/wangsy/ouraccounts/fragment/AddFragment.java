@@ -183,9 +183,19 @@ public class AddFragment extends Fragment implements IconSelectedCallback {
         // 保存数据
         boolean saveFlag = accountData.save();
         if (saveFlag) {
-            Toast.makeText(getActivity(), "保存成功！" + accountData.toString(), Toast.LENGTH_LONG).show();
+            Toast.makeText(getActivity(), "保存成功", Toast.LENGTH_SHORT).show();
+            sendBroadcastToRefreshData();
             cleanMoneyAmount();
         }
+    }
+
+    /**
+     * 通知数据更新
+     */
+    private void sendBroadcastToRefreshData() {
+        Intent intent = new Intent();
+        intent.setAction(ReportListFragment.REFRESH_DATA_BROADCAST_INTENT_FILTER);
+        getActivity().sendBroadcast(intent);
     }
 
     /**
