@@ -65,14 +65,14 @@ public class IconFragment extends Fragment {
         // 选择icon后的处理工作
         bindOnIconClickListener();
 
-        // 默认选择第一页第一个icon
+        // 默认选择第一页第一个支出类型的icon
         setDefaultSelectedIcon();
 
         return view;
     }
 
     private void setDefaultSelectedIcon() {
-        setSelectIcon(0, 0);
+        setSelectIcon(0, 1);
         adapter.notifyDataSetChanged();
     }
 

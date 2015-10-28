@@ -66,7 +66,7 @@ public class AddFragment extends Fragment implements IconSelectedCallback {
         // 主界面显示右侧按钮：保存数据
         initButtonRight(view);
 
-        // 初始化 viewpager
+        // 初始化viewpager
         initViewPager(view);
 
         // 初始化数字键盘
@@ -132,9 +132,9 @@ public class AddFragment extends Fragment implements IconSelectedCallback {
         accountIconToShow = iconToShow;
 
         if (isOut) {
-            etMoneyAmount.setTextColor(getResources().getColor(android.R.color.holo_green_light));
+            etMoneyAmount.setTextColor(getResources().getColor(R.color.color_money_out));
         } else {
-            etMoneyAmount.setTextColor(getResources().getColor(android.R.color.holo_red_light));
+            etMoneyAmount.setTextColor(getResources().getColor(R.color.color_money_in));
         }
     }
 

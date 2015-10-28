@@ -66,10 +66,10 @@ public class AccountAdapter extends BaseAdapter {
 
         if (account.isOut()) {
             viewHolder.tvAccountMoney.setTextColor(
-                    context.getResources().getColor(android.R.color.holo_green_light));
+                    context.getResources().getColor(R.color.color_money_out));
         } else {
             viewHolder.tvAccountMoney.setTextColor(
-                    context.getResources().getColor(android.R.color.holo_red_light));
+                    context.getResources().getColor(R.color.color_money_in));
         }
 
         if (null == account.getComment() || "".equals(account.getComment())) {

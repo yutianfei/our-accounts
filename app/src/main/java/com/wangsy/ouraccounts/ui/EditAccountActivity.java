@@ -4,12 +4,19 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.EditText;
+import android.widget.GridView;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
 import com.wangsy.ouraccounts.R;
+import com.wangsy.ouraccounts.adapter.IconGridViewAdapter;
 import com.wangsy.ouraccounts.model.AccountModel;
+import com.wangsy.ouraccounts.model.IconModel;
+import com.wangsy.ouraccounts.model.IconsList;
+
+import java.util.List;
 
 /**
  * 对记录进行编辑
@@ -19,10 +26,18 @@ import com.wangsy.ouraccounts.model.AccountModel;
 public class EditAccountActivity extends Activity implements View.OnClickListener {
 
     public static final String EXTRA_EDIT_DATA = "extra_edit_data";
+    public static final int REQUEST_SET_DATE = 1;
+
+    private List<IconModel> iconsList;
 
     private AccountModel editAccount;
 
-    private EditText etComment, etAmount;
+    private EditText etComment;
+    private EditText etAmount;
+    private TextView tvDatetime;
+
+    private GridView iconGridView;
+    private IconGridViewAdapter adapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,10 +56,21 @@ public class EditAccountActivity extends Activity implements View.OnClickListene
         // 备注
         etComment = (EditText) findViewById(R.id.id_edit_comment);
         etComment.setText(editAccount.getComment());
+        etComment.setSelection(etComment.getText().toString().length());
 
         // 金额
         etAmount = (EditText) findViewById(R.id.id_edit_amount);
         etAmount.setText(editAccount.getAmount() + "");
+        etAmount.setSelection(etAmount.getText().toString().length());
+        setEtAmountColor();
+
+        // 时间
+        tvDatetime = (TextView) findViewById(R.id.id_edit_datetime);
+        tvDatetime.setText(editAccount.getDatetime());
+        tvDatetime.setOnClickListener(this);
+
+        // 类型
+        initIconType();
 
         // 主界面显示右侧按钮：修改完成，保存数据
         initButtonRight();
@@ -53,9 +79,72 @@ public class EditAccountActivity extends Activity implements View.OnClickListene
         initButtonLeft();
     }
 
+    /**
+     * 设置金额的颜色
+     */
+    private void setEtAmountColor() {
+        if (editAccount.isOut()) {
+            etAmount.setTextColor(getResources().getColor(R.color.color_money_out));
+        } else {
+            etAmount.setTextColor(getResources().getColor(R.color.color_money_in));
+        }
+    }
+
+    private void initIconType() {
+        iconGridView = (GridView) findViewById(R.id.id_edit_icon);
+        iconsList = IconsList.getIconsList();
+        adapter = new IconGridViewAdapter(iconsList, this);
+        iconGridView.setAdapter(adapter);
+
+        // 默认选择传递过来的数据的图标
+        setDefaultIconSelection();
+
+        iconGridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                resetIconStates();
+
+                IconModel iconModel = iconsList.get(position);
+                iconModel.iconNameColor = R.color.color_icon_selected;
+                iconModel.iconImageToShow = iconModel.selectedIcon;
+
+                editAccount.setOut(iconModel.isOut);
+                editAccount.setType(iconModel.type);
+                editAccount.setIconToShow(iconModel.iconImageToShow);
+                setEtAmountColor();
+
+                adapter.notifyDataSetChanged();
+            }
+        });
+    }
+
+    private void setDefaultIconSelection() {
+        for (int i = 0; i < iconsList.size(); i++) {
+            if (editAccount.getType().equals(iconsList.get(i).type)) {
+                iconsList.get(i).iconNameColor = R.color.color_icon_selected;
+                iconsList.get(i).iconImageToShow = iconsList.get(i).selectedIcon;
+                iconGridView.setSelection(i);
+                adapter.notifyDataSetChanged();
+            }
+        }
+    }
+
+    /**
+     * 清除图标状态
+     */
+    private void resetIconStates() {
+        for (int i = 0; i < iconsList.size(); i++) {
+            iconsList.get(i).iconNameColor = R.color.color_icon_normal;
+            iconsList.get(i).iconImageToShow = iconsList.get(i).normalIcon;
+        }
+    }
+
     @Override
     public void onClick(View view) {
         switch (view.getId()) {
+            case R.id.id_edit_datetime:
+                setDatetime();
+                break;
             case R.id.id_title_right_btn:
                 saveEditData();
                 finish();
@@ -64,6 +153,24 @@ public class EditAccountActivity extends Activity implements View.OnClickListene
                 setResult(RESULT_CANCELED);
                 finish();
                 break;
+        }
+    }
+
+    /**
+     * 设置时间
+     */
+    private void setDatetime() {
+        Intent intent = new Intent(EditAccountActivity.this, SetDatetimeDialogActivity.class);
+        intent.putExtra(SetDatetimeDialogActivity.EXTRA_DATETIME, editAccount.getDatetime());
+        startActivityForResult(intent, REQUEST_SET_DATE);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (resultCode == Activity.RESULT_OK && requestCode == REQUEST_SET_DATE) {
+            editAccount.setDatetime(data.getStringExtra(SetDatetimeDialogActivity.EXTRA_DATETIME));
+            tvDatetime.setText(editAccount.getDatetime());
         }
     }
 

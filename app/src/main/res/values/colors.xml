@@ -9,11 +9,16 @@
     <color name="color_text_normal">#767676</color>
     <color name="color_text_selected">#F5A623</color>
 
+    <color name="color_money_out">@android:color/holo_green_dark</color>
+    <color name="color_money_in">@android:color/holo_red_dark</color>
+
     <color name="color_icon_normal">#767676</color>
     <color name="color_icon_selected">#F5A623</color>
 
     <color name="lighter_gray">#ddd</color>
     <color name="darker_gray">#aaa</color>
+
+    <color name="edit_text_color">#333333</color>
 
     <color name="colorPrimary">#3F51B5</color>
     <color name="colorPrimaryDark">#303F9F</color>

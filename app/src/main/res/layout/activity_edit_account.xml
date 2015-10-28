@@ -13,17 +13,25 @@
         android:padding="16dp">
 
         <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="金额：" />
+            style="@style/style_edit_tab"
+            android:text="@string/edit_amount_tab" />
 
         <EditText
             android:id="@+id/id_edit_amount"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            style="@style/style_edit_text"
+            android:hint="@string/edit_amount_tab"
+            android:imeOptions="actionNext"
             android:inputType="numberDecimal" />
     </LinearLayout>
 
+    <!-- 分割线 -->
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_marginEnd="@dimen/dp_16"
+        android:layout_marginStart="@dimen/dp_16"
+        android:background="@color/lighter_gray" />
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -31,16 +39,22 @@
         android:padding="16dp">
 
         <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="时间：" />
+            style="@style/style_edit_tab"
+            android:text="@string/edit_datetime_tab" />
 
-        <EditText
+        <TextView
             android:id="@+id/id_edit_datetime"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
+            style="@style/style_edit_text" />
     </LinearLayout>
 
+    <!-- 分割线 -->
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_marginEnd="@dimen/dp_16"
+        android:layout_marginStart="@dimen/dp_16"
+        android:background="@color/lighter_gray" />
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -48,14 +62,43 @@
         android:padding="16dp">
 
         <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="备注：" />
+            style="@style/style_edit_tab"
+            android:text="@string/edit_comment_tab" />
 
         <EditText
             android:id="@+id/id_edit_comment"
+            style="@style/style_edit_text"
+            android:hint="@string/edit_comment_tab" />
+    </LinearLayout>
+
+    <!-- 分割线 -->
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_marginEnd="@dimen/dp_16"
+        android:layout_marginStart="@dimen/dp_16"
+        android:background="@color/lighter_gray" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:padding="16dp">
+
+        <TextView
+            style="@style/style_edit_tab"
+            android:layout_marginEnd="0dp"
+            android:text="@string/edit_type_tab" />
+
+        <GridView
+            android:id="@+id/id_edit_icon"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:background="@null"
+            android:listSelector="@android:color/transparent"
+            android:numColumns="5"
+            android:paddingTop="5dp"
+            android:verticalSpacing="10dp" />
     </LinearLayout>
 
 </LinearLayout>

@@ -92,7 +92,7 @@ public class ReportListFragment extends Fragment {
                 new QueryAccountsTask().execute(page);
             }
 
-            // 加载更多
+            // 加载下一页
             @Override
             public void onPullUpToRefresh(PullToRefreshBase<SwipeMenuListView> refreshView) {
                 page++;
@@ -197,8 +197,9 @@ public class ReportListFragment extends Fragment {
         btnOk.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // 删除记录
+                // 从数据库中删除
                 accountsList.get(position).delete();
+                // 从显示的列表中移除
                 accountsList.remove(position);
                 accountAdapter.notifyDataSetChanged();
                 dialog.dismiss();
@@ -250,7 +251,6 @@ public class ReportListFragment extends Fragment {
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
-
         // 注册广播
         refreshDataBroadcastReceiver = new RefreshDataBroadcastReceiver();
         IntentFilter filter = new IntentFilter();
