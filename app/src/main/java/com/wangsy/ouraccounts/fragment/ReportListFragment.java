@@ -3,6 +3,7 @@ package com.wangsy.ouraccounts.fragment;
 import android.app.Activity;
 import android.app.Dialog;
 import android.content.BroadcastReceiver;
+import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
@@ -13,7 +14,9 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.Button;
+import android.widget.Toast;
 
 import com.handmark.pulltorefresh.library.PullToRefreshBase;
 import com.wangsy.ouraccounts.R;
@@ -70,6 +73,13 @@ public class ReportListFragment extends Fragment {
         accountsList = new ArrayList<>();
         accountAdapter = new AccountAdapter(accountsList, getActivity());
         listViewAccounts.setAdapter(accountAdapter);
+        listViewAccounts.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                // 前往编辑页面
+                gotoEditActivity(position - 1);
+            }
+        });
 
         // 设置滑动选项
         createSwipeMenu();
@@ -106,22 +116,15 @@ public class ReportListFragment extends Fragment {
             @Override
             public void create(SwipeMenu menu) {
                 // 创建按钮
-                SwipeMenuItem editItem = new SwipeMenuItem(getActivity().getApplicationContext());
-                // 设置按钮背景
-                editItem.setBackground(R.drawable.item_edit);
-                // 设置按钮宽高
-                editItem.setWidth(Util.dp2px(getActivity(), 80));
-                editItem.setHeight(Util.dp2px(getActivity(), 80));
-                // 给按钮添加图片
-                editItem.setIcon(R.mipmap.icon_edit);
-                // 添加进按钮
-                menu.addMenuItem(editItem);
-
                 SwipeMenuItem deleteItem = new SwipeMenuItem(getActivity().getApplicationContext());
+                // 设置按钮背景
                 deleteItem.setBackground(R.drawable.item_delete);
+                // 设置按钮宽高
                 deleteItem.setWidth(Util.dp2px(getActivity(), 80));
                 deleteItem.setHeight(Util.dp2px(getActivity(), 80));
+                // 给按钮添加图片
                 deleteItem.setIcon(R.mipmap.icon_delete);
+                // 添加进按钮
                 menu.addMenuItem(deleteItem);
             }
         };
@@ -131,10 +134,6 @@ public class ReportListFragment extends Fragment {
             public boolean onMenuItemClick(int position, SwipeMenu menu, int index) {
                 switch (index) {
                     case 0:
-                        // 前往编辑页面
-                        gotoEditActivity(position);
-                        break;
-                    case 1:
                         // 显示删除提示
                         showDeleteDialog(position);
                         break;
@@ -152,6 +151,7 @@ public class ReportListFragment extends Fragment {
         AccountModel account = accountsList.get(position);
         Intent intent = new Intent(getActivity(), EditAccountActivity.class);
         intent.putExtra(EditAccountActivity.EXTRA_EDIT_DATA, account);
+        intent.putExtra(EditAccountActivity.EXTRA_EDIT_DATA_ID, accountsList.get(position).getId());
         getParentFragment().startActivityForResult(intent, REQUEST_EDIT_DATA);
     }
 
@@ -168,8 +168,6 @@ public class ReportListFragment extends Fragment {
      * 更新数据
      */
     private void refreshData(AccountModel newAccount) {
-        // 更新数据库数据
-        newAccount.update(accountsList.get(editIndex).getId());
         // 更新显示数据
         accountsList.get(editIndex).setOut(newAccount.isOut());
         accountsList.get(editIndex).setIconToShow(newAccount.getIconToShow());

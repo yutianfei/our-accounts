@@ -10,6 +10,8 @@
     <string name="dialog_tip">提示</string>
     <string name="delete_confirm">确定删除此条记录吗？</string>
 
+    <string name="hint_empty">""</string>
+
     <!-- tab标题 -->
     <string name="tab_add">新的</string>
     <string name="tab_report">记录</string>

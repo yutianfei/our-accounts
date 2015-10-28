@@ -1,6 +1,7 @@
 package com.wangsy.ouraccounts.ui;
 
 import android.app.Activity;
+import android.content.ContentValues;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
@@ -9,12 +10,15 @@ import android.widget.EditText;
 import android.widget.GridView;
 import android.widget.ImageButton;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.wangsy.ouraccounts.R;
 import com.wangsy.ouraccounts.adapter.IconGridViewAdapter;
 import com.wangsy.ouraccounts.model.AccountModel;
 import com.wangsy.ouraccounts.model.IconModel;
 import com.wangsy.ouraccounts.model.IconsList;
+
+import org.litepal.crud.DataSupport;
 
 import java.util.List;
 
@@ -26,11 +30,13 @@ import java.util.List;
 public class EditAccountActivity extends Activity implements View.OnClickListener {
 
     public static final String EXTRA_EDIT_DATA = "extra_edit_data";
+    public static final String EXTRA_EDIT_DATA_ID = "extra_edit_data_id";
     public static final int REQUEST_SET_DATE = 1;
 
     private List<IconModel> iconsList;
 
     private AccountModel editAccount;
+    private long id;
 
     private EditText etComment;
     private EditText etAmount;
@@ -44,6 +50,7 @@ public class EditAccountActivity extends Activity implements View.OnClickListene
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_edit_account);
 
+        id = getIntent().getLongExtra(EXTRA_EDIT_DATA_ID, -1);
         editAccount = (AccountModel) getIntent().getSerializableExtra(EXTRA_EDIT_DATA);
 
         TextView title = (TextView) findViewById(R.id.id_title);
@@ -147,7 +154,6 @@ public class EditAccountActivity extends Activity implements View.OnClickListene
                 break;
             case R.id.id_title_right_btn:
                 saveEditData();
-                finish();
                 break;
             case R.id.id_title_left_btn:
                 setResult(RESULT_CANCELED);
@@ -178,11 +184,26 @@ public class EditAccountActivity extends Activity implements View.OnClickListene
      * 保存更该完成的数据
      */
     private void saveEditData() {
-        // 将修改的信息返回给调用者更新
+        // 设置新的数据
         setNewData();
-        Intent data = new Intent();
-        data.putExtra(EXTRA_EDIT_DATA, editAccount);
-        setResult(RESULT_OK, data);
+
+        // 更新数据库数据
+        ContentValues values = new ContentValues();
+        values.put("isOut", editAccount.isOut());
+        values.put("type", editAccount.getType());
+        values.put("amount", editAccount.getAmount());
+        values.put("comment", editAccount.getComment());
+        values.put("datetime", editAccount.getDatetime());
+        values.put("iconToShow", editAccount.getIconToShow());
+        int count = DataSupport.update(AccountModel.class, values, id);
+        if (count > 0) {
+            Toast.makeText(this, "修改成功", Toast.LENGTH_SHORT).show();
+            // 将修改的信息返回给调用者更新
+            Intent data = new Intent();
+            data.putExtra(EXTRA_EDIT_DATA, editAccount);
+            setResult(RESULT_OK, data);
+            finish();
+        }
     }
 
     private void setNewData() {

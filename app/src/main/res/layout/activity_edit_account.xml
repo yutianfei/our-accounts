@@ -19,9 +19,10 @@
         <EditText
             android:id="@+id/id_edit_amount"
             style="@style/style_edit_text"
-            android:hint="@string/edit_amount_tab"
+            android:hint="@string/hint_empty"
             android:imeOptions="actionNext"
-            android:inputType="numberDecimal" />
+            android:inputType="numberDecimal"
+            android:maxLines="1" />
     </LinearLayout>
 
     <!-- 分割线 -->
@@ -68,7 +69,9 @@
         <EditText
             android:id="@+id/id_edit_comment"
             style="@style/style_edit_text"
-            android:hint="@string/edit_comment_tab" />
+            android:hint="@string/hint_empty"
+            android:maxLines="3"
+            android:scrollbars="vertical" />
     </LinearLayout>
 
     <!-- 分割线 -->

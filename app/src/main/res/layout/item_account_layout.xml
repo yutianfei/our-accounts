@@ -2,6 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="80dp"
+    android:background="@drawable/item_click"
     android:gravity="center"
     android:orientation="horizontal">
 
@@ -45,7 +46,8 @@
             android:id="@+id/id_account_comment"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:maxLines="2"
+            android:ellipsize="end"
+            android:singleLine="true"
             android:textSize="16sp" />
     </LinearLayout>
 
