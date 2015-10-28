@@ -1,5 +1,6 @@
 package com.wangsy.ouraccounts.fragment;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -72,7 +73,7 @@ public class ReportFragment extends Fragment implements View.OnClickListener {
                 viewListUnderline.setVisibility(View.VISIBLE);
                 if (mListFragment == null) {
                     mListFragment = new ReportListFragment();
-                    ft.add(R.id.tab_container, mListFragment);
+                    ft.add(R.id.tab_container, mListFragment, "list");
                 } else {
                     ft.show(mListFragment);
                 }
@@ -133,5 +134,12 @@ public class ReportFragment extends Fragment implements View.OnClickListener {
                 setSelectFragment(TAB_CHART_INDEX);
                 break;
         }
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        Fragment f = fm.findFragmentByTag("list");
+        f.onActivityResult(requestCode, resultCode, data);
     }
 }

@@ -68,10 +68,6 @@ public class AccountModel extends DataSupport implements Serializable {
         return isOut;
     }
 
-    public void setIsOut(boolean isOut) {
-        setOut(isOut);
-    }
-
     public void setOut(boolean isOut) {
         this.isOut = isOut;
     }

@@ -175,7 +175,7 @@ public class AddFragment extends Fragment implements IconSelectedCallback {
         AccountModel accountData = new AccountModel();
         accountData.setAmount(Float.parseFloat(sbMoneyAmount.toString()));
         accountData.setDatetime(accountDatetime);
-        accountData.setIsOut(accountIsOut);
+        accountData.setOut(accountIsOut);
         accountData.setType(accountType);
         accountData.setComment(accountComment);
         accountData.setIconToShow(accountIconToShow);

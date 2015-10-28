@@ -152,19 +152,32 @@ public class ReportListFragment extends Fragment {
         AccountModel account = accountsList.get(position);
         Intent intent = new Intent(getActivity(), EditAccountActivity.class);
         intent.putExtra(EditAccountActivity.EXTRA_EDIT_DATA, account);
-        startActivityForResult(intent, REQUEST_EDIT_DATA);
+        getParentFragment().startActivityForResult(intent, REQUEST_EDIT_DATA);
     }
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (resultCode == Activity.RESULT_OK && requestCode == REQUEST_EDIT_DATA) {
-            AccountModel oldAccount = accountsList.get(editIndex);
             AccountModel newAccount = (AccountModel) data.getSerializableExtra(EditAccountActivity.EXTRA_EDIT_DATA);
-            newAccount.update(oldAccount.getId());
-            oldAccount = newAccount;
-            accountAdapter.notifyDataSetChanged();
+            refreshData(newAccount);
         }
+    }
+
+    /**
+     * 更新数据
+     */
+    private void refreshData(AccountModel newAccount) {
+        // 更新数据库数据
+        newAccount.update(accountsList.get(editIndex).getId());
+        // 更新显示数据
+        accountsList.get(editIndex).setOut(newAccount.isOut());
+        accountsList.get(editIndex).setIconToShow(newAccount.getIconToShow());
+        accountsList.get(editIndex).setDatetime(newAccount.getDatetime());
+        accountsList.get(editIndex).setComment(newAccount.getComment());
+        accountsList.get(editIndex).setAmount(newAccount.getAmount());
+        accountsList.get(editIndex).setType(newAccount.getType());
+        accountAdapter.notifyDataSetChanged();
     }
 
     /**

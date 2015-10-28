@@ -9,7 +9,6 @@ import android.widget.ImageButton;
 import android.widget.TextView;
 
 import com.wangsy.ouraccounts.R;
-import com.wangsy.ouraccounts.fragment.ReportListFragment;
 import com.wangsy.ouraccounts.model.AccountModel;
 
 /**
@@ -21,16 +20,16 @@ public class EditAccountActivity extends Activity implements View.OnClickListene
 
     public static final String EXTRA_EDIT_DATA = "extra_edit_data";
 
-    private AccountModel waitToEditAccount;
+    private AccountModel editAccount;
 
-    private EditText tvComment;
+    private EditText etComment, etAmount;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_edit_account);
 
-        waitToEditAccount = (AccountModel) getIntent().getSerializableExtra(EXTRA_EDIT_DATA);
+        editAccount = (AccountModel) getIntent().getSerializableExtra(EXTRA_EDIT_DATA);
 
         TextView title = (TextView) findViewById(R.id.id_title);
         title.setText(R.string.title_edit);
@@ -39,8 +38,13 @@ public class EditAccountActivity extends Activity implements View.OnClickListene
     }
 
     private void initViews() {
-        tvComment = (EditText) findViewById(R.id.id_edit_comment);
-        tvComment.setText(waitToEditAccount.getComment());
+        // 备注
+        etComment = (EditText) findViewById(R.id.id_edit_comment);
+        etComment.setText(editAccount.getComment());
+
+        // 金额
+        etAmount = (EditText) findViewById(R.id.id_edit_amount);
+        etAmount.setText(editAccount.getAmount() + "");
 
         // 主界面显示右侧按钮：修改完成，保存数据
         initButtonRight();
@@ -53,8 +57,8 @@ public class EditAccountActivity extends Activity implements View.OnClickListene
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.id_title_right_btn:
-                // TODO
-
+                saveEditData();
+                finish();
                 break;
             case R.id.id_title_left_btn:
                 setResult(RESULT_CANCELED);
@@ -63,18 +67,27 @@ public class EditAccountActivity extends Activity implements View.OnClickListene
         }
     }
 
+    /**
+     * 保存更该完成的数据
+     */
+    private void saveEditData() {
+        // 将修改的信息返回给调用者更新
+        setNewData();
+        Intent data = new Intent();
+        data.putExtra(EXTRA_EDIT_DATA, editAccount);
+        setResult(RESULT_OK, data);
+    }
+
+    private void setNewData() {
+        editAccount.setComment(etComment.getText().toString());
+        editAccount.setAmount(Float.parseFloat(etAmount.getText().toString()));
+    }
+
     private void initButtonRight() {
         ImageButton imgBtnRight = (ImageButton) findViewById(R.id.id_title_right_btn);
         imgBtnRight.setVisibility(View.VISIBLE);
         imgBtnRight.setImageResource(R.mipmap.icon_ok);
-        imgBtnRight.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                // 将修改的信息返回给调用者
-                //setResult(RESULT_OK);
-                finish();
-            }
-        });
+        imgBtnRight.setOnClickListener(this);
     }
 
     private void initButtonLeft() {
