@@ -64,8 +64,8 @@ public class IconGridViewAdapter extends BaseAdapter {
             viewHolder = (ViewHolder) convertView.getTag();
         }
 
-        viewHolder.tvIcon.setText(typeIcon.iconName);
-        viewHolder.tvIcon.setTextColor(context.getResources().getColor(typeIcon.iconNameColor));
+        viewHolder.tvIcon.setText(typeIcon.type);
+        viewHolder.tvIcon.setTextColor(context.getResources().getColor(typeIcon.typeTextColor));
         viewHolder.imgIcon.setImageResource(typeIcon.iconImageToShow);
 
         return convertView;

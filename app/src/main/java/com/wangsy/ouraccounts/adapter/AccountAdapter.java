@@ -53,14 +53,16 @@ public class AccountAdapter extends BaseAdapter {
             viewHolder.tvAccountDate = (TextView) convertView.findViewById(R.id.id_account_date);
             viewHolder.tvAccountComment = (TextView) convertView.findViewById(R.id.id_account_comment);
             viewHolder.tvAccountMoney = (TextView) convertView.findViewById(R.id.id_account_money);
-            viewHolder.imgViewAccountIcon = (ImageView) convertView.findViewById(R.id.id_account_icon);
+            viewHolder.tvAccountIconType = (TextView) convertView.findViewById(R.id.id_account_icon_type);
+            viewHolder.imgViewIcon = (ImageView) convertView.findViewById(R.id.id_account_icon_img);
 
             convertView.setTag(viewHolder);
         } else {
             viewHolder = (ViewHolder) convertView.getTag();
         }
 
-        viewHolder.imgViewAccountIcon.setImageResource(account.getIconToShow());
+        viewHolder.tvAccountIconType.setText(account.getType());
+        viewHolder.imgViewIcon.setImageResource(account.getIconToShow());
         viewHolder.tvAccountDate.setText(account.getDatetime());
         viewHolder.tvAccountMoney.setText(account.getAmount() + "");
 
@@ -83,7 +85,7 @@ public class AccountAdapter extends BaseAdapter {
     }
 
     class ViewHolder {
-        ImageView imgViewAccountIcon;
-        TextView tvAccountDate, tvAccountComment, tvAccountMoney;
+        ImageView imgViewIcon;
+        TextView tvAccountDate, tvAccountComment, tvAccountMoney, tvAccountIconType;
     }
 }

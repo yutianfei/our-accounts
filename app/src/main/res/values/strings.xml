@@ -37,24 +37,6 @@
     <!-- imageView contentDescription -->
     <string name="icon_content_description">icon for accounts type</string>
 
-    <!-- icon title -->
-    <string name="icon_food">美食</string>
-    <string name="icon_apps">Apps</string>
-    <string name="icon_car">爱车</string>
-    <string name="icon_clothes">衣物</string>
-    <string name="icon_film">电影</string>
-    <string name="icon_general">其他</string>
-    <string name="icon_hair_cut">理发</string>
-    <string name="icon_hotel">酒店</string>
-    <string name="icon_income">收入</string>
-    <string name="icon_kids">孩子</string>
-    <string name="icon_leisure">休闲</string>
-    <string name="icon_medicine">医药</string>
-    <string name="icon_mobile">手机</string>
-    <string name="icon_pet">宠物</string>
-    <string name="icon_shopping">购物</string>
-    <string name="icon_traffic">交通</string>
-
     <!-- set_comment , set_date -->
     <string name="set_comment">备注</string>
     <string name="set_comment_hint">在这里写下您要备注的内容吧！</string>

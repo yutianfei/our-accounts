@@ -8,7 +8,6 @@ import android.content.IntentFilter;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -139,7 +138,7 @@ public class IconFragment extends Fragment {
     private void setSelectIcon(int currentPage, int currentPosition) {
         if (currentPage == page) {
             IconModel iconModel = iconsList.get(currentPosition);
-            iconModel.iconNameColor = R.color.color_icon_selected;
+            iconModel.typeTextColor = R.color.color_icon_selected;
             iconModel.iconImageToShow = iconModel.selectedIcon;
 
             // 将需要的数据通过回调，返回给父fragment
@@ -152,7 +151,7 @@ public class IconFragment extends Fragment {
      */
     private void resetIconStates() {
         for (int i = 0; i < iconsList.size(); i++) {
-            iconsList.get(i).iconNameColor = R.color.color_icon_normal;
+            iconsList.get(i).typeTextColor = R.color.color_icon_normal;
             iconsList.get(i).iconImageToShow = iconsList.get(i).normalIcon;
         }
     }

@@ -105,7 +105,7 @@ public class EditAccountActivity extends Activity implements View.OnClickListene
                 resetIconStates();
 
                 IconModel iconModel = iconsList.get(position);
-                iconModel.iconNameColor = R.color.color_icon_selected;
+                iconModel.typeTextColor = R.color.color_icon_selected;
                 iconModel.iconImageToShow = iconModel.selectedIcon;
 
                 editAccount.setOut(iconModel.isOut);
@@ -121,7 +121,7 @@ public class EditAccountActivity extends Activity implements View.OnClickListene
     private void setDefaultIconSelection() {
         for (int i = 0; i < iconsList.size(); i++) {
             if (editAccount.getType().equals(iconsList.get(i).type)) {
-                iconsList.get(i).iconNameColor = R.color.color_icon_selected;
+                iconsList.get(i).typeTextColor = R.color.color_icon_selected;
                 iconsList.get(i).iconImageToShow = iconsList.get(i).selectedIcon;
                 iconGridView.setSelection(i);
                 adapter.notifyDataSetChanged();
@@ -134,7 +134,7 @@ public class EditAccountActivity extends Activity implements View.OnClickListene
      */
     private void resetIconStates() {
         for (int i = 0; i < iconsList.size(); i++) {
-            iconsList.get(i).iconNameColor = R.color.color_icon_normal;
+            iconsList.get(i).typeTextColor = R.color.color_icon_normal;
             iconsList.get(i).iconImageToShow = iconsList.get(i).normalIcon;
         }
     }
