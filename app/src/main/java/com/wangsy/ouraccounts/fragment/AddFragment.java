@@ -194,7 +194,7 @@ public class AddFragment extends Fragment implements IconSelectedCallback {
      */
     private void sendBroadcastToRefreshData() {
         Intent intent = new Intent();
-        intent.setAction(ReportListFragment.REFRESH_DATA_BROADCAST_INTENT_FILTER);
+        intent.setAction(ReportFragment.REFRESH_DATA_BROADCAST_INTENT_FILTER);
         getActivity().sendBroadcast(intent);
     }
 

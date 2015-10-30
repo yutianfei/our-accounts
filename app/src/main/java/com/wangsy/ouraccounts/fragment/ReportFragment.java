@@ -15,12 +15,14 @@ import android.widget.TextView;
 import com.wangsy.ouraccounts.R;
 
 /**
- * 列表
+ * 列表，
  * 统计图
  * <p/>
  * Created by wangsy on 15/10/22.
  */
 public class ReportFragment extends Fragment implements View.OnClickListener {
+
+    public static final String REFRESH_DATA_BROADCAST_INTENT_FILTER = "com.refreshData";
 
     // 每个标签对应的索引
     public static final int TAB_LIST_INDEX = 0;

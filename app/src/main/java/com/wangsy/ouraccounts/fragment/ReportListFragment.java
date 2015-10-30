@@ -3,7 +3,6 @@ package com.wangsy.ouraccounts.fragment;
 import android.app.Activity;
 import android.app.Dialog;
 import android.content.BroadcastReceiver;
-import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
@@ -20,7 +19,7 @@ import android.widget.Toast;
 
 import com.handmark.pulltorefresh.library.PullToRefreshBase;
 import com.wangsy.ouraccounts.R;
-import com.wangsy.ouraccounts.adapter.AccountAdapter;
+import com.wangsy.ouraccounts.adapter.AccountListAdapter;
 import com.wangsy.ouraccounts.model.AccountModel;
 import com.wangsy.ouraccounts.swipeMenuListView.SwipeMenu;
 import com.wangsy.ouraccounts.swipeMenuListView.SwipeMenuCreator;
@@ -42,12 +41,11 @@ import java.util.List;
  */
 public class ReportListFragment extends Fragment {
 
-    public static final String REFRESH_DATA_BROADCAST_INTENT_FILTER = "com.refreshData";
     public static final int REQUEST_EDIT_DATA = 1;
 
     private PullToRefreshSlideListView listViewAccounts;
     private List<AccountModel> accountsList;
-    private AccountAdapter accountAdapter;
+    private AccountListAdapter accountListAdapter;
 
     /**
      * 分页索引
@@ -64,6 +62,11 @@ public class ReportListFragment extends Fragment {
      */
     private int editIndex;
 
+    /**
+     * 总页面数
+     */
+    private int totalPages;
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -71,8 +74,8 @@ public class ReportListFragment extends Fragment {
 
         listViewAccounts = (PullToRefreshSlideListView) view.findViewById(R.id.id_account_list);
         accountsList = new ArrayList<>();
-        accountAdapter = new AccountAdapter(accountsList, getActivity());
-        listViewAccounts.setAdapter(accountAdapter);
+        accountListAdapter = new AccountListAdapter(accountsList, getActivity());
+        listViewAccounts.setAdapter(accountListAdapter);
         listViewAccounts.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
@@ -175,7 +178,7 @@ public class ReportListFragment extends Fragment {
         accountsList.get(editIndex).setComment(newAccount.getComment());
         accountsList.get(editIndex).setAmount(newAccount.getAmount());
         accountsList.get(editIndex).setType(newAccount.getType());
-        accountAdapter.notifyDataSetChanged();
+        accountListAdapter.notifyDataSetChanged();
     }
 
     /**
@@ -199,7 +202,10 @@ public class ReportListFragment extends Fragment {
                 accountsList.get(position).delete();
                 // 从显示的列表中移除
                 accountsList.remove(position);
-                accountAdapter.notifyDataSetChanged();
+                // 通知数据更新
+                sendBroadcastToRefreshData();
+
+                Toast.makeText(getActivity(), "删除成功", Toast.LENGTH_SHORT).show();
                 dialog.dismiss();
             }
         });
@@ -215,6 +221,8 @@ public class ReportListFragment extends Fragment {
 
         @Override
         protected List<AccountModel> doInBackground(Integer... page) {
+            int total = DataSupport.count(AccountModel.class);
+            totalPages = total % PER_PAGE_COUNT == 0 ? total / PER_PAGE_COUNT : total / PER_PAGE_COUNT + 1;
             return DataSupport.order("datetime desc")
                     .limit(PER_PAGE_COUNT)
                     .offset(PER_PAGE_COUNT * page[0])
@@ -227,10 +235,26 @@ public class ReportListFragment extends Fragment {
                 accountsList.clear();
             }
             accountsList.addAll(result);
-            accountAdapter.notifyDataSetChanged();
+            accountListAdapter.notifyDataSetChanged();
             listViewAccounts.onRefreshComplete();
+
+            if (page == totalPages - 1) { // 已经是最后一页，取消加载更多
+                listViewAccounts.setMode(PullToRefreshBase.Mode.PULL_FROM_START);
+            } else {
+                listViewAccounts.setMode(PullToRefreshBase.Mode.BOTH);
+            }
+
             super.onPostExecute(result);
         }
+    }
+
+    /**
+     * 通知数据更新
+     */
+    private void sendBroadcastToRefreshData() {
+        Intent intent = new Intent();
+        intent.setAction(ReportFragment.REFRESH_DATA_BROADCAST_INTENT_FILTER);
+        getActivity().sendBroadcast(intent);
     }
 
     /**
@@ -252,7 +276,7 @@ public class ReportListFragment extends Fragment {
         // 注册广播
         refreshDataBroadcastReceiver = new RefreshDataBroadcastReceiver();
         IntentFilter filter = new IntentFilter();
-        filter.addAction(REFRESH_DATA_BROADCAST_INTENT_FILTER);
+        filter.addAction(ReportFragment.REFRESH_DATA_BROADCAST_INTENT_FILTER);
         activity.registerReceiver(refreshDataBroadcastReceiver, filter);
     }
 

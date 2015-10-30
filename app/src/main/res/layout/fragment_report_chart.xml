@@ -2,12 +2,30 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical">
+    android:background="@android:color/white"
+    android:orientation="vertical"
+    android:paddingTop="16dp">
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:text="hello chart" />
+    <com.github.mikephil.charting.charts.PieChart
+        android:id="@+id/id_report_data_chart"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:background="@android:color/white" />
+
+    <!-- 分割线 -->
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_marginTop="16dp"
+        android:background="@color/lighter_gray" />
+
+    <ListView
+        android:id="@+id/id_chart_list"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:listSelector="@null"
+        android:scrollbars="none" />
 
 </LinearLayout>

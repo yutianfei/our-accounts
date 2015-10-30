@@ -14,13 +14,15 @@ import com.wangsy.ouraccounts.model.AccountModel;
 import java.util.List;
 
 /**
+ * 为记录列表提供数据
+ * <p/>
  * Created by wangsy on 15/10/27.
  */
-public class AccountAdapter extends BaseAdapter {
+public class AccountListAdapter extends BaseAdapter {
     private List<AccountModel> accountsListData;
     private Context context;
 
-    public AccountAdapter(List<AccountModel> list, Context context) {
+    public AccountListAdapter(List<AccountModel> list, Context context) {
         this.accountsListData = list;
         this.context = context;
     }
