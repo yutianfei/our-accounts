@@ -10,52 +10,6 @@
         style="@style/style_title"
         android:layout_centerInParent="true" />
 
-    <!-- 统计页面的标题组 -->
-    <LinearLayout
-        android:id="@+id/id_report_title"
-        android:layout_width="wrap_content"
-        android:layout_height="match_parent"
-        android:layout_centerInParent="true"
-        android:orientation="horizontal"
-        android:visibility="gone">
-
-        <LinearLayout
-            android:id="@+id/id_report_list"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:orientation="vertical">
-
-            <TextView
-                android:id="@+id/id_report_list_title"
-                style="@style/style_report_title"
-                android:text="@string/report_title_list"
-                android:textColor="@android:color/white" />
-
-            <View
-                android:id="@+id/id_report_list_underline"
-                style="@style/style_report_underline" />
-        </LinearLayout>
-
-        <LinearLayout
-            android:id="@+id/id_report_chart"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:layout_marginStart="25dp"
-            android:orientation="vertical">
-
-            <TextView
-                android:id="@+id/id_report_chart_title"
-                style="@style/style_report_title"
-                android:text="@string/report_title_chart"
-                android:textColor="@color/color_text_normal" />
-
-            <View
-                android:id="@+id/id_report_chart_underline"
-                style="@style/style_report_underline"
-                android:visibility="invisible" />
-        </LinearLayout>
-    </LinearLayout>
-
     <ImageButton
         android:id="@+id/id_title_right_btn"
         style="@style/style_title_button"

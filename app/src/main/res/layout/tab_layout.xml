@@ -23,19 +23,35 @@
     </LinearLayout>
 
     <LinearLayout
-        android:id="@+id/id_tab_report"
+        android:id="@+id/id_tab_report_list"
         style="@style/style_tab">
 
         <ImageView
-            android:id="@+id/id_tab_report_icon"
+            android:id="@+id/id_tab_report_list_icon"
             style="@style/style_tab_general"
             android:contentDescription="@string/icon_content_description"
             android:src="@mipmap/normal_report" />
 
         <TextView
-            android:id="@+id/id_tab_report_name"
+            android:id="@+id/id_tab_report_list_name"
             style="@style/style_tab_text"
-            android:text="@string/tab_report" />
+            android:text="@string/tab_report_list" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/id_tab_report_chart"
+        style="@style/style_tab">
+
+        <ImageView
+            android:id="@+id/id_tab_report_chart_icon"
+            style="@style/style_tab_general"
+            android:contentDescription="@string/icon_content_description"
+            android:src="@mipmap/normal_report" />
+
+        <TextView
+            android:id="@+id/id_tab_report_chart_name"
+            style="@style/style_tab_text"
+            android:text="@string/tab_report_chart" />
     </LinearLayout>
 
     <LinearLayout

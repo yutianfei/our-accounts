@@ -9,13 +9,13 @@ import android.database.Cursor;
 import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
+import android.widget.TextView;
 
 import com.github.mikephil.charting.charts.PieChart;
 import com.github.mikephil.charting.components.Legend;
@@ -30,6 +30,8 @@ import com.wangsy.ouraccounts.R;
 import com.wangsy.ouraccounts.adapter.ChartListAdapter;
 import com.wangsy.ouraccounts.model.AccountModel;
 import com.wangsy.ouraccounts.model.ChartItemModel;
+import com.wangsy.ouraccounts.model.TableConstant;
+import com.wangsy.ouraccounts.ui.MainActivity;
 
 import org.litepal.crud.DataSupport;
 
@@ -63,14 +65,19 @@ public class ReportChartFragment extends Fragment implements OnChartValueSelecte
     private float totalAmount;
 
     // 查询记录类别、图标
-    private static final String QUERY_TYPES = "select distinct type , icontoshow from accountmodel";
+    private static final String QUERY_TYPES = "select distinct " + TableConstant.TYPE
+            + " , " + TableConstant.ICONIMAGENAME + " from " + TableConstant.TABLENAME;
 
-    @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_report_chart, container, false);
+
+        TextView title = (TextView) view.findViewById(R.id.id_title);
+        title.setText(R.string.tab_report_chart);
+
         initListView(view);
         initPieChartView(view);
+
         return view;
     }
 
@@ -83,9 +90,9 @@ public class ReportChartFragment extends Fragment implements OnChartValueSelecte
     private void initPieChartView(View view) {
         reportPieChart = (PieChart) view.findViewById(R.id.id_report_data_chart);
 
-        // 在饼图中心和饼块上显示文字
+        // 在饼图中心显示文字，饼块上不显示文字
         reportPieChart.setDrawCenterText(true);
-        reportPieChart.setDrawSliceText(true);
+        reportPieChart.setDrawSliceText(false);
         reportPieChart.setCenterTextSize(16f);
         reportPieChart.setDescription("");
 
@@ -153,23 +160,23 @@ public class ReportChartFragment extends Fragment implements OnChartValueSelecte
             List<ChartItemModel> datas = new ArrayList<>();
 
             // 所有记录总金额
-            totalAmount = DataSupport.sum(AccountModel.class, "amount", float.class);
+            totalAmount = DataSupport.sum(AccountModel.class, TableConstant.AMOUNT, float.class);
 
             // 查询类别、图标、类别总金额
             Cursor cursor = DataSupport.findBySQL(QUERY_TYPES);
             if (cursor != null && cursor.moveToFirst()) {
                 do {
-                    String type = cursor.getString(cursor.getColumnIndex("type"));
-                    int iconToShow = cursor.getInt(cursor.getColumnIndex("icontoshow"));
-                    float sum = DataSupport.where("type = ?", type)
-                            .sum(AccountModel.class, "amount", float.class);
+                    String type = cursor.getString(cursor.getColumnIndex(TableConstant.TYPE));
+                    String iconImageName = cursor.getString(cursor.getColumnIndex(TableConstant.ICONIMAGENAME));
+                    float sum = DataSupport.where(TableConstant.TYPE + " = ?", type)
+                            .sum(AccountModel.class, TableConstant.AMOUNT, float.class);
 
                     types.add(type);
                     percents.add(sum / totalAmount);
 
                     ChartItemModel chartItemModel = new ChartItemModel();
                     chartItemModel.type = type;
-                    chartItemModel.iconImageToShow = iconToShow;
+                    chartItemModel.iconImageName = iconImageName;
                     chartItemModel.sum = sum;
                     datas.add(chartItemModel);
 
@@ -216,7 +223,7 @@ public class ReportChartFragment extends Fragment implements OnChartValueSelecte
 
         PieDataSet dataSet = new PieDataSet(yValues, "");
         dataSet.setSliceSpace(0f);
-        dataSet.setSelectionShift(5f);
+        dataSet.setSelectionShift(0f);
         dataSet.setColors(colors);
 
         PieData data = new PieData(xValues, dataSet);
@@ -262,7 +269,7 @@ public class ReportChartFragment extends Fragment implements OnChartValueSelecte
         // 注册广播
         refreshDataBroadcastReceiver = new RefreshDataBroadcastReceiver();
         IntentFilter filter = new IntentFilter();
-        filter.addAction(ReportFragment.REFRESH_DATA_BROADCAST_INTENT_FILTER);
+        filter.addAction(MainActivity.REFRESH_DATA_BROADCAST_INTENT_FILTER);
         activity.registerReceiver(refreshDataBroadcastReceiver, filter);
     }
 

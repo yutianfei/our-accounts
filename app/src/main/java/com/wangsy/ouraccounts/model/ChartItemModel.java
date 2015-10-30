@@ -7,6 +7,6 @@ package com.wangsy.ouraccounts.model;
  */
 public class ChartItemModel {
     public String type;
-    public int iconImageToShow;
+    public String iconImageName;
     public float sum;
 }

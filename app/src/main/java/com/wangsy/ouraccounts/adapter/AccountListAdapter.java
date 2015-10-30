@@ -10,6 +10,7 @@ import android.widget.TextView;
 
 import com.wangsy.ouraccounts.R;
 import com.wangsy.ouraccounts.model.AccountModel;
+import com.wangsy.ouraccounts.utils.Util;
 
 import java.util.List;
 
@@ -64,7 +65,7 @@ public class AccountListAdapter extends BaseAdapter {
         }
 
         viewHolder.tvAccountIconType.setText(account.getType());
-        viewHolder.imgViewIcon.setImageResource(account.getIconToShow());
+        viewHolder.imgViewIcon.setImageResource(Util.getImageResourceId(context, account.getIconImageName()));
         viewHolder.tvAccountDate.setText(account.getDatetime());
         viewHolder.tvAccountMoney.setText(account.getAmount() + "");
 

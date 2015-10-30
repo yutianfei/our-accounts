@@ -10,6 +10,7 @@ import android.widget.TextView;
 
 import com.wangsy.ouraccounts.R;
 import com.wangsy.ouraccounts.model.ChartItemModel;
+import com.wangsy.ouraccounts.utils.Util;
 
 import java.util.List;
 
@@ -61,14 +62,14 @@ public class ChartListAdapter extends BaseAdapter {
             viewHolder = (ViewHolder) convertView.getTag();
         }
 
-        viewHolder.imgViewIcon.setImageResource(model.iconImageToShow);
+        viewHolder.imgViewIcon.setImageResource(Util.getImageResourceId(context, model.iconImageName));
         viewHolder.tvChartType.setText(model.type);
         viewHolder.tvChartSumAmount.setText(model.sum + "");
 
         if ("收入".equals(model.type)) {
-            viewHolder.tvChartSumAmount.setTextColor(context.getResources().getColor(android.R.color.holo_red_light));
+            viewHolder.tvChartSumAmount.setTextColor(context.getResources().getColor(R.color.color_money_in));
         } else {
-            viewHolder.tvChartSumAmount.setTextColor(context.getResources().getColor(android.R.color.holo_green_light));
+            viewHolder.tvChartSumAmount.setTextColor(context.getResources().getColor(R.color.color_money_out));
         }
 
         return convertView;

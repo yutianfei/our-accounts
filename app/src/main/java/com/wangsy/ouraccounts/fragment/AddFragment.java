@@ -3,7 +3,6 @@ package com.wangsy.ouraccounts.fragment;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
 import android.view.LayoutInflater;
@@ -20,6 +19,7 @@ import com.wangsy.ouraccounts.R;
 import com.wangsy.ouraccounts.adapter.IconFragmentPagerAdapter;
 import com.wangsy.ouraccounts.callback.IconSelectedCallback;
 import com.wangsy.ouraccounts.model.AccountModel;
+import com.wangsy.ouraccounts.ui.MainActivity;
 import com.wangsy.ouraccounts.ui.SetDatetimeDialogActivity;
 import com.wangsy.ouraccounts.ui.SetCommentDialogActivity;
 import com.wangsy.ouraccounts.utils.Util;
@@ -43,7 +43,7 @@ public class AddFragment extends Fragment implements IconSelectedCallback {
     private boolean accountIsOut;
     private String accountComment = "";
     private String accountDatetime = "";
-    private int accountIconToShow;
+    private String accountIconName;
 
     @Override
     public void onAttach(Activity activity) {
@@ -55,7 +55,6 @@ public class AddFragment extends Fragment implements IconSelectedCallback {
         super.onActivityCreated(savedInstanceState);
     }
 
-    @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_add, container, false);
@@ -126,10 +125,10 @@ public class AddFragment extends Fragment implements IconSelectedCallback {
     }
 
     @Override
-    public void onIconSelected(boolean isOut, String type, int iconToShow) {
+    public void onIconSelected(boolean isOut, String type, String iconName) {
         accountIsOut = isOut;
         accountType = type;
-        accountIconToShow = iconToShow;
+        accountIconName = iconName;
 
         if (isOut) {
             etMoneyAmount.setTextColor(getResources().getColor(R.color.color_money_out));
@@ -178,7 +177,7 @@ public class AddFragment extends Fragment implements IconSelectedCallback {
         accountData.setOut(accountIsOut);
         accountData.setType(accountType);
         accountData.setComment(accountComment);
-        accountData.setIconToShow(accountIconToShow);
+        accountData.setIconImageName(accountIconName);
 
         // 保存数据
         boolean saveFlag = accountData.save();
@@ -194,7 +193,7 @@ public class AddFragment extends Fragment implements IconSelectedCallback {
      */
     private void sendBroadcastToRefreshData() {
         Intent intent = new Intent();
-        intent.setAction(ReportFragment.REFRESH_DATA_BROADCAST_INTENT_FILTER);
+        intent.setAction(MainActivity.REFRESH_DATA_BROADCAST_INTENT_FILTER);
         getActivity().sendBroadcast(intent);
     }
 

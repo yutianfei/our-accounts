@@ -8,13 +8,13 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.Button;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.handmark.pulltorefresh.library.PullToRefreshBase;
@@ -26,6 +26,7 @@ import com.wangsy.ouraccounts.swipeMenuListView.SwipeMenuCreator;
 import com.wangsy.ouraccounts.swipeMenuListView.SwipeMenuItem;
 import com.wangsy.ouraccounts.swipeMenuListView.SwipeMenuListView;
 import com.wangsy.ouraccounts.ui.EditAccountActivity;
+import com.wangsy.ouraccounts.ui.MainActivity;
 import com.wangsy.ouraccounts.utils.Util;
 import com.wangsy.ouraccounts.view.PullToRefreshSlideListView;
 
@@ -40,8 +41,6 @@ import java.util.List;
  * Created by wangsy on 15/10/26.
  */
 public class ReportListFragment extends Fragment {
-
-    public static final int REQUEST_EDIT_DATA = 1;
 
     private PullToRefreshSlideListView listViewAccounts;
     private List<AccountModel> accountsList;
@@ -58,19 +57,16 @@ public class ReportListFragment extends Fragment {
     private static final int PER_PAGE_COUNT = 10;
 
     /**
-     * 修改的数据索引
-     */
-    private int editIndex;
-
-    /**
      * 总页面数
      */
     private int totalPages;
 
-    @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_report_list, container, false);
+
+        TextView title = (TextView) view.findViewById(R.id.id_title);
+        title.setText(R.string.tab_report_list);
 
         listViewAccounts = (PullToRefreshSlideListView) view.findViewById(R.id.id_account_list);
         accountsList = new ArrayList<>();
@@ -150,35 +146,11 @@ public class ReportListFragment extends Fragment {
      * 跳转到编辑信息的Activity
      */
     private void gotoEditActivity(int position) {
-        editIndex = position;
         AccountModel account = accountsList.get(position);
         Intent intent = new Intent(getActivity(), EditAccountActivity.class);
         intent.putExtra(EditAccountActivity.EXTRA_EDIT_DATA, account);
         intent.putExtra(EditAccountActivity.EXTRA_EDIT_DATA_ID, accountsList.get(position).getId());
-        getParentFragment().startActivityForResult(intent, REQUEST_EDIT_DATA);
-    }
-
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        if (resultCode == Activity.RESULT_OK && requestCode == REQUEST_EDIT_DATA) {
-            AccountModel newAccount = (AccountModel) data.getSerializableExtra(EditAccountActivity.EXTRA_EDIT_DATA);
-            refreshData(newAccount);
-        }
-    }
-
-    /**
-     * 更新数据
-     */
-    private void refreshData(AccountModel newAccount) {
-        // 更新显示数据
-        accountsList.get(editIndex).setOut(newAccount.isOut());
-        accountsList.get(editIndex).setIconToShow(newAccount.getIconToShow());
-        accountsList.get(editIndex).setDatetime(newAccount.getDatetime());
-        accountsList.get(editIndex).setComment(newAccount.getComment());
-        accountsList.get(editIndex).setAmount(newAccount.getAmount());
-        accountsList.get(editIndex).setType(newAccount.getType());
-        accountListAdapter.notifyDataSetChanged();
+        startActivity(intent);
     }
 
     /**
@@ -253,7 +225,7 @@ public class ReportListFragment extends Fragment {
      */
     private void sendBroadcastToRefreshData() {
         Intent intent = new Intent();
-        intent.setAction(ReportFragment.REFRESH_DATA_BROADCAST_INTENT_FILTER);
+        intent.setAction(MainActivity.REFRESH_DATA_BROADCAST_INTENT_FILTER);
         getActivity().sendBroadcast(intent);
     }
 
@@ -276,7 +248,7 @@ public class ReportListFragment extends Fragment {
         // 注册广播
         refreshDataBroadcastReceiver = new RefreshDataBroadcastReceiver();
         IntentFilter filter = new IntentFilter();
-        filter.addAction(ReportFragment.REFRESH_DATA_BROADCAST_INTENT_FILTER);
+        filter.addAction(MainActivity.REFRESH_DATA_BROADCAST_INTENT_FILTER);
         activity.registerReceiver(refreshDataBroadcastReceiver, filter);
     }
 

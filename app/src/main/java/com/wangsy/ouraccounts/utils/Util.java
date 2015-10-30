@@ -11,6 +11,9 @@ import java.util.Calendar;
  */
 public class Util {
 
+    public static final String PACKAGE_NAME = "com.wangsy.ouraccounts";
+    public static final String IMAGE_FOLDER = "mipmap";
+
     public static final String DATE_FORMAT = "yyyy年MM月dd日 HH:mm";
 
     /**
@@ -68,6 +71,13 @@ public class Util {
     public static int dp2px(Context context, float dp) {
         final float scale = context.getResources().getDisplayMetrics().density;
         return (int) (dp * scale + 0.5f);
+    }
+
+    /**
+     * 根据图片名称获得图片id
+     */
+    public static int getImageResourceId(Context context, String imageName) {
+        return context.getResources().getIdentifier(imageName, IMAGE_FOLDER, PACKAGE_NAME);
     }
 
 }

@@ -5,6 +5,10 @@
     android:gravity="center"
     android:orientation="vertical">
 
+    <TextView
+        style="@style/style_dialog_title"
+        android:text="@string/set_date_title" />
+
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="0dp"
@@ -16,22 +20,20 @@
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
-            <TextView
-                style="@style/style_dialog_title"
-                android:text="@string/set_date_title" />
-
             <DatePicker
                 android:id="@+id/id_date_picker"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:calendarViewShown="false" />
+                android:calendarViewShown="false"
+                android:datePickerMode="spinner" />
 
             <TimePicker
                 android:id="@+id/id_time_picker"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center" />
+                android:layout_gravity="center"
+                android:timePickerMode="spinner" />
 
         </LinearLayout>
     </ScrollView>

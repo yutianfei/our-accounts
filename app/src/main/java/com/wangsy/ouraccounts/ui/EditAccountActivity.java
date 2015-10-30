@@ -17,6 +17,7 @@ import com.wangsy.ouraccounts.adapter.IconGridViewAdapter;
 import com.wangsy.ouraccounts.model.AccountModel;
 import com.wangsy.ouraccounts.model.IconModel;
 import com.wangsy.ouraccounts.model.IconsList;
+import com.wangsy.ouraccounts.model.TableConstant;
 
 import org.litepal.crud.DataSupport;
 
@@ -117,7 +118,7 @@ public class EditAccountActivity extends Activity implements View.OnClickListene
 
                 editAccount.setOut(iconModel.isOut);
                 editAccount.setType(iconModel.type);
-                editAccount.setIconToShow(iconModel.iconImageToShow);
+                editAccount.setIconImageName(iconModel.iconImageName);
                 setEtAmountColor();
 
                 adapter.notifyDataSetChanged();
@@ -189,21 +190,27 @@ public class EditAccountActivity extends Activity implements View.OnClickListene
 
         // 更新数据库数据
         ContentValues values = new ContentValues();
-        values.put("isOut", editAccount.isOut());
-        values.put("type", editAccount.getType());
-        values.put("amount", editAccount.getAmount());
-        values.put("comment", editAccount.getComment());
-        values.put("datetime", editAccount.getDatetime());
-        values.put("iconToShow", editAccount.getIconToShow());
+        values.put(TableConstant.ISOUT, editAccount.isOut());
+        values.put(TableConstant.TYPE, editAccount.getType());
+        values.put(TableConstant.AMOUNT, editAccount.getAmount());
+        values.put(TableConstant.COMMENT, editAccount.getComment());
+        values.put(TableConstant.DATETIME, editAccount.getDatetime());
+        values.put(TableConstant.ICONIMAGENAME, editAccount.getIconImageName());
         int count = DataSupport.update(AccountModel.class, values, id);
         if (count > 0) {
             Toast.makeText(this, "修改成功", Toast.LENGTH_SHORT).show();
-            // 将修改的信息返回给调用者更新
-            Intent data = new Intent();
-            data.putExtra(EXTRA_EDIT_DATA, editAccount);
-            setResult(RESULT_OK, data);
+            sendBroadcastToRefreshData();
             finish();
         }
+    }
+
+    /**
+     * 通知数据更新
+     */
+    private void sendBroadcastToRefreshData() {
+        Intent intent = new Intent();
+        intent.setAction(MainActivity.REFRESH_DATA_BROADCAST_INTENT_FILTER);
+        sendBroadcast(intent);
     }
 
     private void setNewData() {

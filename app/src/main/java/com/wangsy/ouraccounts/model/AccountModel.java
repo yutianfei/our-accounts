@@ -18,18 +18,18 @@ public class AccountModel extends DataSupport implements Serializable {
     private float amount = 0;
     private String comment = "";
     private String datetime = "";
-    private int iconToShow;
+    private String iconImageName;
 
     public long getId() {
         return getBaseObjId();
     }
 
-    public int getIconToShow() {
-        return iconToShow;
+    public String getIconImageName() {
+        return iconImageName;
     }
 
-    public void setIconToShow(int iconToShow) {
-        this.iconToShow = iconToShow;
+    public void setIconImageName(String iconImageName) {
+        this.iconImageName = iconImageName;
     }
 
     public String getDatetime() {
@@ -75,6 +75,6 @@ public class AccountModel extends DataSupport implements Serializable {
     @Override
     public String toString() {
         return "isOut = " + isOut + ",type = " + type + ",amount = " + amount
-                + ",datetime = " + datetime + ",comment = " + comment;
+                + ",datetime = " + datetime + ",comment = " + comment + ",icon = " + iconImageName;
     }
 }

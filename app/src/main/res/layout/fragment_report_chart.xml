@@ -3,21 +3,23 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@android:color/white"
-    android:orientation="vertical"
-    android:paddingTop="16dp">
+    android:orientation="vertical">
+
+    <include layout="@layout/title_bar_layout" />
 
     <com.github.mikephil.charting.charts.PieChart
         android:id="@+id/id_report_data_chart"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="1"
+        android:layout_marginTop="10dp"
+        android:layout_weight="1.3"
         android:background="@android:color/white" />
 
     <!-- 分割线 -->
     <View
         android:layout_width="match_parent"
         android:layout_height="1dp"
-        android:layout_marginTop="16dp"
+        android:layout_marginTop="10dp"
         android:background="@color/lighter_gray" />
 
     <ListView

@@ -22,4 +22,5 @@ public class TypeConstants {
     public static final String PET = "宠物";
     public static final String SHOPPING = "购物";
     public static final String TRAFFIC = "交通";
+    public static final String HOME = "家";
 }
