@@ -4,10 +4,10 @@
     android:layout_height="wrap_content"
     android:background="@drawable/item_click"
     android:gravity="center_vertical"
-    android:paddingBottom="10dp"
+    android:paddingBottom="12dp"
     android:paddingEnd="20dp"
     android:paddingStart="20dp"
-    android:paddingTop="10dp">
+    android:paddingTop="12dp">
 
     <ImageView
         android:id="@+id/id_chart_icon_img"
