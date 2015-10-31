@@ -1,4 +1,4 @@
-package com.wangsy.ouraccounts.fragment;
+package com.wangsy.ouraccounts.ui;
 
 import android.app.Activity;
 import android.app.Dialog;
@@ -8,8 +8,6 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
@@ -22,13 +20,11 @@ import com.handmark.pulltorefresh.library.PullToRefreshBase;
 import com.wangsy.ouraccounts.R;
 import com.wangsy.ouraccounts.adapter.AccountListAdapter;
 import com.wangsy.ouraccounts.model.AccountModel;
+import com.wangsy.ouraccounts.model.TableConstant;
 import com.wangsy.ouraccounts.swipeMenuListView.SwipeMenu;
 import com.wangsy.ouraccounts.swipeMenuListView.SwipeMenuCreator;
 import com.wangsy.ouraccounts.swipeMenuListView.SwipeMenuItem;
 import com.wangsy.ouraccounts.swipeMenuListView.SwipeMenuListView;
-import com.wangsy.ouraccounts.ui.EditAccountActivity;
-import com.wangsy.ouraccounts.ui.MainActivity;
-import com.wangsy.ouraccounts.ui.SearchConditionActivity;
 import com.wangsy.ouraccounts.utils.Util;
 import com.wangsy.ouraccounts.view.PullToRefreshSlideListView;
 
@@ -38,11 +34,14 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * 账目记录列表
+ * 显示数据列表
  * <p/>
- * Created by wangsy on 15/10/26.
+ * Created by wangsy on 15/10/31.
  */
-public class ReportListFragment extends Fragment {
+public class AccountListActivity extends Activity {
+    public static final String EXTRA_TYPE_NAME = "extra_type_name";
+
+    private String strType;
 
     private PullToRefreshSlideListView listViewAccounts;
     private List<AccountModel> accountsList;
@@ -64,18 +63,18 @@ public class ReportListFragment extends Fragment {
     private int totalPages;
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_report_list, container, false);
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.fragment_report_list);
 
-        TextView title = (TextView) view.findViewById(R.id.id_title);
-        title.setText(R.string.tab_report_list);
+        strType = getIntent().getStringExtra(EXTRA_TYPE_NAME);
 
-        // 显示右侧按钮：搜索
-        initButtonRight(view);
+        TextView title = (TextView) findViewById(R.id.id_title);
+        title.setText(strType);
 
-        listViewAccounts = (PullToRefreshSlideListView) view.findViewById(R.id.id_account_list);
+        listViewAccounts = (PullToRefreshSlideListView) findViewById(R.id.id_account_list);
         accountsList = new ArrayList<>();
-        accountListAdapter = new AccountListAdapter(accountsList, getActivity());
+        accountListAdapter = new AccountListAdapter(accountsList, this);
         listViewAccounts.setAdapter(accountListAdapter);
         listViewAccounts.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -94,19 +93,36 @@ public class ReportListFragment extends Fragment {
         // 初始获取第一页数据
         new QueryAccountsTask().execute(page);
 
-        return view;
+        // 显示右侧按钮：搜索
+        initButtonRight();
+
+        // 显示左侧按钮：返回
+        initButtonLeft();
     }
 
-    private void initButtonRight(View view) {
-        ImageButton imgBtnRight = (ImageButton) view.findViewById(R.id.id_title_right_btn);
+    private void initButtonRight() {
+        ImageButton imgBtnRight = (ImageButton) findViewById(R.id.id_title_right_btn);
         imgBtnRight.setVisibility(View.VISIBLE);
         imgBtnRight.setImageResource(R.mipmap.icon_search);
         imgBtnRight.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(getActivity(), SearchConditionActivity.class);
-                intent.putExtra(SearchConditionActivity.EXTRA_SEARCH_FLAG, SearchConditionActivity.SEARCH_FLAG_ALL);
+                Intent intent = new Intent(AccountListActivity.this, SearchConditionActivity.class);
+                intent.putExtra(SearchConditionActivity.EXTRA_TYPE, strType);
+                intent.putExtra(SearchConditionActivity.EXTRA_SEARCH_FLAG, SearchConditionActivity.SEARCH_FLAG_DATETIME);
                 startActivity(intent);
+            }
+        });
+    }
+
+    private void initButtonLeft() {
+        ImageButton imgBtnLeft = (ImageButton) findViewById(R.id.id_title_left_btn);
+        imgBtnLeft.setVisibility(View.VISIBLE);
+        imgBtnLeft.setImageResource(R.mipmap.icon_back);
+        imgBtnLeft.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
             }
         });
     }
@@ -134,12 +150,12 @@ public class ReportListFragment extends Fragment {
             @Override
             public void create(SwipeMenu menu) {
                 // 创建按钮
-                SwipeMenuItem deleteItem = new SwipeMenuItem(getActivity().getApplicationContext());
+                SwipeMenuItem deleteItem = new SwipeMenuItem(AccountListActivity.this);
                 // 设置按钮背景
                 deleteItem.setBackground(R.drawable.item_delete);
                 // 设置按钮宽高
-                deleteItem.setWidth(Util.dp2px(getActivity(), 80));
-                deleteItem.setHeight(Util.dp2px(getActivity(), 80));
+                deleteItem.setWidth(Util.dp2px(AccountListActivity.this, 80));
+                deleteItem.setHeight(Util.dp2px(AccountListActivity.this, 80));
                 // 给按钮添加图片
                 deleteItem.setIcon(R.mipmap.icon_delete);
                 // 添加进按钮
@@ -166,7 +182,7 @@ public class ReportListFragment extends Fragment {
      */
     private void gotoEditActivity(int position) {
         AccountModel account = accountsList.get(position);
-        Intent intent = new Intent(getActivity(), EditAccountActivity.class);
+        Intent intent = new Intent(AccountListActivity.this, EditAccountActivity.class);
         intent.putExtra(EditAccountActivity.EXTRA_EDIT_DATA, account);
         intent.putExtra(EditAccountActivity.EXTRA_EDIT_DATA_ID, accountsList.get(position).getId());
         startActivity(intent);
@@ -176,8 +192,8 @@ public class ReportListFragment extends Fragment {
      * 删除提示
      */
     private void showDeleteDialog(final int position) {
-        final Dialog dialog = new Dialog(getActivity(), R.style.style_dialog_common);
-        View view = View.inflate(getActivity(), R.layout.dialog_common, null);
+        final Dialog dialog = new Dialog(this, R.style.style_dialog_common);
+        View view = View.inflate(this, R.layout.dialog_common, null);
         Button btnCancel = (Button) view.findViewById(R.id.id_button_cancel);
         Button btnOk = (Button) view.findViewById(R.id.id_button_ok);
         btnCancel.setOnClickListener(new View.OnClickListener() {
@@ -196,7 +212,7 @@ public class ReportListFragment extends Fragment {
                 // 通知数据更新
                 sendBroadcastToRefreshData();
 
-                Toast.makeText(getActivity(), "删除成功", Toast.LENGTH_SHORT).show();
+                Toast.makeText(AccountListActivity.this, "删除成功", Toast.LENGTH_SHORT).show();
                 dialog.dismiss();
             }
         });
@@ -212,9 +228,10 @@ public class ReportListFragment extends Fragment {
 
         @Override
         protected List<AccountModel> doInBackground(Integer... page) {
-            int total = DataSupport.count(AccountModel.class);
+            int total = DataSupport.where(TableConstant.TYPE + " = ?", strType).count(AccountModel.class);
             totalPages = total % PER_PAGE_COUNT == 0 ? total / PER_PAGE_COUNT : total / PER_PAGE_COUNT + 1;
-            return DataSupport.order("datetime desc")
+            return DataSupport.where(TableConstant.TYPE + " = ?", strType)
+                    .order("datetime desc")
                     .limit(PER_PAGE_COUNT)
                     .offset(PER_PAGE_COUNT * page[0])
                     .find(AccountModel.class);
@@ -245,7 +262,7 @@ public class ReportListFragment extends Fragment {
     private void sendBroadcastToRefreshData() {
         Intent intent = new Intent();
         intent.setAction(MainActivity.REFRESH_DATA_BROADCAST_INTENT_FILTER);
-        getActivity().sendBroadcast(intent);
+        sendBroadcast(intent);
     }
 
     /**
@@ -262,18 +279,18 @@ public class ReportListFragment extends Fragment {
     private RefreshDataBroadcastReceiver refreshDataBroadcastReceiver;
 
     @Override
-    public void onAttach(Activity activity) {
-        super.onAttach(activity);
+    protected void onResume() {
+        super.onResume();
         // 注册广播
         refreshDataBroadcastReceiver = new RefreshDataBroadcastReceiver();
         IntentFilter filter = new IntentFilter();
         filter.addAction(MainActivity.REFRESH_DATA_BROADCAST_INTENT_FILTER);
-        activity.registerReceiver(refreshDataBroadcastReceiver, filter);
+        registerReceiver(refreshDataBroadcastReceiver, filter);
     }
 
     @Override
     public void onDestroy() {
         super.onDestroy();
-        getActivity().unregisterReceiver(refreshDataBroadcastReceiver);
+        unregisterReceiver(refreshDataBroadcastReceiver);
     }
 }

@@ -14,6 +14,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -31,6 +32,7 @@ import com.wangsy.ouraccounts.adapter.ChartListAdapter;
 import com.wangsy.ouraccounts.model.AccountModel;
 import com.wangsy.ouraccounts.model.ChartItemModel;
 import com.wangsy.ouraccounts.model.TableConstant;
+import com.wangsy.ouraccounts.ui.AccountListActivity;
 import com.wangsy.ouraccounts.ui.MainActivity;
 
 import org.litepal.crud.DataSupport;
@@ -85,6 +87,14 @@ public class ReportChartFragment extends Fragment implements OnChartValueSelecte
         ListView listView = (ListView) view.findViewById(R.id.id_chart_list);
         adapter = new ChartListAdapter(getActivity(), chartDataList);
         listView.setAdapter(adapter);
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Intent intent = new Intent(getActivity(), AccountListActivity.class);
+                intent.putExtra(AccountListActivity.EXTRA_TYPE_NAME, chartDataList.get(position).type);
+                startActivity(intent);
+            }
+        });
     }
 
     private void initPieChartView(View view) {

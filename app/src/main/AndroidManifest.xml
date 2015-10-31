@@ -20,6 +20,15 @@
             </intent-filter>
         </activity>
         <activity
+            android:name=".ui.AccountListActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.SearchConditionActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.SearchResultActivity"
+            android:screenOrientation="portrait" />
+        <activity
             android:name=".ui.EditAccountActivity"
             android:configChanges="orientation|keyboardHidden"
             android:screenOrientation="portrait"
