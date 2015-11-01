@@ -231,4 +231,10 @@ public class EditAccountActivity extends Activity implements View.OnClickListene
         imgBtnLeft.setImageResource(R.mipmap.icon_back);
         imgBtnLeft.setOnClickListener(this);
     }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        finish();
+    }
 }

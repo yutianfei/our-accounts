@@ -195,4 +195,9 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
         tvSettingName = (TextView) findViewById(R.id.id_tab_setting_name);
     }
 
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        finish();
+    }
 }

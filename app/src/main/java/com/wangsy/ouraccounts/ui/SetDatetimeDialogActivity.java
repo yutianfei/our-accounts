@@ -12,7 +12,6 @@ import android.widget.TimePicker;
 import com.wangsy.ouraccounts.R;
 import com.wangsy.ouraccounts.utils.Util;
 
-import java.text.SimpleDateFormat;
 import java.util.Calendar;
 
 /**
@@ -23,6 +22,11 @@ import java.util.Calendar;
 public class SetDatetimeDialogActivity extends Activity implements DatePicker.OnDateChangedListener, TimePicker.OnTimeChangedListener {
 
     public static final String EXTRA_DATETIME = "extra_datetime";
+    public static final String EXTRA_DATETIME_FLAG = "extra_datetime_flag";
+
+    public static final int DATETIME_FLAG_NO_TIMEPICKER = 1;
+
+    private int flag;
 
     private DatePicker datePicker;
     private TimePicker timePicker;
@@ -44,6 +48,7 @@ public class SetDatetimeDialogActivity extends Activity implements DatePicker.On
 
     private void initDateTimePickers() {
         Calendar calendar = null;
+        flag = getIntent().getIntExtra(EXTRA_DATETIME_FLAG, 0);
         dateTime = getIntent().getStringExtra(EXTRA_DATETIME);
 
         if (dateTime == null || "".equals(dateTime)) {
@@ -62,6 +67,10 @@ public class SetDatetimeDialogActivity extends Activity implements DatePicker.On
         timePicker.setOnTimeChangedListener(this);
         timePicker.setCurrentHour(calendar.get(Calendar.HOUR_OF_DAY));
         timePicker.setCurrentMinute(calendar.get(Calendar.MINUTE));
+
+        if (flag == DATETIME_FLAG_NO_TIMEPICKER) {
+            timePicker.setVisibility(View.GONE);
+        }
     }
 
     private void initButtons() {
@@ -69,6 +78,20 @@ public class SetDatetimeDialogActivity extends Activity implements DatePicker.On
         btnOk.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
+                // 获得日历实例
+                Calendar calendar = Calendar.getInstance();
+                if (flag == DATETIME_FLAG_NO_TIMEPICKER) {
+                    calendar.set(datePicker.getYear(), datePicker.getMonth(),
+                            datePicker.getDayOfMonth());
+                    dateTime = Util.dateFormatWithDay(calendar.getTime());
+                } else {
+                    calendar.set(datePicker.getYear(), datePicker.getMonth(),
+                            datePicker.getDayOfMonth(), timePicker.getCurrentHour(),
+                            timePicker.getCurrentMinute());
+                    dateTime = Util.dateFormat(calendar.getTime());
+                }
+
                 Intent intent = new Intent();
                 intent.putExtra(EXTRA_DATETIME, dateTime);
                 setResult(RESULT_OK, intent);
@@ -88,18 +111,9 @@ public class SetDatetimeDialogActivity extends Activity implements DatePicker.On
 
     @Override
     public void onTimeChanged(TimePicker view, int hourOfDay, int minute) {
-        onDateChanged(null, 0, 0, 0);
     }
 
     @Override
     public void onDateChanged(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
-        // 获得日历实例
-        Calendar calendar = Calendar.getInstance();
-        calendar.set(datePicker.getYear(), datePicker.getMonth(),
-                datePicker.getDayOfMonth(), timePicker.getCurrentHour(),
-                timePicker.getCurrentMinute());
-
-        SimpleDateFormat sdf = new SimpleDateFormat(Util.DATE_FORMAT);
-        dateTime = sdf.format(calendar.getTime());
     }
 }

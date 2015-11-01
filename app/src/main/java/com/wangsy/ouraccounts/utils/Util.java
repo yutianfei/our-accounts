@@ -2,7 +2,9 @@ package com.wangsy.ouraccounts.utils;
 
 import android.content.Context;
 
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Date;
 
 /**
  * 工具方法类
@@ -14,7 +16,18 @@ public class Util {
     public static final String PACKAGE_NAME = "com.wangsy.ouraccounts";
     public static final String IMAGE_FOLDER = "mipmap";
 
+    public static final String DATE_FORMAT_DAY = "yyyy年MM月dd日";
     public static final String DATE_FORMAT = "yyyy年MM月dd日 HH:mm";
+
+    public static String dateFormat(Date date) {
+        SimpleDateFormat sdf = new SimpleDateFormat(DATE_FORMAT);
+        return sdf.format(date);
+    }
+
+    public static String dateFormatWithDay(Date date) {
+        SimpleDateFormat sdf = new SimpleDateFormat(DATE_FORMAT_DAY);
+        return sdf.format(date);
+    }
 
     /**
      * 将字符串类型的日期时间转换为Calendar类型
@@ -80,4 +93,21 @@ public class Util {
         return context.getResources().getIdentifier(imageName, IMAGE_FOLDER, PACKAGE_NAME);
     }
 
+    /**
+     * 获取时间字符串
+     */
+    public static String[] getDatetimeStringWithMonths(int months) {
+        String[] result = new String[2];
+        Calendar calendar = Calendar.getInstance();
+
+        // 结束时间
+        result[1] = dateFormatWithDay(calendar.getTime()) + " 23:59";
+
+        // 根据传入的参数设置日历
+        calendar.add(Calendar.MONTH, months);
+        // 开始时间
+        result[0] = dateFormatWithDay(calendar.getTime()) + " 00:00";
+
+        return result;
+    }
 }

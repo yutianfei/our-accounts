@@ -31,4 +31,5 @@ dependencies {
     compile project(':pulltorefresh')
     compile 'org.litepal.android:core:1.3.0'
     compile 'com.github.PhilJay:MPAndroidChart:v2.1.5'
+    compile 'com.android.support:recyclerview-v7:22.2.1'
 }

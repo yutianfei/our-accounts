@@ -1,4 +1,4 @@
-package com.wangsy.ouraccounts.fragment;
+package com.wangsy.ouraccounts.ui;
 
 import android.app.Activity;
 import android.app.Dialog;
@@ -7,29 +7,23 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ImageButton;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.handmark.pulltorefresh.library.PullToRefreshBase;
 import com.wangsy.ouraccounts.R;
 import com.wangsy.ouraccounts.adapter.AccountListAdapter;
+import com.wangsy.ouraccounts.asynctask.QueryDataTask;
 import com.wangsy.ouraccounts.callback.OnQueryDataReceived;
 import com.wangsy.ouraccounts.model.AccountModel;
 import com.wangsy.ouraccounts.swipeMenuListView.SwipeMenu;
 import com.wangsy.ouraccounts.swipeMenuListView.SwipeMenuCreator;
 import com.wangsy.ouraccounts.swipeMenuListView.SwipeMenuItem;
 import com.wangsy.ouraccounts.swipeMenuListView.SwipeMenuListView;
-import com.wangsy.ouraccounts.ui.EditAccountActivity;
-import com.wangsy.ouraccounts.ui.MainActivity;
-import com.wangsy.ouraccounts.asynctask.QueryDataTask;
-import com.wangsy.ouraccounts.ui.SearchConditionActivity;
 import com.wangsy.ouraccounts.utils.Util;
 import com.wangsy.ouraccounts.view.PullToRefreshSlideListView;
 
@@ -39,11 +33,11 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * 账目记录列表
+ * 列表基本activity
  * <p/>
- * Created by wangsy on 15/10/26.
+ * Created by wangsy on 15/10/31.
  */
-public class ReportListFragment extends Fragment implements OnQueryDataReceived {
+public class BaseListActivity extends Activity implements OnQueryDataReceived {
 
     private PullToRefreshSlideListView listViewAccounts;
     private List<AccountModel> accountsList;
@@ -54,19 +48,29 @@ public class ReportListFragment extends Fragment implements OnQueryDataReceived 
      */
     private int page = 0;
 
+    /**
+     * 类型
+     */
+    protected String strType = "";
+
+    /**
+     * 开始时间
+     */
+    protected String strStartDatetime = "";
+
+    /**
+     * 结束时间
+     */
+    protected String strEndDatetime = "";
+
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_report_list, container, false);
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.fragment_report_list);
 
-        TextView title = (TextView) view.findViewById(R.id.id_title);
-        title.setText(R.string.tab_report_list);
-
-        // 显示右侧按钮：搜索
-        initButtonRight(view);
-
-        listViewAccounts = (PullToRefreshSlideListView) view.findViewById(R.id.id_account_list);
+        listViewAccounts = (PullToRefreshSlideListView) findViewById(R.id.id_account_list);
         accountsList = new ArrayList<>();
-        accountListAdapter = new AccountListAdapter(accountsList, getActivity());
+        accountListAdapter = new AccountListAdapter(accountsList, this);
         listViewAccounts.setAdapter(accountListAdapter);
         listViewAccounts.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -85,19 +89,18 @@ public class ReportListFragment extends Fragment implements OnQueryDataReceived 
         // 初始获取第一页数据
         queryData();
 
-        return view;
+        // 显示左侧按钮：返回
+        initButtonLeft();
     }
 
-    private void initButtonRight(View view) {
-        ImageButton imgBtnRight = (ImageButton) view.findViewById(R.id.id_title_right_btn);
-        imgBtnRight.setVisibility(View.VISIBLE);
-        imgBtnRight.setImageResource(R.mipmap.icon_search);
-        imgBtnRight.setOnClickListener(new View.OnClickListener() {
+    private void initButtonLeft() {
+        ImageButton imgBtnLeft = (ImageButton) findViewById(R.id.id_title_left_btn);
+        imgBtnLeft.setVisibility(View.VISIBLE);
+        imgBtnLeft.setImageResource(R.mipmap.icon_back);
+        imgBtnLeft.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(getActivity(), SearchConditionActivity.class);
-                intent.putExtra(SearchConditionActivity.EXTRA_SEARCH_FLAG, SearchConditionActivity.SEARCH_FLAG_ALL);
-                startActivity(intent);
+                finish();
             }
         });
     }
@@ -120,17 +123,48 @@ public class ReportListFragment extends Fragment implements OnQueryDataReceived 
         });
     }
 
+    /**
+     * 异步获取数据
+     */
+    private void queryData() {
+        Map<String, Object> params = new HashMap<>();
+        params.put(QueryDataTask.PAGE, page);
+        params.put(QueryDataTask.TYPE, strType);
+        params.put(QueryDataTask.START_DATETIME, strStartDatetime);
+        params.put(QueryDataTask.END_DATETIME, strEndDatetime);
+        new QueryDataTask(this).execute(params);
+    }
+
+    @Override
+    public void onQueryDataReceived(Map<String, Object> result) {
+        int totalPages = (int) result.get(QueryDataTask.TOTAL_PAGES);
+        List<AccountModel> resultList = (List<AccountModel>) result.get(QueryDataTask.RESULT_LIST);
+
+        if (page == 0) {
+            accountsList.clear();
+        }
+        accountsList.addAll(resultList);
+        accountListAdapter.notifyDataSetChanged();
+        listViewAccounts.onRefreshComplete();
+
+        if (page == totalPages - 1) { // 已经是最后一页，取消加载更多
+            listViewAccounts.setMode(PullToRefreshBase.Mode.PULL_FROM_START);
+        } else {
+            listViewAccounts.setMode(PullToRefreshBase.Mode.BOTH);
+        }
+    }
+
     private void createSwipeMenu() {
         SwipeMenuCreator creator = new SwipeMenuCreator() {
             @Override
             public void create(SwipeMenu menu) {
                 // 创建按钮
-                SwipeMenuItem deleteItem = new SwipeMenuItem(getActivity().getApplicationContext());
+                SwipeMenuItem deleteItem = new SwipeMenuItem(BaseListActivity.this);
                 // 设置按钮背景
                 deleteItem.setBackground(R.drawable.item_delete);
                 // 设置按钮宽高
-                deleteItem.setWidth(Util.dp2px(getActivity(), 80));
-                deleteItem.setHeight(Util.dp2px(getActivity(), 80));
+                deleteItem.setWidth(Util.dp2px(BaseListActivity.this, 80));
+                deleteItem.setHeight(Util.dp2px(BaseListActivity.this, 80));
                 // 给按钮添加图片
                 deleteItem.setIcon(R.mipmap.icon_delete);
                 // 添加进按钮
@@ -157,7 +191,7 @@ public class ReportListFragment extends Fragment implements OnQueryDataReceived 
      */
     private void gotoEditActivity(int position) {
         AccountModel account = accountsList.get(position);
-        Intent intent = new Intent(getActivity(), EditAccountActivity.class);
+        Intent intent = new Intent(BaseListActivity.this, EditAccountActivity.class);
         intent.putExtra(EditAccountActivity.EXTRA_EDIT_DATA, account);
         intent.putExtra(EditAccountActivity.EXTRA_EDIT_DATA_ID, accountsList.get(position).getId());
         startActivity(intent);
@@ -167,8 +201,8 @@ public class ReportListFragment extends Fragment implements OnQueryDataReceived 
      * 删除提示
      */
     private void showDeleteDialog(final int position) {
-        final Dialog dialog = new Dialog(getActivity(), R.style.style_dialog_common);
-        View view = View.inflate(getActivity(), R.layout.dialog_common, null);
+        final Dialog dialog = new Dialog(this, R.style.style_dialog_common);
+        View view = View.inflate(this, R.layout.dialog_common, null);
         Button btnCancel = (Button) view.findViewById(R.id.id_button_cancel);
         Button btnOk = (Button) view.findViewById(R.id.id_button_ok);
         btnCancel.setOnClickListener(new View.OnClickListener() {
@@ -187,7 +221,7 @@ public class ReportListFragment extends Fragment implements OnQueryDataReceived 
                 // 通知数据更新
                 sendBroadcastToRefreshData();
 
-                Toast.makeText(getActivity(), "删除成功", Toast.LENGTH_SHORT).show();
+                Toast.makeText(BaseListActivity.this, "删除成功", Toast.LENGTH_SHORT).show();
                 dialog.dismiss();
             }
         });
@@ -197,43 +231,12 @@ public class ReportListFragment extends Fragment implements OnQueryDataReceived 
     }
 
     /**
-     * 异步获取数据
-     */
-    private void queryData() {
-        Map<String, Object> params = new HashMap<>();
-        params.put(QueryDataTask.PAGE, page);
-        params.put(QueryDataTask.TYPE, "");
-        params.put(QueryDataTask.START_DATETIME, "");
-        params.put(QueryDataTask.END_DATETIME, "");
-        new QueryDataTask(this).execute(params);
-    }
-
-    @Override
-    public void onQueryDataReceived(Map<String, Object> result) {
-        int totalPages = (int) result.get(QueryDataTask.TOTAL_PAGES);
-        List<AccountModel> resultList = (List<AccountModel>) result.get(QueryDataTask.RESULT_LIST);
-
-        if (page == 0) {
-            accountsList.clear();
-        }
-        accountsList.addAll(resultList);
-        accountListAdapter.notifyDataSetChanged();
-        listViewAccounts.onRefreshComplete();
-
-        if (page == totalPages - 1) { // 已经是最后一页，取消加载更多
-            listViewAccounts.setMode(PullToRefreshBase.Mode.PULL_FROM_START);
-        } else {
-            listViewAccounts.setMode(PullToRefreshBase.Mode.BOTH);
-        }
-    }
-
-    /**
      * 通知数据更新
      */
     private void sendBroadcastToRefreshData() {
         Intent intent = new Intent();
         intent.setAction(MainActivity.REFRESH_DATA_BROADCAST_INTENT_FILTER);
-        getActivity().sendBroadcast(intent);
+        sendBroadcast(intent);
     }
 
     /**
@@ -250,18 +253,24 @@ public class ReportListFragment extends Fragment implements OnQueryDataReceived 
     private RefreshDataBroadcastReceiver refreshDataBroadcastReceiver;
 
     @Override
-    public void onAttach(Activity activity) {
-        super.onAttach(activity);
+    protected void onResume() {
+        super.onResume();
         // 注册广播
         refreshDataBroadcastReceiver = new RefreshDataBroadcastReceiver();
         IntentFilter filter = new IntentFilter();
         filter.addAction(MainActivity.REFRESH_DATA_BROADCAST_INTENT_FILTER);
-        activity.registerReceiver(refreshDataBroadcastReceiver, filter);
+        registerReceiver(refreshDataBroadcastReceiver, filter);
     }
 
     @Override
     public void onDestroy() {
         super.onDestroy();
-        getActivity().unregisterReceiver(refreshDataBroadcastReceiver);
+        unregisterReceiver(refreshDataBroadcastReceiver);
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        finish();
     }
 }

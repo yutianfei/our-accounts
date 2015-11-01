@@ -58,5 +58,9 @@
     <!-- search title strings -->
     <string name="search_type">类别</string>
     <string name="search_datetime">时间</string>
+    <string name="search_datetime_prepare">快捷选择</string>
+    <string name="search_datetime_custom">自由选择</string>
+    <string name="search_datetime_start">开始时间：</string>
+    <string name="search_datetime_end">结束时间：</string>
 
 </resources>

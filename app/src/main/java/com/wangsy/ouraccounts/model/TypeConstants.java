@@ -1,7 +1,5 @@
 package com.wangsy.ouraccounts.model;
 
-import com.wangsy.ouraccounts.R;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -11,6 +9,7 @@ import java.util.List;
  * Created by wangsy on 15/10/21.
  */
 public class TypeConstants {
+    public static final String ALL = "全部";
     public static final String Food = "美食";
     public static final String APPS = "apps";
     public static final String CAR = "爱车";
@@ -81,6 +80,9 @@ public class TypeConstants {
         list.add(model);
 
         model = new SearchTextModel(GENERAL);
+        list.add(model);
+
+        model = new SearchTextModel(ALL);
         list.add(model);
 
         return list;
