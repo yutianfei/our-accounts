@@ -269,10 +269,8 @@ public class SearchConditionActivity extends Activity implements View.OnClickLis
             } else if (strStartDatetimeCustom.compareTo(strEndDatetimeCustom) > 0) {
                 Toast.makeText(this, "开始时间不能晚于结束时间...", Toast.LENGTH_LONG).show();
             } else {
-                if (strStartDatetimeCustom.equals(strEndDatetimeCustom)) {
-                    strStartDatetimeCustom = strStartDatetimeCustom + " 00:00";
-                    strEndDatetimeCustom = strEndDatetimeCustom + " 23:59";
-                }
+                strStartDatetimeCustom = strStartDatetimeCustom + " 00:00";
+                strEndDatetimeCustom = strEndDatetimeCustom + " 23:59";
                 intent.putExtra(EXTRA_START_DATETIME, strStartDatetimeCustom);
                 intent.putExtra(EXTRA_END_DATETIME, strEndDatetimeCustom);
                 startActivity(intent);
