@@ -1,6 +1,7 @@
 package com.wangsy.ouraccounts.fragment;
 
 import android.app.Activity;
+import android.app.ProgressDialog;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -161,6 +162,9 @@ public class ReportChartFragment extends Fragment implements OnChartValueSelecte
      * 异步查询数据
      */
     private class QueryDataTask extends AsyncTask<Void, Void, Map<String, List>> {
+
+        private ProgressDialog dialog;
+
         @Override
         protected Map<String, List> doInBackground(Void... params) {
             Map<String, List> result = new HashMap<>();
@@ -202,7 +206,15 @@ public class ReportChartFragment extends Fragment implements OnChartValueSelecte
         }
 
         @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            dialog = ProgressDialog.show(getActivity(), "", "正在加载，请稍等...");
+        }
+
+        @Override
         protected void onPostExecute(Map<String, List> result) {
+            dialog.dismiss();
+
             chartDataTypes.clear();
             chartDataPercents.clear();
             chartDataList.clear();

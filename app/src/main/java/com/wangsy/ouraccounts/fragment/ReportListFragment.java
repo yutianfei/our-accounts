@@ -210,7 +210,7 @@ public class ReportListFragment extends Fragment implements OnQueryDataReceived 
         params.put(QueryDataTask.TYPE, "");
         params.put(QueryDataTask.START_DATETIME, "");
         params.put(QueryDataTask.END_DATETIME, "");
-        new QueryDataTask(this).execute(params);
+        new QueryDataTask(getActivity(), this).execute(params);
     }
 
     @Override

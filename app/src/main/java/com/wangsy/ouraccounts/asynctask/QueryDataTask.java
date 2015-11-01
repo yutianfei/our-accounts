@@ -1,5 +1,7 @@
 package com.wangsy.ouraccounts.asynctask;
 
+import android.app.ProgressDialog;
+import android.content.Context;
 import android.os.AsyncTask;
 
 import com.wangsy.ouraccounts.callback.OnQueryDataReceived;
@@ -30,6 +32,9 @@ public class QueryDataTask extends AsyncTask<Map<String, Object>, Void, Map<Stri
      */
     private OnQueryDataReceived onQueryDataReceived;
 
+    private Context context;
+    private ProgressDialog dialog;
+
     public static final String PAGE = "page";
     public static final String TOTAL_PAGES = "total_pages";
     public static final String TYPE = "type";
@@ -37,7 +42,8 @@ public class QueryDataTask extends AsyncTask<Map<String, Object>, Void, Map<Stri
     public static final String END_DATETIME = "end_datetime";
     public static final String RESULT_LIST = "result_list";
 
-    public QueryDataTask(OnQueryDataReceived onQueryDataReceived) {
+    public QueryDataTask(Context context, OnQueryDataReceived onQueryDataReceived) {
+        this.context = context;
         this.onQueryDataReceived = onQueryDataReceived;
     }
 
@@ -105,7 +111,14 @@ public class QueryDataTask extends AsyncTask<Map<String, Object>, Void, Map<Stri
     }
 
     @Override
+    protected void onPreExecute() {
+        super.onPreExecute();
+        dialog = ProgressDialog.show(context, "", "正在加载，请稍等...");
+    }
+
+    @Override
     protected void onPostExecute(Map<String, Object> result) {
+        dialog.dismiss();
         onQueryDataReceived.onQueryDataReceived(result);
         super.onPostExecute(result);
     }

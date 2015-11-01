@@ -137,7 +137,7 @@ public class BaseListActivity extends Activity implements OnQueryDataReceived {
         params.put(QueryDataTask.TYPE, strType);
         params.put(QueryDataTask.START_DATETIME, strStartDatetime);
         params.put(QueryDataTask.END_DATETIME, strEndDatetime);
-        new QueryDataTask(this).execute(params);
+        new QueryDataTask(this, this).execute(params);
     }
 
     @Override
