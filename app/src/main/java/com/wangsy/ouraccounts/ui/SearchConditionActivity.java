@@ -262,9 +262,9 @@ public class SearchConditionActivity extends Activity implements View.OnClickLis
         intent.putExtra(EXTRA_TYPE, strType);
 
         if (!isDatetimeCustom) {
-            if ("".equals(strStartDatetimeCustom)) {
+            if (null == strStartDatetimeCustom || "".equals(strStartDatetimeCustom)) {
                 Toast.makeText(this, "请输入开始时间", Toast.LENGTH_SHORT).show();
-            } else if ("".equals(strEndDatetimeCustom)) {
+            } else if (null == strEndDatetimeCustom || "".equals(strEndDatetimeCustom)) {
                 Toast.makeText(this, "请输入结束时间", Toast.LENGTH_SHORT).show();
             } else if (strStartDatetimeCustom.compareTo(strEndDatetimeCustom) > 0) {
                 Toast.makeText(this, "开始时间不能晚于结束时间...", Toast.LENGTH_LONG).show();
