@@ -6,6 +6,8 @@
 
     <include layout="@layout/title_bar_layout" />
 
+    <include layout="@layout/empty_tip_layout" />
+
     <com.wangsy.ouraccounts.view.PullToRefreshSlideListView xmlns:ptr="http://schemas.android.com/apk/res-auto"
         android:id="@+id/id_account_list"
         android:layout_width="match_parent"

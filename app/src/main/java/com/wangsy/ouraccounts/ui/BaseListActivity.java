@@ -12,6 +12,7 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ImageButton;
+import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import com.handmark.pulltorefresh.library.PullToRefreshBase;
@@ -43,6 +44,8 @@ public class BaseListActivity extends Activity implements OnQueryDataReceived {
     private List<AccountModel> accountsList;
     private AccountListAdapter accountListAdapter;
 
+    private LinearLayout emptyTipLayout;
+
     /**
      * 分页索引
      */
@@ -67,6 +70,8 @@ public class BaseListActivity extends Activity implements OnQueryDataReceived {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.fragment_report_list);
+
+        emptyTipLayout = (LinearLayout) findViewById(R.id.id_empty_tip);
 
         listViewAccounts = (PullToRefreshSlideListView) findViewById(R.id.id_account_list);
         accountsList = new ArrayList<>();
@@ -140,17 +145,25 @@ public class BaseListActivity extends Activity implements OnQueryDataReceived {
         int totalPages = (int) result.get(QueryDataTask.TOTAL_PAGES);
         List<AccountModel> resultList = (List<AccountModel>) result.get(QueryDataTask.RESULT_LIST);
 
-        if (page == 0) {
-            accountsList.clear();
-        }
-        accountsList.addAll(resultList);
-        accountListAdapter.notifyDataSetChanged();
-        listViewAccounts.onRefreshComplete();
-
-        if (page == totalPages - 1) { // 已经是最后一页，取消加载更多
-            listViewAccounts.setMode(PullToRefreshBase.Mode.PULL_FROM_START);
+        if (null == resultList || 0 == resultList.size()) {
+            emptyTipLayout.setVisibility(View.VISIBLE);
+            listViewAccounts.setVisibility(View.GONE);
         } else {
-            listViewAccounts.setMode(PullToRefreshBase.Mode.BOTH);
+            emptyTipLayout.setVisibility(View.GONE);
+            listViewAccounts.setVisibility(View.VISIBLE);
+
+            if (page == 0) {
+                accountsList.clear();
+            }
+            accountsList.addAll(resultList);
+            accountListAdapter.notifyDataSetChanged();
+            listViewAccounts.onRefreshComplete();
+
+            if (page == totalPages - 1) { // 已经是最后一页，取消加载更多
+                listViewAccounts.setMode(PullToRefreshBase.Mode.PULL_FROM_START);
+            } else {
+                listViewAccounts.setMode(PullToRefreshBase.Mode.BOTH);
+            }
         }
     }
 

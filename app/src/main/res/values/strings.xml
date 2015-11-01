@@ -12,6 +12,7 @@
     <string name="dialog_tip">提示</string>
     <string name="delete_confirm">确定删除此条记录吗？</string>
 
+    <string name="empty_tip">没有相应的记录哦！</string>
     <string name="hint_empty">""</string>
 
     <!-- tab标题 -->
