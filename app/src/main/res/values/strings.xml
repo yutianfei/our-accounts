@@ -72,7 +72,7 @@
     <string name="setting_update">版本更新</string>
     <string name="setting_recommend">推荐给好友</string>
     <string name="setting_user_agreement">用户协议</string>
-    <string name="setting_feedback_content_hint">请您在这里写下对记一笔的意见，我们将不断努力改进，感谢支持！</string>
+    <string name="setting_feedback_content_hint">请在这里写下您对记一笔的意见，我们将不断努力改进，感谢支持！</string>
     <string name="setting_feedback_address_hint">您的电话/QQ/邮箱(可选)，以便我们与您联系</string>
     <string name="setting_select_error_log">同时发送错误日志</string>
     <string name="setting_about_contact_us">联系我们：yutianfei1127@163.com</string>

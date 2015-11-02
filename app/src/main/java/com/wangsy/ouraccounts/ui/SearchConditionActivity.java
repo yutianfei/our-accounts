@@ -16,7 +16,7 @@ import com.wangsy.ouraccounts.adapter.SearchConditionAdapter;
 import com.wangsy.ouraccounts.model.DateTimeConstants;
 import com.wangsy.ouraccounts.model.SearchTextModel;
 import com.wangsy.ouraccounts.model.TypeConstants;
-import com.wangsy.ouraccounts.utils.Util;
+import com.wangsy.ouraccounts.utils.Utils;
 
 import java.util.List;
 
@@ -156,17 +156,17 @@ public class SearchConditionActivity extends Activity implements View.OnClickLis
                 strEndDatetimePrepare = "";
                 break;
             case DateTimeConstants.ONE_MONTH:
-                String[] oneMonth = Util.getDatetimeStringWithMonths(-1);
+                String[] oneMonth = Utils.getDatetimeStringWithMonths(-1);
                 strStartDatetimePrepare = oneMonth[0];
                 strEndDatetimePrepare = oneMonth[1];
                 break;
             case DateTimeConstants.TWO_MONTH:
-                String[] twoMonth = Util.getDatetimeStringWithMonths(-2);
+                String[] twoMonth = Utils.getDatetimeStringWithMonths(-2);
                 strStartDatetimePrepare = twoMonth[0];
                 strEndDatetimePrepare = twoMonth[1];
                 break;
             case DateTimeConstants.THREE_MONTH:
-                String[] threeMonth = Util.getDatetimeStringWithMonths(-3);
+                String[] threeMonth = Utils.getDatetimeStringWithMonths(-3);
                 strStartDatetimePrepare = threeMonth[0];
                 strEndDatetimePrepare = threeMonth[1];
                 break;
@@ -192,14 +192,12 @@ public class SearchConditionActivity extends Activity implements View.OnClickLis
     private void initButtonRight() {
         ImageButton imgBtnRight = (ImageButton) findViewById(R.id.id_title_right_btn);
         imgBtnRight.setVisibility(View.VISIBLE);
-        imgBtnRight.setImageResource(R.mipmap.icon_ok);
         imgBtnRight.setOnClickListener(this);
     }
 
     private void initButtonLeft() {
         ImageButton btnBack = (ImageButton) findViewById(R.id.id_title_left_btn);
         btnBack.setVisibility(View.VISIBLE);
-        btnBack.setImageResource(R.mipmap.icon_back);
         btnBack.setOnClickListener(this);
     }
 

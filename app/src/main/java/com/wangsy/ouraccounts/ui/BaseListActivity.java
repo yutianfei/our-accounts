@@ -22,7 +22,7 @@ import com.wangsy.ouraccounts.swipeMenuListView.SwipeMenu;
 import com.wangsy.ouraccounts.swipeMenuListView.SwipeMenuCreator;
 import com.wangsy.ouraccounts.swipeMenuListView.SwipeMenuItem;
 import com.wangsy.ouraccounts.swipeMenuListView.SwipeMenuListView;
-import com.wangsy.ouraccounts.utils.Util;
+import com.wangsy.ouraccounts.utils.Utils;
 import com.wangsy.ouraccounts.view.PullToRefreshSlideListView;
 
 import java.util.ArrayList;
@@ -100,7 +100,6 @@ public class BaseListActivity extends Activity implements OnQueryDataReceived {
     private void initButtonLeft() {
         ImageButton imgBtnLeft = (ImageButton) findViewById(R.id.id_title_left_btn);
         imgBtnLeft.setVisibility(View.VISIBLE);
-        imgBtnLeft.setImageResource(R.mipmap.icon_back);
         imgBtnLeft.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -175,8 +174,8 @@ public class BaseListActivity extends Activity implements OnQueryDataReceived {
                 // 设置按钮背景
                 deleteItem.setBackground(R.drawable.item_delete);
                 // 设置按钮宽高
-                deleteItem.setWidth(Util.dp2px(BaseListActivity.this, 80));
-                deleteItem.setHeight(Util.dp2px(BaseListActivity.this, 80));
+                deleteItem.setWidth(Utils.dp2px(BaseListActivity.this, 80));
+                deleteItem.setHeight(Utils.dp2px(BaseListActivity.this, 80));
                 // 给按钮添加图片
                 deleteItem.setIcon(R.mipmap.icon_delete);
                 // 添加进按钮

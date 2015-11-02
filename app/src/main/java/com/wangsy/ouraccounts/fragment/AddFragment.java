@@ -22,7 +22,7 @@ import com.wangsy.ouraccounts.model.AccountModel;
 import com.wangsy.ouraccounts.ui.MainActivity;
 import com.wangsy.ouraccounts.ui.SetDatetimeDialogActivity;
 import com.wangsy.ouraccounts.ui.SetCommentDialogActivity;
-import com.wangsy.ouraccounts.utils.Util;
+import com.wangsy.ouraccounts.utils.Utils;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -166,7 +166,7 @@ public class AddFragment extends Fragment implements IconSelectedCallback {
         // 如果没有设置时间，默认为当前时间
         if (accountDatetime == null || "".equals(accountDatetime)) {
             Calendar c = Calendar.getInstance();
-            SimpleDateFormat sdf = new SimpleDateFormat(Util.DATE_FORMAT);
+            SimpleDateFormat sdf = new SimpleDateFormat(Utils.DATE_FORMAT);
             accountDatetime = sdf.format(c.getTime());
         }
 
@@ -253,7 +253,6 @@ public class AddFragment extends Fragment implements IconSelectedCallback {
     private void initButtonRight(View view) {
         ImageButton imgBtn = (ImageButton) view.findViewById(R.id.id_title_right_btn);
         imgBtn.setVisibility(View.VISIBLE);
-        imgBtn.setImageResource(R.mipmap.icon_ok);
         imgBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

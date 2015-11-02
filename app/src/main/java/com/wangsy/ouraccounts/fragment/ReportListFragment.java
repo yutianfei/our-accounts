@@ -31,7 +31,7 @@ import com.wangsy.ouraccounts.ui.EditAccountActivity;
 import com.wangsy.ouraccounts.ui.MainActivity;
 import com.wangsy.ouraccounts.asynctask.QueryDataTask;
 import com.wangsy.ouraccounts.ui.SearchConditionActivity;
-import com.wangsy.ouraccounts.utils.Util;
+import com.wangsy.ouraccounts.utils.Utils;
 import com.wangsy.ouraccounts.view.PullToRefreshSlideListView;
 
 import java.util.ArrayList;
@@ -134,8 +134,8 @@ public class ReportListFragment extends Fragment implements OnQueryDataReceived 
                 // 设置按钮背景
                 deleteItem.setBackground(R.drawable.item_delete);
                 // 设置按钮宽高
-                deleteItem.setWidth(Util.dp2px(getActivity(), 80));
-                deleteItem.setHeight(Util.dp2px(getActivity(), 80));
+                deleteItem.setWidth(Utils.dp2px(getActivity(), 80));
+                deleteItem.setHeight(Utils.dp2px(getActivity(), 80));
                 // 给按钮添加图片
                 deleteItem.setIcon(R.mipmap.icon_delete);
                 // 添加进按钮

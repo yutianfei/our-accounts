@@ -5,6 +5,8 @@ import com.wangsy.ouraccounts.R;
 import java.io.Serializable;
 
 /**
+ * 类型图标相关内容
+ * <p/>
  * Created by wangsy on 15/10/21.
  */
 public class IconModel implements Serializable {

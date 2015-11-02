@@ -15,6 +15,7 @@
         style="@style/style_title_button"
         android:layout_alignParentEnd="true"
         android:contentDescription="@string/icon_content_description"
+        android:src="@mipmap/icon_ok"
         android:visibility="gone" />
 
     <ImageButton
@@ -22,5 +23,6 @@
         style="@style/style_title_button"
         android:layout_alignParentStart="true"
         android:contentDescription="@string/icon_content_description"
+        android:src="@mipmap/icon_back"
         android:visibility="gone" />
 </RelativeLayout>

@@ -9,12 +9,11 @@
     <EditText
         android:id="@+id/id_edit_feedback_content"
         android:layout_width="match_parent"
-        android:layout_height="160dp"
+        android:layout_height="140dp"
         android:layout_marginTop="20dp"
-        android:background="@android:color/white"
+        android:background="@drawable/bg_setting_item"
         android:gravity="top|start"
         android:hint="@string/setting_feedback_content_hint"
-        android:imeOptions="actionNext"
         android:padding="10dp"
         android:textColor="@color/color_text_normal"
         android:textSize="16sp" />
@@ -24,7 +23,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="20dp"
-        android:background="@android:color/white"
+        android:background="@drawable/bg_setting_item"
         android:gravity="top|start"
         android:hint="@string/setting_feedback_address_hint"
         android:maxLines="1"

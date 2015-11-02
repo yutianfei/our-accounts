@@ -1,6 +1,8 @@
 package com.wangsy.ouraccounts.utils;
 
 import android.content.Context;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -11,7 +13,7 @@ import java.util.Date;
  * <p/>
  * Created by wangsy on 15/3/12.
  */
-public class Util {
+public class Utils {
 
     public static final String PACKAGE_NAME = "com.wangsy.ouraccounts";
     public static final String IMAGE_FOLDER = "mipmap";
@@ -109,5 +111,33 @@ public class Util {
         result[0] = dateFormatWithDay(calendar.getTime()) + " 00:00";
 
         return result;
+    }
+
+    /**
+     * 检查网络是否可用
+     */
+    public static boolean isNetworkAvailable(Context context) {
+        ConnectivityManager cm = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
+        if (cm != null) {
+            NetworkInfo info = cm.getActiveNetworkInfo();
+            if (info != null) {
+                return info.isAvailable();
+            }
+        }
+        return false;
+    }
+
+    /**
+     * 检查是否连接了wifi
+     */
+    public static boolean isWifiConnected(Context context){
+        ConnectivityManager cm = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
+        if (cm != null) {
+            NetworkInfo wifiInfo = cm.getNetworkInfo(ConnectivityManager.TYPE_WIFI);
+            if (wifiInfo != null) {
+                return wifiInfo.isAvailable();
+            }
+        }
+        return false;
     }
 }

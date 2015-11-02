@@ -10,7 +10,7 @@ import android.widget.DatePicker;
 import android.widget.TimePicker;
 
 import com.wangsy.ouraccounts.R;
-import com.wangsy.ouraccounts.utils.Util;
+import com.wangsy.ouraccounts.utils.Utils;
 
 import java.util.Calendar;
 
@@ -54,7 +54,7 @@ public class SetDatetimeDialogActivity extends Activity implements DatePicker.On
         if (dateTime == null || "".equals(dateTime)) {
             calendar = Calendar.getInstance();
         } else {
-            calendar = Util.getCalendarByString(dateTime);
+            calendar = Utils.getCalendarByString(dateTime);
         }
 
         datePicker = (DatePicker) findViewById(R.id.id_date_picker);
@@ -84,12 +84,12 @@ public class SetDatetimeDialogActivity extends Activity implements DatePicker.On
                 if (flag == DATETIME_FLAG_NO_TIMEPICKER) {
                     calendar.set(datePicker.getYear(), datePicker.getMonth(),
                             datePicker.getDayOfMonth());
-                    dateTime = Util.dateFormatWithDay(calendar.getTime());
+                    dateTime = Utils.dateFormatWithDay(calendar.getTime());
                 } else {
                     calendar.set(datePicker.getYear(), datePicker.getMonth(),
                             datePicker.getDayOfMonth(), timePicker.getCurrentHour(),
                             timePicker.getCurrentMinute());
-                    dateTime = Util.dateFormat(calendar.getTime());
+                    dateTime = Utils.dateFormat(calendar.getTime());
                 }
 
                 Intent intent = new Intent();

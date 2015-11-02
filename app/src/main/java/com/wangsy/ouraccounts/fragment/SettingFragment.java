@@ -6,11 +6,11 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.wangsy.ouraccounts.R;
 import com.wangsy.ouraccounts.ui.AboutActivity;
+import com.wangsy.ouraccounts.ui.FeedbackActivity;
 
 /**
  * 设置
@@ -77,6 +77,8 @@ public class SettingFragment extends Fragment implements View.OnClickListener {
     }
 
     private void gotoFeedbackActivity() {
+        Intent feedbackIntent = new Intent(getActivity(), FeedbackActivity.class);
+        startActivity(feedbackIntent);
     }
 
     private void gotoAboutActivity() {

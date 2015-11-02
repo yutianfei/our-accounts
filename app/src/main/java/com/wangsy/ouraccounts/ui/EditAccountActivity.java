@@ -221,14 +221,12 @@ public class EditAccountActivity extends Activity implements View.OnClickListene
     private void initButtonRight() {
         ImageButton imgBtnRight = (ImageButton) findViewById(R.id.id_title_right_btn);
         imgBtnRight.setVisibility(View.VISIBLE);
-        imgBtnRight.setImageResource(R.mipmap.icon_ok);
         imgBtnRight.setOnClickListener(this);
     }
 
     private void initButtonLeft() {
         ImageButton imgBtnLeft = (ImageButton) findViewById(R.id.id_title_left_btn);
         imgBtnLeft.setVisibility(View.VISIBLE);
-        imgBtnLeft.setImageResource(R.mipmap.icon_back);
         imgBtnLeft.setOnClickListener(this);
     }
 

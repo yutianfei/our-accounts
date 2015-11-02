@@ -10,7 +10,7 @@ import android.widget.TextView;
 
 import com.wangsy.ouraccounts.R;
 import com.wangsy.ouraccounts.model.ChartItemModel;
-import com.wangsy.ouraccounts.utils.Util;
+import com.wangsy.ouraccounts.utils.Utils;
 
 import java.util.List;
 
@@ -62,7 +62,7 @@ public class ChartListAdapter extends BaseAdapter {
             viewHolder = (ViewHolder) convertView.getTag();
         }
 
-        viewHolder.imgViewIcon.setImageResource(Util.getImageResourceId(context, model.iconImageName));
+        viewHolder.imgViewIcon.setImageResource(Utils.getImageResourceId(context, model.iconImageName));
         viewHolder.tvChartType.setText(model.type);
         viewHolder.tvChartSumAmount.setText(model.sum + "");
 
