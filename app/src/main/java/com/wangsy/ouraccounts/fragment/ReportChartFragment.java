@@ -33,7 +33,7 @@ import com.wangsy.ouraccounts.adapter.ChartListAdapter;
 import com.wangsy.ouraccounts.model.AccountModel;
 import com.wangsy.ouraccounts.model.ChartItemModel;
 import com.wangsy.ouraccounts.model.TableConstant;
-import com.wangsy.ouraccounts.ui.AccountListActivity;
+import com.wangsy.ouraccounts.ui.ChartAccountListActivity;
 import com.wangsy.ouraccounts.ui.MainActivity;
 
 import org.litepal.crud.DataSupport;
@@ -91,8 +91,8 @@ public class ReportChartFragment extends Fragment implements OnChartValueSelecte
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Intent intent = new Intent(getActivity(), AccountListActivity.class);
-                intent.putExtra(AccountListActivity.EXTRA_TYPE_NAME, chartDataList.get(position).type);
+                Intent intent = new Intent(getActivity(), ChartAccountListActivity.class);
+                intent.putExtra(ChartAccountListActivity.EXTRA_TYPE_NAME, chartDataList.get(position).type);
                 startActivity(intent);
             }
         });

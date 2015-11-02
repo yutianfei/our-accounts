@@ -8,15 +8,12 @@ import android.widget.TextView;
 
 import com.wangsy.ouraccounts.R;
 
-import java.util.HashMap;
-import java.util.Map;
-
 /**
  * 显示数据列表
  * <p/>
  * Created by wangsy on 15/10/31.
  */
-public class AccountListActivity extends BaseListActivity {
+public class ChartAccountListActivity extends BaseListActivity {
     public static final String EXTRA_TYPE_NAME = "extra_type_name";
 
     @Override
@@ -39,7 +36,7 @@ public class AccountListActivity extends BaseListActivity {
             @Override
             public void onClick(View v) {
                 BaseListActivity.isDataModified = false;
-                Intent intent = new Intent(AccountListActivity.this, SearchConditionActivity.class);
+                Intent intent = new Intent(ChartAccountListActivity.this, SearchConditionActivity.class);
                 intent.putExtra(SearchConditionActivity.EXTRA_TYPE, strType);
                 intent.putExtra(SearchConditionActivity.EXTRA_SEARCH_FLAG, SearchConditionActivity.SEARCH_FLAG_DATETIME);
                 startActivity(intent);

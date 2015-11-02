@@ -5,9 +5,6 @@ import android.widget.TextView;
 
 import com.wangsy.ouraccounts.R;
 
-import java.util.HashMap;
-import java.util.Map;
-
 /**
  * 显示搜索结果
  * <p/>

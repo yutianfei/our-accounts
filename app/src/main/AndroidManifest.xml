@@ -20,7 +20,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".ui.AccountListActivity"
+            android:name=".ui.ChartAccountListActivity"
             android:screenOrientation="portrait" />
         <activity
             android:name=".ui.SearchConditionActivity"
