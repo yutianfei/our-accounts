@@ -11,14 +11,11 @@
 
     <EditText
         android:id="@+id/id_input_comment"
+        style="@style/style_edit_text"
         android:layout_width="match_parent"
         android:layout_height="120dp"
-        android:background="@null"
-        android:gravity="top"
         android:hint="@string/set_comment_hint"
-        android:maxLength="@integer/comment_max_length"
         android:padding="5dp"
-        android:textColor="@color/edit_text_color"
         android:textSize="16sp" />
 
     <include layout="@layout/dialog_button_layout" />

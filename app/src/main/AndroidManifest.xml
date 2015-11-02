@@ -41,6 +41,9 @@
             android:name=".ui.SetCommentDialogActivity"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.AppCompat.Light.Dialog" />
+        <activity
+            android:name=".ui.AboutActivity"
+            android:screenOrientation="portrait" />
     </application>
 
 </manifest>

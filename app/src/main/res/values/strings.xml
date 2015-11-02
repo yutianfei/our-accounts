@@ -15,6 +15,8 @@
     <string name="empty_tip">没有相应的记录哦！</string>
     <string name="hint_empty">""</string>
 
+    <string name="item_arrow"><![CDATA[>]]></string>
+
     <!-- tab标题 -->
     <string name="tab_add">新的</string>
     <string name="tab_report_list">记录</string>
@@ -63,5 +65,19 @@
     <string name="search_datetime_custom">自由选择</string>
     <string name="search_datetime_start">开始时间：</string>
     <string name="search_datetime_end">结束时间：</string>
+
+    <!-- setting title strings -->
+    <string name="setting_about">关于记一笔</string>
+    <string name="setting_feedback">意见反馈</string>
+    <string name="setting_update">版本更新</string>
+    <string name="setting_recommend">推荐给好友</string>
+    <string name="setting_user_agreement">用户协议</string>
+    <string name="setting_feedback_content_hint">请您在这里写下对记一笔的意见，我们将不断努力改进，感谢支持！</string>
+    <string name="setting_feedback_address_hint">您的电话/QQ/邮箱(可选)，以便我们与您联系</string>
+    <string name="setting_select_error_log">同时发送错误日志</string>
+    <string name="setting_about_contact_us">联系我们：yutianfei1127@163.com</string>
+    <string name="setting_about_introduction">随时随地方便您的记账需求</string>
+    <string name="setting_about_copyright_have">版权所有</string>
+    <string name="setting_about_version"> v</string>
 
 </resources>

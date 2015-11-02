@@ -6,4 +6,90 @@
 
     <!-- 标题栏 -->
     <include layout="@layout/title_bar_layout" />
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <LinearLayout style="@style/style_setting_layout">
+
+                <RelativeLayout
+                    android:id="@+id/id_setting_feedback"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <TextView
+                        style="@style/style_setting_title"
+                        android:layout_alignParentStart="true"
+                        android:text="@string/setting_feedback" />
+
+                    <TextView
+                        style="@style/style_setting_title"
+                        android:layout_alignParentEnd="true"
+                        android:layout_marginEnd="16dp"
+                        android:text="@string/item_arrow" />
+                </RelativeLayout>
+
+                <!-- 分割线 -->
+                <View style="@style/style_setting_divider" />
+
+                <TextView
+                    android:id="@+id/id_setting_recommend"
+                    style="@style/style_setting_title"
+                    android:layout_width="match_parent"
+                    android:text="@string/setting_recommend" />
+            </LinearLayout>
+
+            <LinearLayout style="@style/style_setting_layout">
+
+                <RelativeLayout
+                    android:id="@+id/id_setting_about"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <TextView
+                        style="@style/style_setting_title"
+                        android:layout_alignParentStart="true"
+                        android:text="@string/setting_about" />
+
+                    <TextView
+                        style="@style/style_setting_title"
+                        android:layout_alignParentEnd="true"
+                        android:layout_marginEnd="16dp"
+                        android:text="@string/item_arrow" />
+                </RelativeLayout>
+
+                <!-- 分割线 -->
+                <View style="@style/style_setting_divider" />
+
+                <TextView
+                    android:id="@+id/id_setting_update"
+                    style="@style/style_setting_title"
+                    android:layout_width="match_parent"
+                    android:text="@string/setting_update" />
+            </LinearLayout>
+
+            <RelativeLayout
+                android:id="@+id/id_setting_user_agreement"
+                style="@style/style_setting_layout">
+
+                <TextView
+                    style="@style/style_setting_title"
+                    android:layout_alignParentStart="true"
+                    android:text="@string/setting_user_agreement" />
+
+                <TextView
+                    style="@style/style_setting_title"
+                    android:layout_alignParentEnd="true"
+                    android:layout_marginEnd="16dp"
+                    android:text="@string/item_arrow" />
+            </RelativeLayout>
+
+        </LinearLayout>
+    </ScrollView>
 </LinearLayout>
