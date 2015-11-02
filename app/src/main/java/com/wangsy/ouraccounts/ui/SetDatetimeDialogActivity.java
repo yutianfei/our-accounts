@@ -103,7 +103,6 @@ public class SetDatetimeDialogActivity extends Activity implements DatePicker.On
         btnCancel.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                setResult(RESULT_CANCELED);
                 finish();
             }
         });

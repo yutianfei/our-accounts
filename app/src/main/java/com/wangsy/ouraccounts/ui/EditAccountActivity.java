@@ -157,7 +157,6 @@ public class EditAccountActivity extends Activity implements View.OnClickListene
                 saveEditData();
                 break;
             case R.id.id_title_left_btn:
-                setResult(RESULT_CANCELED);
                 finish();
                 break;
         }
@@ -200,6 +199,7 @@ public class EditAccountActivity extends Activity implements View.OnClickListene
         if (count > 0) {
             Toast.makeText(this, "修改成功", Toast.LENGTH_SHORT).show();
             sendBroadcastToRefreshData();
+            BaseListActivity.isDataModified = true;
             finish();
         }
     }

@@ -2,10 +2,7 @@ package com.wangsy.ouraccounts.ui;
 
 import android.app.Activity;
 import android.app.Dialog;
-import android.content.BroadcastReceiver;
-import android.content.Context;
 import android.content.Intent;
-import android.content.IntentFilter;
 import android.os.Bundle;
 import android.view.View;
 import android.view.ViewGroup;
@@ -39,6 +36,11 @@ import java.util.Map;
  * Created by wangsy on 15/10/31.
  */
 public class BaseListActivity extends Activity implements OnQueryDataReceived {
+
+    /**
+     * 数据是否进行了修改
+     */
+    public static boolean isDataModified = true;
 
     private PullToRefreshSlideListView listViewAccounts;
     private List<AccountModel> accountsList;
@@ -90,9 +92,6 @@ public class BaseListActivity extends Activity implements OnQueryDataReceived {
 
         // 绑定下拉刷新上拉加载事件
         bindPullToRefresh();
-
-        // 初始获取第一页数据
-        queryData();
 
         // 显示左侧按钮：返回
         initButtonLeft();
@@ -203,6 +202,7 @@ public class BaseListActivity extends Activity implements OnQueryDataReceived {
      * 跳转到编辑信息的Activity
      */
     private void gotoEditActivity(int position) {
+        isDataModified = false;
         AccountModel account = accountsList.get(position);
         Intent intent = new Intent(BaseListActivity.this, EditAccountActivity.class);
         intent.putExtra(EditAccountActivity.EXTRA_EDIT_DATA, account);
@@ -233,6 +233,7 @@ public class BaseListActivity extends Activity implements OnQueryDataReceived {
                 accountsList.remove(position);
                 // 通知数据更新
                 sendBroadcastToRefreshData();
+                queryData();
 
                 Toast.makeText(BaseListActivity.this, "删除成功", Toast.LENGTH_SHORT).show();
                 dialog.dismiss();
@@ -252,38 +253,11 @@ public class BaseListActivity extends Activity implements OnQueryDataReceived {
         sendBroadcast(intent);
     }
 
-    /**
-     * 接收刷新数据的广播
-     */
-    private class RefreshDataBroadcastReceiver extends BroadcastReceiver {
-        @Override
-        public void onReceive(Context context, Intent intent) {
-            page = 0;
-            queryData();
-        }
-    }
-
-    private RefreshDataBroadcastReceiver refreshDataBroadcastReceiver;
-
     @Override
     protected void onResume() {
         super.onResume();
-        // 注册广播
-        refreshDataBroadcastReceiver = new RefreshDataBroadcastReceiver();
-        IntentFilter filter = new IntentFilter();
-        filter.addAction(MainActivity.REFRESH_DATA_BROADCAST_INTENT_FILTER);
-        registerReceiver(refreshDataBroadcastReceiver, filter);
-    }
-
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
-        unregisterReceiver(refreshDataBroadcastReceiver);
-    }
-
-    @Override
-    public void onBackPressed() {
-        super.onBackPressed();
-        finish();
+        if (isDataModified) {// 获取第一页数据
+            queryData();
+        }
     }
 }

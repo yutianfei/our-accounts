@@ -38,6 +38,7 @@ public class AccountListActivity extends BaseListActivity {
         imgBtnRight.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                BaseListActivity.isDataModified = false;
                 Intent intent = new Intent(AccountListActivity.this, SearchConditionActivity.class);
                 intent.putExtra(SearchConditionActivity.EXTRA_TYPE, strType);
                 intent.putExtra(SearchConditionActivity.EXTRA_SEARCH_FLAG, SearchConditionActivity.SEARCH_FLAG_DATETIME);

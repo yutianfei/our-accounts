@@ -23,6 +23,8 @@ public class SearchResultActivity extends BaseListActivity {
 
         super.onCreate(savedInstanceState);
 
+        BaseListActivity.isDataModified = true;
+
         TextView title = (TextView) findViewById(R.id.id_title);
         title.setText(R.string.title_search_result);
     }
