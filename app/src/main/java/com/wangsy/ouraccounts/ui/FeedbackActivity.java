@@ -13,7 +13,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.wangsy.ouraccounts.R;
-import com.wangsy.ouraccounts.utils.Utils;
+import com.wangsy.ouraccounts.utils.NetworkUtils;
 
 import java.util.Timer;
 import java.util.TimerTask;
@@ -94,16 +94,18 @@ public class FeedbackActivity extends Activity implements View.OnClickListener {
         }
 
         // 检查网络是否可用，如果不可用，取消提交
-        if (!Utils.isNetworkAvailable(this)) {
+        if (!NetworkUtils.isNetworkAvailable(this)) {
             Toast.makeText(this, "网络是否连接了？", Toast.LENGTH_SHORT).show();
             return;
         }
 
         // 如果提交错误日志，检查网络是否为wifi，如果不是，提示用户是否继续
-        if (cbSendErrorLog.isChecked() && !Utils.isWifiConnected(this)) {
-            Toast.makeText(this, "当前网络并非wifi，发送错误日志需要消耗流量，是否继续？", Toast.LENGTH_SHORT).show();
+        if (cbSendErrorLog.isChecked() && !NetworkUtils.isWifiConnected(this)) {
+            Toast.makeText(this, "当前网络并非wifi，发送错误日志需要消耗流量，是否继续？", Toast.LENGTH_LONG).show();
             return;
         }
+
+        // TODO
 
         finish();
     }

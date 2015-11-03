@@ -1,12 +1,11 @@
 package com.wangsy.ouraccounts.utils;
 
 import android.content.Context;
-import android.net.ConnectivityManager;
-import android.net.NetworkInfo;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.Locale;
 
 /**
  * 工具方法类
@@ -22,12 +21,12 @@ public class Utils {
     public static final String DATE_FORMAT = "yyyy年MM月dd日 HH:mm";
 
     public static String dateFormat(Date date) {
-        SimpleDateFormat sdf = new SimpleDateFormat(DATE_FORMAT);
+        SimpleDateFormat sdf = new SimpleDateFormat(DATE_FORMAT, Locale.getDefault());
         return sdf.format(date);
     }
 
     public static String dateFormatWithDay(Date date) {
-        SimpleDateFormat sdf = new SimpleDateFormat(DATE_FORMAT_DAY);
+        SimpleDateFormat sdf = new SimpleDateFormat(DATE_FORMAT_DAY, Locale.getDefault());
         return sdf.format(date);
     }
 
@@ -111,33 +110,5 @@ public class Utils {
         result[0] = dateFormatWithDay(calendar.getTime()) + " 00:00";
 
         return result;
-    }
-
-    /**
-     * 检查网络是否可用
-     */
-    public static boolean isNetworkAvailable(Context context) {
-        ConnectivityManager cm = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
-        if (cm != null) {
-            NetworkInfo info = cm.getActiveNetworkInfo();
-            if (info != null) {
-                return info.isAvailable();
-            }
-        }
-        return false;
-    }
-
-    /**
-     * 检查是否连接了wifi
-     */
-    public static boolean isWifiConnected(Context context){
-        ConnectivityManager cm = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
-        if (cm != null) {
-            NetworkInfo wifiInfo = cm.getNetworkInfo(ConnectivityManager.TYPE_WIFI);
-            if (wifiInfo != null) {
-                return wifiInfo.isAvailable();
-            }
-        }
-        return false;
     }
 }

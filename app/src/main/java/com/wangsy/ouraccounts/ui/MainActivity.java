@@ -16,6 +16,8 @@ import com.wangsy.ouraccounts.fragment.ReportChartFragment;
 import com.wangsy.ouraccounts.fragment.ReportListFragment;
 import com.wangsy.ouraccounts.fragment.SettingFragment;
 
+import cn.sharesdk.framework.ShareSDK;
+
 public class MainActivity extends FragmentActivity implements View.OnClickListener {
 
     public static final String REFRESH_DATA_BROADCAST_INTENT_FILTER = "com.refreshData";
@@ -50,6 +52,8 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        ShareSDK.initSDK(this);
 
         initViews();
         fm = getSupportFragmentManager();
@@ -193,6 +197,12 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
         tvReportListName = (TextView) findViewById(R.id.id_tab_report_list_name);
         tvReportChartName = (TextView) findViewById(R.id.id_tab_report_chart_name);
         tvSettingName = (TextView) findViewById(R.id.id_tab_setting_name);
+    }
+
+    @Override
+    protected void onDestroy() {
+        ShareSDK.stopSDK();
+        super.onDestroy();
     }
 
     @Override

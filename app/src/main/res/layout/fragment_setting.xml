@@ -39,10 +39,10 @@
                 <View style="@style/style_setting_divider" />
 
                 <TextView
-                    android:id="@+id/id_setting_recommend"
+                    android:id="@+id/id_setting_share"
                     style="@style/style_setting_title"
                     android:layout_width="match_parent"
-                    android:text="@string/setting_recommend" />
+                    android:text="@string/setting_share" />
             </LinearLayout>
 
             <LinearLayout style="@style/style_setting_layout">
