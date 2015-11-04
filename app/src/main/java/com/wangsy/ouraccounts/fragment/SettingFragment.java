@@ -1,23 +1,29 @@
 package com.wangsy.ouraccounts.fragment;
 
+import android.app.Dialog;
 import android.content.Intent;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.squareup.okhttp.Request;
 import com.wangsy.ouraccounts.R;
+import com.wangsy.ouraccounts.model.Constants;
+import com.wangsy.ouraccounts.model.VersionModel;
 import com.wangsy.ouraccounts.ui.AboutActivity;
 import com.wangsy.ouraccounts.ui.FeedbackActivity;
-import com.wangsy.ouraccounts.utils.AppUpdateUtils;
+import com.wangsy.ouraccounts.utils.NetworkUtils;
+import com.wangsy.ouraccounts.utils.OkHttpClientManager;
 
-import java.util.HashMap;
-
-import cn.sharesdk.framework.Platform;
-import cn.sharesdk.framework.PlatformActionListener;
 import cn.sharesdk.framework.ShareSDK;
 import cn.sharesdk.onekeyshare.OnekeyShare;
 
@@ -76,7 +82,7 @@ public class SettingFragment extends Fragment implements View.OnClickListener {
                 gotoAboutActivity();
                 break;
             case R.id.id_setting_update:
-                checkUpdate();
+                checkAppUpdate();
                 break;
             case R.id.id_setting_user_agreement:
                 gotoUserAgreementActivity();
@@ -105,8 +111,77 @@ public class SettingFragment extends Fragment implements View.OnClickListener {
     /**
      * 检查更新
      */
-    private void checkUpdate() {
-        AppUpdateUtils.checkAppVersionUpdate(getActivity());
+    private void checkAppUpdate() {
+        // 检查网络是否可用，如果不可用，取消更新操作
+        if (!NetworkUtils.isNetworkAvailable(getActivity())) {
+            Toast.makeText(getActivity(), "网络是否连接了？", Toast.LENGTH_SHORT).show();
+            return;
+        }
+        // 从网络检测最新版本信息
+        OkHttpClientManager.getAsyn(Constants.HTTP_CHECK_UPDATE, new OkHttpClientManager.ResultCallback<VersionModel>() {
+            @Override
+            public void onError(Request request, Exception e) {
+                Toast.makeText(getActivity(), "检查失败", Toast.LENGTH_SHORT).show();
+            }
+
+            @Override
+            public void onResponse(VersionModel response) {
+                checkUpdate(response);
+            }
+        });
+    }
+
+    private void checkUpdate(VersionModel lastedVersion) {
+        if (lastedVersion != null) {
+            PackageManager pm = getActivity().getPackageManager();
+            try {
+                PackageInfo info = pm.getPackageInfo(getActivity().getPackageName(), 0);
+                int currentVersionCode = info.versionCode;
+                String currentVersionName = getActivity().getResources().getString(R.string.setting_about_version) + info.versionName;
+
+                if (lastedVersion.versionCode == currentVersionCode) {
+                    Toast.makeText(getActivity(), "当前已是最新版本", Toast.LENGTH_SHORT).show();
+                } else {
+                    chooseUpdateDialog(currentVersionName, lastedVersion.versionName, lastedVersion.downloadAddress);
+                }
+            } catch (PackageManager.NameNotFoundException e) {
+                Log.e("getPackageName", e.getMessage());
+            }
+        }
+    }
+
+    private void chooseUpdateDialog(String currentVersionName, String lastedVersionName, final String downloadAddress) {
+        final Dialog dialog = new Dialog(getActivity(), R.style.style_dialog_common);
+        View view = View.inflate(getActivity(), R.layout.dialog_common, null);
+
+        TextView tvTitle = (TextView) view.findViewById(R.id.id_dialog_title);
+        tvTitle.setText("是否更新？");
+        TextView tvMessage = (TextView) view.findViewById(R.id.id_dialog_message);
+        tvMessage.setText(String.format(getActivity().getResources().getString(R.string.update_version_string),
+                currentVersionName, lastedVersionName));
+
+        Button btnCancel = (Button) view.findViewById(R.id.id_button_cancel);
+        Button btnOk = (Button) view.findViewById(R.id.id_button_ok);
+        btnCancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
+            }
+        });
+        btnOk.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // 调用浏览器进行下载
+                Toast.makeText(getActivity(), "即将下载...", Toast.LENGTH_SHORT).show();
+                Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(downloadAddress));
+                startActivity(intent);
+
+                dialog.dismiss();
+            }
+        });
+        dialog.setContentView(view);
+        dialog.getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        dialog.show();
     }
 
     /**
@@ -124,30 +199,36 @@ public class SettingFragment extends Fragment implements View.OnClickListener {
         // title标题，印象笔记、邮箱、信息、微信、人人网和QQ空间使用
         oks.setTitle(getString(R.string.share));
         // titleUrl是标题的网络链接，仅在人人网和QQ空间使用
-        oks.setTitleUrl("http://sharesdk.cn");
+        oks.setTitleUrl(Constants.HTTP_APP_INDEX);
         // text是分享文本，所有平台都需要这个字段
-        oks.setText("周周记账，一个使用方便的记账App，随时随地满足大家的记账需求哦！（＾_＾）");
+        oks.setText(getString(R.string.share_text));
         // imagePath是图片的本地路径，Linked-In以外的平台都支持此参数
-        // oks.setImagePath("/sdcard/test.jpg");//确保SDcard下面存在此张图片
-        oks.setImageUrl("http://7sby7r.com1.z0.glb.clouddn.com/CYSJ_02.jpg");
+        // oks.setImagePath("/sdcard/test.jpg");
+        // imageUrl是图片的网络路径，新浪微博、人人网、QQ空间和Linked-In支持此字段
+        oks.setImageUrl(Constants.HTTP_ICON_IMAGE);
         // url仅在微信（包括好友和朋友圈）中使用
-        oks.setUrl("http://sharesdk.cn");
+        oks.setUrl(Constants.HTTP_APP_INDEX);
         // comment是我对这条分享的评论，仅在人人网和QQ空间使用
-        oks.setComment("我是测试评论文本");
+        oks.setComment(getString(R.string.share_text));
         // site是分享此内容的网站名称，仅在QQ空间使用
         oks.setSite(getString(R.string.app_name));
         // siteUrl是分享此内容的网站地址，仅在QQ空间使用
-        oks.setSiteUrl("http://sharesdk.cn");
+        oks.setSiteUrl(Constants.HTTP_APP_INDEX);
 
         // 启动分享GUI
         oks.show(getActivity());
-
     }
 
     /**
      * 用户协议界面
      */
     private void gotoUserAgreementActivity() {
+        // TODO
     }
 
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        OkHttpClientManager.cancelTag(this);
+    }
 }

@@ -17,6 +17,8 @@
 
     <string name="item_arrow"><![CDATA[>]]></string>
 
+    <string name="share_text">周周记账，一个使用方便的记账APP，随时随地满足大家的记账需求哦！（＾_＾）</string>
+
     <!-- tab标题 -->
     <string name="tab_add">新的</string>
     <string name="tab_report_list">记录</string>
