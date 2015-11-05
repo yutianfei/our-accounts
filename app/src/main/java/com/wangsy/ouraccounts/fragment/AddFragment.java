@@ -20,13 +20,11 @@ import com.wangsy.ouraccounts.adapter.IconFragmentPagerAdapter;
 import com.wangsy.ouraccounts.callback.IconSelectedCallback;
 import com.wangsy.ouraccounts.model.AccountModel;
 import com.wangsy.ouraccounts.ui.MainActivity;
-import com.wangsy.ouraccounts.ui.SetDatetimeDialogActivity;
 import com.wangsy.ouraccounts.ui.SetCommentDialogActivity;
+import com.wangsy.ouraccounts.ui.SetDatetimeDialogActivity;
 import com.wangsy.ouraccounts.utils.Utils;
 
-import java.text.SimpleDateFormat;
 import java.util.Calendar;
-import java.util.Locale;
 
 /**
  * 新增
