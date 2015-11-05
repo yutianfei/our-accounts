@@ -26,6 +26,7 @@ import com.wangsy.ouraccounts.utils.Utils;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Locale;
 
 /**
  * 新增
@@ -166,8 +167,7 @@ public class AddFragment extends Fragment implements IconSelectedCallback {
         // 如果没有设置时间，默认为当前时间
         if (accountDatetime == null || "".equals(accountDatetime)) {
             Calendar c = Calendar.getInstance();
-            SimpleDateFormat sdf = new SimpleDateFormat(Utils.DATE_FORMAT);
-            accountDatetime = sdf.format(c.getTime());
+            accountDatetime = Utils.dateFormat(c.getTime());
         }
 
         // 设置要保存的数据

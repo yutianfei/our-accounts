@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.ContentValues;
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.EditText;
@@ -184,8 +185,21 @@ public class EditAccountActivity extends Activity implements View.OnClickListene
      * 保存更该完成的数据
      */
     private void saveEditData() {
+        // 没有金额，提示，不保存
+        if (TextUtils.isEmpty(etAmount.getText().toString())) {
+            Toast.makeText(this, "金额是否输入了呢？", Toast.LENGTH_LONG).show();
+            return;
+        }
+
+        // 0元提示，不保存
+        if (Float.parseFloat(etAmount.getText().toString()) == 0) {
+            Toast.makeText(this, "请确保金额输入正确哦！", Toast.LENGTH_LONG).show();
+            return;
+        }
+
         // 设置新的数据
-        setNewData();
+        editAccount.setAmount(Float.parseFloat(etAmount.getText().toString()));
+        editAccount.setComment(etComment.getText().toString());
 
         // 更新数据库数据
         ContentValues values = new ContentValues();
@@ -211,11 +225,6 @@ public class EditAccountActivity extends Activity implements View.OnClickListene
         Intent intent = new Intent();
         intent.setAction(MainActivity.REFRESH_DATA_BROADCAST_INTENT_FILTER);
         sendBroadcast(intent);
-    }
-
-    private void setNewData() {
-        editAccount.setComment(etComment.getText().toString());
-        editAccount.setAmount(Float.parseFloat(etAmount.getText().toString()));
     }
 
     private void initButtonRight() {
