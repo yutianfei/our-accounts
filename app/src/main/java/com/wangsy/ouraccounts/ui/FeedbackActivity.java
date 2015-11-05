@@ -119,7 +119,7 @@ public class FeedbackActivity extends Activity implements View.OnClickListener {
         if (isSendErrorLog) {
             Toast.makeText(this, "发送错误日志", Toast.LENGTH_SHORT).show();
             // 上传错误日志
-            uploadReeorLog();
+            uploadErrorLog();
         }
 
         // 上传反馈信息
@@ -141,7 +141,7 @@ public class FeedbackActivity extends Activity implements View.OnClickListener {
         finish();
     }
 
-    private void uploadReeorLog() {
+    private void uploadErrorLog() {
         // TODO
 //        OkHttpClientManager.getUploadDelegate().postAsyn(Constants.HTTP_USER_FEEDBACK_ERROR_LOG,
 //                "error_log", file, new OkHttpClientManager.ResultCallback() {
