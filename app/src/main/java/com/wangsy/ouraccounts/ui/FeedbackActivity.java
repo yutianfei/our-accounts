@@ -3,8 +3,6 @@ package com.wangsy.ouraccounts.ui;
 import android.app.Activity;
 import android.app.Dialog;
 import android.content.Context;
-import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,15 +15,12 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.squareup.okhttp.MediaType;
 import com.squareup.okhttp.Request;
-import com.squareup.okhttp.RequestBody;
 import com.wangsy.ouraccounts.R;
 import com.wangsy.ouraccounts.model.Constants;
 import com.wangsy.ouraccounts.utils.NetworkUtils;
 import com.wangsy.ouraccounts.utils.OkHttpClientManager;
 
-import java.io.File;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Timer;
@@ -44,6 +39,7 @@ public class FeedbackActivity extends Activity implements View.OnClickListener {
     private EditText etFeedbackAddress;
     // 是否发送错误日志
     private CheckBox cbSendErrorLog;
+    // 默认不发送错误日志
     private boolean isSendErrorLog = false;
 
     @Override
@@ -122,20 +118,8 @@ public class FeedbackActivity extends Activity implements View.OnClickListener {
 
         if (isSendErrorLog) {
             Toast.makeText(this, "发送错误日志", Toast.LENGTH_SHORT).show();
-
             // 上传错误日志
-//            OkHttpClientManager.getUploadDelegate().postAsyn(Constants.HTTP_USER_FEEDBACK_ERROR_LOG,
-//                    "error_log", file, new OkHttpClientManager.ResultCallback() {
-//                        @Override
-//                        public void onError(Request request, Exception e) {
-//                            Toast.makeText(FeedbackActivity.this, "错误日志提交出错", Toast.LENGTH_SHORT).show();
-//                        }
-//
-//                        @Override
-//                        public void onResponse(Object response) {
-//                            Toast.makeText(FeedbackActivity.this, "错误日志提交成功", Toast.LENGTH_SHORT).show();
-//                        }
-//                    });
+            uploadReeorLog();
         }
 
         // 上传反馈信息
@@ -155,6 +139,22 @@ public class FeedbackActivity extends Activity implements View.OnClickListener {
         });
 
         finish();
+    }
+
+    private void uploadReeorLog() {
+        // TODO
+//        OkHttpClientManager.getUploadDelegate().postAsyn(Constants.HTTP_USER_FEEDBACK_ERROR_LOG,
+//                "error_log", file, new OkHttpClientManager.ResultCallback() {
+//                    @Override
+//                    public void onError(Request request, Exception e) {
+//                        Toast.makeText(FeedbackActivity.this, "错误日志提交出错", Toast.LENGTH_SHORT).show();
+//                    }
+//
+//                    @Override
+//                    public void onResponse(Object response) {
+//                        Toast.makeText(FeedbackActivity.this, "错误日志提交成功", Toast.LENGTH_SHORT).show();
+//                    }
+//                });
     }
 
     private void showIsUploadLogDialog() {

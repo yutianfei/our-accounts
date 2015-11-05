@@ -35,6 +35,7 @@ import com.wangsy.ouraccounts.model.ChartItemModel;
 import com.wangsy.ouraccounts.model.TableConstant;
 import com.wangsy.ouraccounts.ui.ChartAccountListActivity;
 import com.wangsy.ouraccounts.ui.MainActivity;
+import com.wangsy.ouraccounts.utils.Utils;
 
 import org.litepal.crud.DataSupport;
 
@@ -190,6 +191,7 @@ public class ReportChartFragment extends Fragment implements OnChartValueSelecte
 
                     ChartItemModel chartItemModel = new ChartItemModel();
                     chartItemModel.type = type;
+                    chartItemModel.percent = Utils.convertFloatToPercent(sum / totalAmount);
                     chartItemModel.iconImageName = iconImageName;
                     chartItemModel.sum = sum;
                     datas.add(chartItemModel);

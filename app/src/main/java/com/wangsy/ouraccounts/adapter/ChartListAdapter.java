@@ -55,6 +55,7 @@ public class ChartListAdapter extends BaseAdapter {
             viewHolder = new ViewHolder();
             viewHolder.imgViewIcon = (ImageView) convertView.findViewById(R.id.id_chart_icon_img);
             viewHolder.tvChartType = (TextView) convertView.findViewById(R.id.id_chart_type);
+            viewHolder.tvChartPercent = (TextView) convertView.findViewById(R.id.id_chart_percent);
             viewHolder.tvChartSumAmount = (TextView) convertView.findViewById(R.id.id_chart_sum_amount);
 
             convertView.setTag(viewHolder);
@@ -64,6 +65,7 @@ public class ChartListAdapter extends BaseAdapter {
 
         viewHolder.imgViewIcon.setImageResource(Utils.getImageResourceId(context, model.iconImageName));
         viewHolder.tvChartType.setText(model.type);
+        viewHolder.tvChartPercent.setText(model.percent);
         viewHolder.tvChartSumAmount.setText(model.sum + "");
 
         if ("收入".equals(model.type)) {
@@ -76,7 +78,7 @@ public class ChartListAdapter extends BaseAdapter {
     }
 
     private class ViewHolder {
-        TextView tvChartType, tvChartSumAmount;
+        TextView tvChartType, tvChartPercent, tvChartSumAmount;
         ImageView imgViewIcon;
     }
 }

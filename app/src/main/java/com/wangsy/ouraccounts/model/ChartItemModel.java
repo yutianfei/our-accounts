@@ -7,6 +7,7 @@ package com.wangsy.ouraccounts.model;
  */
 public class ChartItemModel {
     public String type;
+    public String percent;
     public String iconImageName;
     public float sum;
 }

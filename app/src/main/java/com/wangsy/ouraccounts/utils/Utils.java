@@ -2,6 +2,7 @@ package com.wangsy.ouraccounts.utils;
 
 import android.content.Context;
 
+import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
@@ -110,5 +111,14 @@ public class Utils {
         result[0] = dateFormatWithDay(calendar.getTime()) + " 00:00";
 
         return result;
+    }
+
+    /**
+     * float转百分比，保留一位小数
+     */
+    public static String convertFloatToPercent(float number) {
+        float convertNumber = number * 100;
+        DecimalFormat format = new DecimalFormat("##0.0");
+        return format.format(convertNumber) + "%";
     }
 }

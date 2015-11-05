@@ -23,6 +23,13 @@
         android:textSize="16sp" />
 
     <TextView
+        android:id="@+id/id_chart_percent"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:textSize="14sp" />
+
+    <TextView
         android:id="@+id/id_chart_sum_amount"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
