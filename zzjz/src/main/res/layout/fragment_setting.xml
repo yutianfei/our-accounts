@@ -16,6 +16,33 @@
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
+            <LinearLayout
+                style="@style/style_setting_layout"
+                android:layout_marginTop="0dp"
+                android:background="@mipmap/setting_bg"
+                android:gravity="center"
+                android:paddingBottom="22dp"
+                android:paddingEnd="0dp"
+                android:paddingStart="0dp"
+                android:paddingTop="22dp">
+
+                <ImageView
+                    android:id="@+id/id_user_image"
+                    android:layout_width="80dp"
+                    android:layout_height="80dp"
+                    android:contentDescription="@string/icon_content_description"
+                    android:src="@mipmap/ic_launcher2" />
+
+                <TextView
+                    android:id="@+id/id_user_name"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="5dp"
+                    android:text="@string/click_to_login"
+                    android:textColor="@android:color/white"
+                    android:textSize="16sp" />
+            </LinearLayout>
+
             <LinearLayout style="@style/style_setting_layout">
 
                 <RelativeLayout

@@ -4,19 +4,32 @@
     android:layout_height="wrap_content"
     android:orientation="vertical">
 
-    <include layout="@layout/title_bar_layout" />
+    <include
+        layout="@layout/title_bar_layout"
+        android:layout_width="match_parent"
+        android:layout_height="55dp"
+        android:layout_marginBottom="20dp" />
+
+    <TextView
+        android:id="@+id/id_error_tip"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="@dimen/dp_10"
+        android:gravity="center"
+        android:textColor="@android:color/holo_red_light"
+        android:textSize="14sp"
+        android:visibility="gone" />
 
     <EditText
         android:id="@+id/id_login_username"
         style="@style/style_edit_text"
         android:layout_marginEnd="16dp"
         android:layout_marginStart="16dp"
-        android:layout_marginTop="16dp"
         android:background="@android:color/white"
         android:hint="@string/hint_username"
         android:imeOptions="actionNext"
         android:maxLines="1"
-        android:padding="10dp" />
+        android:padding="12dp" />
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -33,9 +46,9 @@
             android:layout_width="0dp"
             android:layout_weight="1"
             android:hint="@string/hint_password"
-            android:inputType="textPassword"
+            android:inputType="textVisiblePassword"
             android:maxLines="1"
-            android:padding="10dp" />
+            android:padding="12dp" />
 
         <TextView
             android:id="@+id/id_password_visibility"
@@ -44,12 +57,12 @@
             android:gravity="center"
             android:paddingEnd="@dimen/dp_10"
             android:paddingStart="@dimen/dp_10"
-            android:text="@string/password_see"
+            android:text="@string/password_hidden"
             android:textColor="@color/color_text_selected"
             android:textSize="14sp" />
     </LinearLayout>
 
-    <LinearLayout
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginEnd="16dp"
@@ -59,29 +72,32 @@
 
         <TextView
             android:id="@+id/id_login_register"
-            android:layout_width="0dp"
-            android:layout_weight="1"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textSize="16sp"
+            android:layout_alignParentStart="true"
+            android:padding="10dp"
+            android:text="@string/text_register"
             android:textColor="@color/color_text_normal"
-            android:hint="@string/hint_password"
-            android:padding="10dp" />
+            android:textSize="16sp" />
 
         <TextView
             android:id="@+id/id_password_forget"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textSize="16sp"
+            android:layout_alignEnd="@id/id_login_register"
+            android:layout_alignParentEnd="true"
+            android:padding="10dp"
+            android:text="@string/password_forget"
             android:textColor="@color/color_text_normal"
-            android:hint="@string/password_see"
-            android:padding="10dp" />
-    </LinearLayout>
+            android:textSize="16sp" />
+    </RelativeLayout>
 
     <Button
         android:id="@+id/id_button_login"
         style="@style/style_dialog_button"
         android:layout_margin="16dp"
         android:background="@drawable/button_common"
-        android:text="@string/title_login" />
+        android:text="@string/title_login"
+        android:textSize="19sp" />
 
 </LinearLayout>

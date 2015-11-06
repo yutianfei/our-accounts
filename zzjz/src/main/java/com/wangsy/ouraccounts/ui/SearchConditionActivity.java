@@ -261,11 +261,11 @@ public class SearchConditionActivity extends Activity implements View.OnClickLis
 
         if (!isDatetimeCustom) {
             if (null == strStartDatetimeCustom || "".equals(strStartDatetimeCustom)) {
-                Toast.makeText(this, "请输入开始时间", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, R.string.tip_start_datetime_null, Toast.LENGTH_SHORT).show();
             } else if (null == strEndDatetimeCustom || "".equals(strEndDatetimeCustom)) {
-                Toast.makeText(this, "请输入结束时间", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, R.string.tip_end_datetime_null, Toast.LENGTH_SHORT).show();
             } else if (strStartDatetimeCustom.compareTo(strEndDatetimeCustom) > 0) {
-                Toast.makeText(this, "开始时间不能晚于结束时间...", Toast.LENGTH_LONG).show();
+                Toast.makeText(this, R.string.tip_end_before_start, Toast.LENGTH_LONG).show();
             } else {
                 strStartDatetimeCustom = strStartDatetimeCustom + " 00:00";
                 strEndDatetimeCustom = strEndDatetimeCustom + " 23:59";

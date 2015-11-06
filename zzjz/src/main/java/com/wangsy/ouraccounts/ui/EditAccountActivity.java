@@ -187,13 +187,13 @@ public class EditAccountActivity extends Activity implements View.OnClickListene
     private void saveEditData() {
         // 没有金额，提示，不保存
         if (TextUtils.isEmpty(etAmount.getText().toString())) {
-            Toast.makeText(this, "金额是否输入了呢？", Toast.LENGTH_LONG).show();
+            Toast.makeText(this, R.string.tip_amount_null, Toast.LENGTH_LONG).show();
             return;
         }
 
         // 0元提示，不保存
         if (Float.parseFloat(etAmount.getText().toString()) == 0) {
-            Toast.makeText(this, "请确保金额输入正确哦！", Toast.LENGTH_LONG).show();
+            Toast.makeText(this, R.string.tip_amount_ensure, Toast.LENGTH_LONG).show();
             return;
         }
 
@@ -211,7 +211,7 @@ public class EditAccountActivity extends Activity implements View.OnClickListene
         values.put(TableConstant.ICONIMAGENAME, editAccount.getIconImageName());
         int count = DataSupport.update(AccountModel.class, values, id);
         if (count > 0) {
-            Toast.makeText(this, "修改成功", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, R.string.tip_modified_ok, Toast.LENGTH_SHORT).show();
             sendBroadcastToRefreshData();
             BaseListActivity.isDataModified = true;
             finish();

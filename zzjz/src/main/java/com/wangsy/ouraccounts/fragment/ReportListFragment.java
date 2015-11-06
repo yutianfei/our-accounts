@@ -192,7 +192,7 @@ public class ReportListFragment extends Fragment implements OnQueryDataReceived 
                 // 通知数据更新
                 sendBroadcastToRefreshData();
 
-                Toast.makeText(getActivity(), "删除成功", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getActivity(), R.string.tip_delete_ok, Toast.LENGTH_SHORT).show();
                 dialog.dismiss();
             }
         });

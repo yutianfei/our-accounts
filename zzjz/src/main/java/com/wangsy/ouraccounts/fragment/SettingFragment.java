@@ -1,17 +1,22 @@
 package com.wangsy.ouraccounts.fragment;
 
+import android.app.Activity;
 import android.app.Dialog;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -21,6 +26,7 @@ import com.wangsy.ouraccounts.Constants;
 import com.wangsy.ouraccounts.model.VersionModel;
 import com.wangsy.ouraccounts.ui.AboutActivity;
 import com.wangsy.ouraccounts.ui.FeedbackActivity;
+import com.wangsy.ouraccounts.ui.LoginActivity;
 import com.wangsy.ouraccounts.utils.NetworkUtils;
 import com.wangsy.ouraccounts.utils.OkHttpClientManager;
 
@@ -34,9 +40,20 @@ import cn.sharesdk.onekeyshare.OnekeyShare;
  */
 public class SettingFragment extends Fragment implements View.OnClickListener {
 
+    public static final int REQUEST_FOR_LOGIN = 1;
+
+    // 用户头像、用户名
+    private ImageView ivUserImage;
+    private TextView tvUsername;
+
+    private String username;
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_setting, container, false);
+
+        SharedPreferences sp = getActivity().getSharedPreferences(LoginActivity.USER_SharedPreferences, Context.MODE_PRIVATE);
+        username = sp.getString(LoginActivity.USERNAME, "");
 
         TextView title = (TextView) view.findViewById(R.id.id_title);
         title.setText(R.string.title_setting);
@@ -47,6 +64,11 @@ public class SettingFragment extends Fragment implements View.OnClickListener {
     }
 
     private void initViews(View view) {
+        ivUserImage = (ImageView) view.findViewById(R.id.id_user_image);
+        ivUserImage.setOnClickListener(this);
+        tvUsername = (TextView) view.findViewById(R.id.id_user_name);
+        tvUsername.setText(TextUtils.isEmpty(username) ? getString(R.string.click_to_login) : username);
+
         // 意见反馈
         View settingFeedback = view.findViewById(R.id.id_setting_feedback);
         settingFeedback.setOnClickListener(this);
@@ -87,8 +109,30 @@ public class SettingFragment extends Fragment implements View.OnClickListener {
             case R.id.id_setting_user_agreement:
                 gotoUserAgreementActivity();
                 break;
+            case R.id.id_user_image:
+                if (TextUtils.isEmpty(username)) {
+                    gotoLoginActivity();
+                }
+                break;
             default:
                 break;
+        }
+    }
+
+    /**
+     * 前往登录
+     */
+    private void gotoLoginActivity() {
+        Intent loginIntent = new Intent(getActivity(), LoginActivity.class);
+        startActivityForResult(loginIntent, REQUEST_FOR_LOGIN);
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (resultCode == Activity.RESULT_OK && requestCode == REQUEST_FOR_LOGIN) {
+            String username = data.getStringExtra(LoginActivity.USERNAME);
+            tvUsername.setText(username);
         }
     }
 
@@ -114,14 +158,14 @@ public class SettingFragment extends Fragment implements View.OnClickListener {
     private void checkAppUpdate() {
         // 检查网络是否可用，如果不可用，取消更新操作
         if (!NetworkUtils.isNetworkAvailable(getActivity())) {
-            Toast.makeText(getActivity(), "网络是否连接了？", Toast.LENGTH_SHORT).show();
+            Toast.makeText(getActivity(), R.string.tip_network_is_connected, Toast.LENGTH_SHORT).show();
             return;
         }
         // 从网络检测最新版本信息
         OkHttpClientManager.getAsyn(Constants.HTTP_CHECK_UPDATE, new OkHttpClientManager.ResultCallback<VersionModel>() {
             @Override
             public void onError(Request request, Exception e) {
-                Toast.makeText(getActivity(), "检查失败", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getActivity(), R.string.tip_check_update_error, Toast.LENGTH_SHORT).show();
             }
 
             @Override
@@ -140,7 +184,7 @@ public class SettingFragment extends Fragment implements View.OnClickListener {
                 String currentVersionName = getActivity().getResources().getString(R.string.setting_about_version) + info.versionName;
 
                 if (lastedVersion.versionCode == currentVersionCode) {
-                    Toast.makeText(getActivity(), "当前已是最新版本", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getActivity(), R.string.tip_current_lasted, Toast.LENGTH_SHORT).show();
                 } else {
                     chooseUpdateDialog(currentVersionName, lastedVersion.versionName, lastedVersion.downloadUrl);
                 }
@@ -155,7 +199,7 @@ public class SettingFragment extends Fragment implements View.OnClickListener {
         View view = View.inflate(getActivity(), R.layout.dialog_common, null);
 
         TextView tvTitle = (TextView) view.findViewById(R.id.id_dialog_title);
-        tvTitle.setText("是否更新？");
+        tvTitle.setText(R.string.tip_choose_update);
         TextView tvMessage = (TextView) view.findViewById(R.id.id_dialog_message);
         tvMessage.setText(String.format(getActivity().getResources().getString(R.string.update_version_string),
                 currentVersionName, lastedVersionName));
@@ -172,7 +216,7 @@ public class SettingFragment extends Fragment implements View.OnClickListener {
             @Override
             public void onClick(View v) {
                 // 调用浏览器进行下载
-                Toast.makeText(getActivity(), "即将下载...", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getActivity(), R.string.tip_going_download, Toast.LENGTH_SHORT).show();
                 Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(downloadUrl));
                 startActivity(intent);
 

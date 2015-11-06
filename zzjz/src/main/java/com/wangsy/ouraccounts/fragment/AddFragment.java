@@ -139,13 +139,13 @@ public class AddFragment extends Fragment implements IconSelectedCallback {
     private void saveAccountData() {
         // 没有金额，提示，不保存
         if (sbMoneyAmount.toString().isEmpty()) {
-            Toast.makeText(getActivity(), "金额是否输入了呢？", Toast.LENGTH_LONG).show();
+            Toast.makeText(getActivity(), R.string.tip_amount_null, Toast.LENGTH_LONG).show();
             return;
         }
 
         // 没有类型，提示，不保存
         if (accountType == null) {
-            Toast.makeText(getActivity(), "消费类型是否选择了呢？", Toast.LENGTH_LONG).show();
+            Toast.makeText(getActivity(), R.string.tip_type_null, Toast.LENGTH_LONG).show();
             return;
         }
 
@@ -158,7 +158,7 @@ public class AddFragment extends Fragment implements IconSelectedCallback {
 
         // 0元提示，不保存
         if (Float.parseFloat(sbMoneyAmount.toString()) == 0) {
-            Toast.makeText(getActivity(), "请确保金额输入正确哦！", Toast.LENGTH_LONG).show();
+            Toast.makeText(getActivity(), R.string.tip_amount_ensure, Toast.LENGTH_LONG).show();
             return;
         }
 
@@ -180,7 +180,7 @@ public class AddFragment extends Fragment implements IconSelectedCallback {
         // 保存数据
         boolean saveFlag = accountData.save();
         if (saveFlag) {
-            Toast.makeText(getActivity(), "保存成功", Toast.LENGTH_SHORT).show();
+            Toast.makeText(getActivity(), R.string.tip_save_ok, Toast.LENGTH_SHORT).show();
             sendBroadcastToRefreshData();
             cleanMoneyAmount();
         }

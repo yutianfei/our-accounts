@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
+
+    <include
+        layout="@layout/title_bar_layout"
+        android:layout_width="match_parent"
+        android:layout_height="55dp"
+        android:layout_marginBottom="20dp" />
+
+    <TextView
+        android:id="@+id/id_error_tip"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="@dimen/dp_10"
+        android:gravity="center"
+        android:textColor="@android:color/holo_red_light"
+        android:textSize="14sp"
+        android:visibility="gone" />
+
+    <EditText
+        android:id="@+id/id_register_username"
+        style="@style/style_edit_text"
+        android:layout_marginEnd="16dp"
+        android:layout_marginStart="16dp"
+        android:background="@android:color/white"
+        android:hint="@string/hint_username"
+        android:imeOptions="actionNext"
+        android:maxLines="1"
+        android:padding="12dp" />
+
+    <EditText
+        android:id="@+id/id_register_password"
+        style="@style/style_edit_text"
+        android:layout_marginEnd="16dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="10dp"
+        android:background="@android:color/white"
+        android:hint="@string/hint_password"
+        android:inputType="textVisiblePassword"
+        android:maxLines="1"
+        android:padding="12dp" />
+
+    <Button
+        android:id="@+id/id_button_register"
+        style="@style/style_dialog_button"
+        android:layout_margin="16dp"
+        android:background="@drawable/button_common"
+        android:text="@string/title_register"
+        android:textSize="19sp" />
+
+</LinearLayout>

@@ -9,4 +9,13 @@ public class VersionModel {
     public int versionCode;
     public String versionName;
     public String downloadUrl;
+
+    @Override
+    public String toString() {
+        return "VersionModel{" +
+                "versionCode=" + versionCode +
+                ", versionName='" + versionName + '\'' +
+                ", downloadUrl='" + downloadUrl + '\'' +
+                '}';
+    }
 }

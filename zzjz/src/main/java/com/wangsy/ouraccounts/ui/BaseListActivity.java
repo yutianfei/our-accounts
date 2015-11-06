@@ -234,7 +234,7 @@ public class BaseListActivity extends Activity implements OnQueryDataReceived {
                 sendBroadcastToRefreshData();
                 queryData();
 
-                Toast.makeText(BaseListActivity.this, "删除成功", Toast.LENGTH_SHORT).show();
+                Toast.makeText(BaseListActivity.this, R.string.tip_delete_ok, Toast.LENGTH_SHORT).show();
                 dialog.dismiss();
             }
         });

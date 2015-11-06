@@ -99,13 +99,13 @@ public class FeedbackActivity extends Activity implements View.OnClickListener {
 
         // 反馈内容为空时，不允许提交
         if ("".equals(feedbackContent)) {
-            Toast.makeText(this, "请填写反馈内容", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, R.string.tip_feedback_content_null, Toast.LENGTH_SHORT).show();
             return;
         }
 
         // 检查网络是否可用，如果不可用，取消提交
         if (!NetworkUtils.isNetworkAvailable(this)) {
-            Toast.makeText(this, "网络是否连接了？", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, R.string.tip_network_is_connected, Toast.LENGTH_SHORT).show();
             return;
         }
 
@@ -117,24 +117,24 @@ public class FeedbackActivity extends Activity implements View.OnClickListener {
         }
 
         if (isSendErrorLog) {
-            Toast.makeText(this, "发送错误日志", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, R.string.tip_send_log, Toast.LENGTH_SHORT).show();
             // 上传错误日志
             uploadErrorLog();
         }
 
         // 上传反馈信息
         Map<String, String> params = new HashMap<>();
-        params.put("content", feedbackContent);
-        params.put("address", feedbackAddress);
+        params.put("feedbackContent", feedbackContent);
+        params.put("feedbackAddress", feedbackAddress);
         OkHttpClientManager.postAsyn(Constants.HTTP_USER_FEEDBACK, params, new OkHttpClientManager.ResultCallback() {
             @Override
             public void onError(Request request, Exception e) {
-                Toast.makeText(FeedbackActivity.this, "提交出错", Toast.LENGTH_SHORT).show();
+                Toast.makeText(FeedbackActivity.this, R.string.tip_submit_error, Toast.LENGTH_SHORT).show();
             }
 
             @Override
             public void onResponse(Object response) {
-                Toast.makeText(FeedbackActivity.this, "提交成功", Toast.LENGTH_SHORT).show();
+                Toast.makeText(FeedbackActivity.this, R.string.tip_submit_success, Toast.LENGTH_SHORT).show();
             }
         });
 
@@ -147,12 +147,12 @@ public class FeedbackActivity extends Activity implements View.OnClickListener {
 //                "error_log", file, new OkHttpClientManager.ResultCallback() {
 //                    @Override
 //                    public void onError(Request request, Exception e) {
-//                        Toast.makeText(FeedbackActivity.this, "错误日志提交出错", Toast.LENGTH_SHORT).show();
+//                        Toast.makeText(FeedbackActivity.this, R.string.tip_send_log_error, Toast.LENGTH_SHORT).show();
 //                    }
 //
 //                    @Override
 //                    public void onResponse(Object response) {
-//                        Toast.makeText(FeedbackActivity.this, "错误日志提交成功", Toast.LENGTH_SHORT).show();
+//                        Toast.makeText(FeedbackActivity.this, R.string.tip_send_log_success, Toast.LENGTH_SHORT).show();
 //                    }
 //                });
     }
@@ -162,9 +162,9 @@ public class FeedbackActivity extends Activity implements View.OnClickListener {
         View view = View.inflate(this, R.layout.dialog_common, null);
 
         TextView tvTitle = (TextView) view.findViewById(R.id.id_dialog_title);
-        tvTitle.setText("提示");
+        tvTitle.setText(R.string.dialog_tip);
         TextView tvMessage = (TextView) view.findViewById(R.id.id_dialog_message);
-        tvMessage.setText("当前网络并非wifi，发送错误日志需要消耗流量，是否继续？");
+        tvMessage.setText(R.string.submit_log_confirm);
 
         Button btnCancel = (Button) view.findViewById(R.id.id_button_cancel);
         Button btnOk = (Button) view.findViewById(R.id.id_button_ok);

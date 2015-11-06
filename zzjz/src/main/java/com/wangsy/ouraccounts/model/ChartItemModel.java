@@ -10,4 +10,14 @@ public class ChartItemModel {
     public String percent;
     public String iconImageName;
     public float sum;
+
+    @Override
+    public String toString() {
+        return "ChartItemModel{" +
+                "type='" + type + '\'' +
+                ", percent='" + percent + '\'' +
+                ", iconImageName='" + iconImageName + '\'' +
+                ", sum=" + sum +
+                '}';
+    }
 }

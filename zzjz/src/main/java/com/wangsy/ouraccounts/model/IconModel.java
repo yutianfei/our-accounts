@@ -10,7 +10,6 @@ import java.io.Serializable;
  * Created by wangsy on 15/10/21.
  */
 public class IconModel implements Serializable {
-
     public boolean isOut;
     public String type;
     public int typeTextColor;
@@ -34,5 +33,18 @@ public class IconModel implements Serializable {
      */
     public IconModel(String type, int normalIcon, int selectedIcon, String imageName) {
         this(true, type, normalIcon, selectedIcon, imageName);
+    }
+
+    @Override
+    public String toString() {
+        return "IconModel{" +
+                "isOut=" + isOut +
+                ", type='" + type + '\'' +
+                ", typeTextColor=" + typeTextColor +
+                ", normalIcon=" + normalIcon +
+                ", selectedIcon=" + selectedIcon +
+                ", iconImageToShow=" + iconImageToShow +
+                ", iconImageName='" + iconImageName + '\'' +
+                '}';
     }
 }
