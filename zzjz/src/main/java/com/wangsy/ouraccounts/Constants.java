@@ -1,4 +1,4 @@
-package com.wangsy.ouraccounts.model;
+package com.wangsy.ouraccounts;
 
 /**
  * 常量
@@ -8,7 +8,7 @@ package com.wangsy.ouraccounts.model;
 public class Constants {
     public static final String HTTP_APP_INDEX = "http://";
     public static final String HTTP_CHECK_UPDATE = "http://";
-    public static final String HTTP_ICON_IMAGE = "http://";
+    public static final String HTTP_ICON_IMAGE = "http://133.130.89.237:8080/resouces/zzjz_icon.png";
     public static final String HTTP_USER_FEEDBACK = "http://";
     public static final String HTTP_USER_FEEDBACK_ERROR_LOG = "http://";
 

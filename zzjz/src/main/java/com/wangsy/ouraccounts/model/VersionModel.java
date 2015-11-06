@@ -8,5 +8,5 @@ package com.wangsy.ouraccounts.model;
 public class VersionModel {
     public int versionCode;
     public String versionName;
-    public String downloadAddress;
+    public String downloadUrl;
 }

@@ -17,7 +17,7 @@ import android.widget.Toast;
 
 import com.squareup.okhttp.Request;
 import com.wangsy.ouraccounts.R;
-import com.wangsy.ouraccounts.model.Constants;
+import com.wangsy.ouraccounts.Constants;
 import com.wangsy.ouraccounts.model.VersionModel;
 import com.wangsy.ouraccounts.ui.AboutActivity;
 import com.wangsy.ouraccounts.ui.FeedbackActivity;
@@ -142,7 +142,7 @@ public class SettingFragment extends Fragment implements View.OnClickListener {
                 if (lastedVersion.versionCode == currentVersionCode) {
                     Toast.makeText(getActivity(), "当前已是最新版本", Toast.LENGTH_SHORT).show();
                 } else {
-                    chooseUpdateDialog(currentVersionName, lastedVersion.versionName, lastedVersion.downloadAddress);
+                    chooseUpdateDialog(currentVersionName, lastedVersion.versionName, lastedVersion.downloadUrl);
                 }
             } catch (PackageManager.NameNotFoundException e) {
                 Log.e("getPackageName", e.getMessage());
@@ -150,7 +150,7 @@ public class SettingFragment extends Fragment implements View.OnClickListener {
         }
     }
 
-    private void chooseUpdateDialog(String currentVersionName, String lastedVersionName, final String downloadAddress) {
+    private void chooseUpdateDialog(String currentVersionName, String lastedVersionName, final String downloadUrl) {
         final Dialog dialog = new Dialog(getActivity(), R.style.style_dialog_common);
         View view = View.inflate(getActivity(), R.layout.dialog_common, null);
 
@@ -173,7 +173,7 @@ public class SettingFragment extends Fragment implements View.OnClickListener {
             public void onClick(View v) {
                 // 调用浏览器进行下载
                 Toast.makeText(getActivity(), "即将下载...", Toast.LENGTH_SHORT).show();
-                Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(downloadAddress));
+                Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(downloadUrl));
                 startActivity(intent);
 
                 dialog.dismiss();

@@ -17,7 +17,7 @@ import android.widget.Toast;
 
 import com.squareup.okhttp.Request;
 import com.wangsy.ouraccounts.R;
-import com.wangsy.ouraccounts.model.Constants;
+import com.wangsy.ouraccounts.Constants;
 import com.wangsy.ouraccounts.utils.NetworkUtils;
 import com.wangsy.ouraccounts.utils.OkHttpClientManager;
 
