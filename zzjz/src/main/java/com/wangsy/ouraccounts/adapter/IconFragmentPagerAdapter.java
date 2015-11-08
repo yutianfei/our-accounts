@@ -5,7 +5,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 
-import com.wangsy.ouraccounts.model.IconsList;
+import com.wangsy.ouraccounts.constants.IconConstants;
 import com.wangsy.ouraccounts.fragment.IconFragment;
 
 /**
@@ -37,8 +37,8 @@ public class IconFragmentPagerAdapter extends FragmentPagerAdapter {
     // 计算总共有多少页
     @Override
     public int getCount() {
-        return IconsList.getIconsList().size() % PER_PAGE_NUMBER == 0 ?
-                IconsList.getIconsList().size() / PER_PAGE_NUMBER :
-                IconsList.getIconsList().size() / PER_PAGE_NUMBER + 1;
+        return IconConstants.getIconsList().size() % PER_PAGE_NUMBER == 0 ?
+                IconConstants.getIconsList().size() / PER_PAGE_NUMBER :
+                IconConstants.getIconsList().size() / PER_PAGE_NUMBER + 1;
     }
 }

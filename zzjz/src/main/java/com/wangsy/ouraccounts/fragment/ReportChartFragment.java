@@ -32,7 +32,7 @@ import com.wangsy.ouraccounts.R;
 import com.wangsy.ouraccounts.adapter.ChartListAdapter;
 import com.wangsy.ouraccounts.model.AccountModel;
 import com.wangsy.ouraccounts.model.ChartItemModel;
-import com.wangsy.ouraccounts.model.TableConstant;
+import com.wangsy.ouraccounts.constants.TableConstants;
 import com.wangsy.ouraccounts.ui.ChartAccountListActivity;
 import com.wangsy.ouraccounts.ui.MainActivity;
 import com.wangsy.ouraccounts.utils.Utils;
@@ -69,8 +69,8 @@ public class ReportChartFragment extends Fragment implements OnChartValueSelecte
     private float totalAmount;
 
     // 查询记录类别、图标
-    private static final String QUERY_TYPES = "select distinct " + TableConstant.TYPE
-            + " , " + TableConstant.ICONIMAGENAME + " from " + TableConstant.TABLENAME;
+    private static final String QUERY_TYPES = "select distinct " + TableConstants.TYPE
+            + " , " + TableConstants.ICONIMAGENAME + " from " + TableConstants.TABLENAME;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -175,16 +175,16 @@ public class ReportChartFragment extends Fragment implements OnChartValueSelecte
             List<ChartItemModel> datas = new ArrayList<>();
 
             // 所有记录总金额
-            totalAmount = DataSupport.sum(AccountModel.class, TableConstant.AMOUNT, float.class);
+            totalAmount = DataSupport.sum(AccountModel.class, TableConstants.AMOUNT, float.class);
 
             // 查询类别、图标、类别总金额
             Cursor cursor = DataSupport.findBySQL(QUERY_TYPES);
             if (cursor != null && cursor.moveToFirst()) {
                 do {
-                    String type = cursor.getString(cursor.getColumnIndex(TableConstant.TYPE));
-                    String iconImageName = cursor.getString(cursor.getColumnIndex(TableConstant.ICONIMAGENAME));
-                    float sum = DataSupport.where(TableConstant.TYPE + " = ?", type)
-                            .sum(AccountModel.class, TableConstant.AMOUNT, float.class);
+                    String type = cursor.getString(cursor.getColumnIndex(TableConstants.TYPE));
+                    String iconImageName = cursor.getString(cursor.getColumnIndex(TableConstants.ICONIMAGENAME));
+                    float sum = DataSupport.where(TableConstants.TYPE + " = ?", type)
+                            .sum(AccountModel.class, TableConstants.AMOUNT, float.class);
 
                     types.add(type);
                     percents.add(sum / totalAmount);

@@ -17,14 +17,16 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.squareup.okhttp.Request;
 import com.wangsy.ouraccounts.R;
-import com.wangsy.ouraccounts.Constants;
+import com.wangsy.ouraccounts.constants.UrlConstants;
 import com.wangsy.ouraccounts.model.VersionModel;
 import com.wangsy.ouraccounts.ui.AboutActivity;
+import com.wangsy.ouraccounts.ui.ChangePasswordActivity;
 import com.wangsy.ouraccounts.ui.FeedbackActivity;
 import com.wangsy.ouraccounts.ui.LoginActivity;
 import com.wangsy.ouraccounts.utils.NetworkUtils;
@@ -42,9 +44,12 @@ public class SettingFragment extends Fragment implements View.OnClickListener {
 
     public static final int REQUEST_FOR_LOGIN = 1;
 
-    // 用户头像、用户名
-    private ImageView ivUserImage;
+    // 用户名
     private TextView tvUsername;
+    // 退出登录
+    private Button btnLogout;
+    // 修改密码
+    private RelativeLayout settingChangePassword;
 
     private String username;
 
@@ -64,10 +69,12 @@ public class SettingFragment extends Fragment implements View.OnClickListener {
     }
 
     private void initViews(View view) {
-        ivUserImage = (ImageView) view.findViewById(R.id.id_user_image);
-        ivUserImage.setOnClickListener(this);
         tvUsername = (TextView) view.findViewById(R.id.id_user_name);
         tvUsername.setText(TextUtils.isEmpty(username) ? getString(R.string.click_to_login) : username);
+
+        // 用户头像
+        ImageView ivUserImage = (ImageView) view.findViewById(R.id.id_user_image);
+        ivUserImage.setOnClickListener(this);
 
         // 意见反馈
         View settingFeedback = view.findViewById(R.id.id_setting_feedback);
@@ -84,6 +91,16 @@ public class SettingFragment extends Fragment implements View.OnClickListener {
         // 更新
         View settingUpdate = view.findViewById(R.id.id_setting_update);
         settingUpdate.setOnClickListener(this);
+
+        // 退出当前账号
+        btnLogout = (Button) view.findViewById(R.id.id_button_logout);
+        btnLogout.setVisibility(TextUtils.isEmpty(username) ? View.GONE : View.VISIBLE);
+        btnLogout.setOnClickListener(this);
+
+        // 修改密码
+        settingChangePassword = (RelativeLayout) view.findViewById(R.id.id_setting_user_change_password);
+        settingChangePassword.setVisibility(TextUtils.isEmpty(username) ? View.GONE : View.VISIBLE);
+        settingChangePassword.setOnClickListener(this);
 
         // 用户协议
         View settingUserAgreement = view.findViewById(R.id.id_setting_user_agreement);
@@ -114,9 +131,37 @@ public class SettingFragment extends Fragment implements View.OnClickListener {
                     gotoLoginActivity();
                 }
                 break;
+            case R.id.id_button_logout:
+                logout();
+                break;
+            case R.id.id_setting_user_change_password:
+                gotoChangePasswordActivity();
             default:
                 break;
         }
+    }
+
+    /**
+     * 前往修改密码
+     */
+    private void gotoChangePasswordActivity() {
+        Intent intent = new Intent(getActivity(), ChangePasswordActivity.class);
+        startActivity(intent);
+    }
+
+    /**
+     * 退出登录
+     */
+    private void logout() {
+        // 清除保存的账号密码
+        SharedPreferences sp = getActivity().getSharedPreferences(LoginActivity.USER_SharedPreferences, Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sp.edit();
+        editor.remove(LoginActivity.USERNAME);
+        editor.remove(LoginActivity.PASSWORD);
+        editor.apply();
+        // 设置相应的界面元素
+        btnLogout.setVisibility(View.GONE);
+        tvUsername.setText(R.string.click_to_login);
     }
 
     /**
@@ -133,6 +178,8 @@ public class SettingFragment extends Fragment implements View.OnClickListener {
         if (resultCode == Activity.RESULT_OK && requestCode == REQUEST_FOR_LOGIN) {
             String username = data.getStringExtra(LoginActivity.USERNAME);
             tvUsername.setText(username);
+            btnLogout.setVisibility(View.VISIBLE);
+            settingChangePassword.setVisibility(View.VISIBLE);
         }
     }
 
@@ -162,7 +209,7 @@ public class SettingFragment extends Fragment implements View.OnClickListener {
             return;
         }
         // 从网络检测最新版本信息
-        OkHttpClientManager.getAsyn(Constants.HTTP_CHECK_UPDATE, new OkHttpClientManager.ResultCallback<VersionModel>() {
+        OkHttpClientManager.getAsyn(UrlConstants.HTTP_CHECK_UPDATE, new OkHttpClientManager.ResultCallback<VersionModel>() {
             @Override
             public void onError(Request request, Exception e) {
                 Toast.makeText(getActivity(), R.string.tip_check_update_error, Toast.LENGTH_SHORT).show();
@@ -243,21 +290,21 @@ public class SettingFragment extends Fragment implements View.OnClickListener {
         // title标题，印象笔记、邮箱、信息、微信、人人网和QQ空间使用
         oks.setTitle(getString(R.string.share));
         // titleUrl是标题的网络链接，仅在人人网和QQ空间使用
-        oks.setTitleUrl(Constants.HTTP_APP_INDEX);
+        oks.setTitleUrl(UrlConstants.HTTP_APP_INDEX);
         // text是分享文本，所有平台都需要这个字段
         oks.setText(getString(R.string.share_text));
         // imagePath是图片的本地路径，Linked-In以外的平台都支持此参数
         // oks.setImagePath("/sdcard/test.jpg");
         // imageUrl是图片的网络路径，新浪微博、人人网、QQ空间和Linked-In支持此字段
-        oks.setImageUrl(Constants.HTTP_ICON_IMAGE);
+        oks.setImageUrl(UrlConstants.HTTP_ICON_IMAGE);
         // url仅在微信（包括好友和朋友圈）中使用
-        oks.setUrl(Constants.HTTP_APP_INDEX);
+        oks.setUrl(UrlConstants.HTTP_APP_INDEX);
         // comment是我对这条分享的评论，仅在人人网和QQ空间使用
         oks.setComment(getString(R.string.share_text));
         // site是分享此内容的网站名称，仅在QQ空间使用
         oks.setSite(getString(R.string.app_name));
         // siteUrl是分享此内容的网站地址，仅在QQ空间使用
-        oks.setSiteUrl(Constants.HTTP_APP_INDEX);
+        oks.setSiteUrl(UrlConstants.HTTP_APP_INDEX);
 
         // 启动分享GUI
         oks.show(getActivity());

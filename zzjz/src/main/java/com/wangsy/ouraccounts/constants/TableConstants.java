@@ -1,11 +1,11 @@
-package com.wangsy.ouraccounts.model;
+package com.wangsy.ouraccounts.constants;
 
 /**
  * 表名、列名
  * <p/>
  * Created by wangsy on 15/10/30.
  */
-public class TableConstant {
+public class TableConstants {
     public static final String TABLENAME = "accountmodel";
     public static final String ISOUT = "isout";
     public static final String TYPE = "type";

@@ -6,7 +6,7 @@ import android.os.AsyncTask;
 
 import com.wangsy.ouraccounts.callback.OnQueryDataReceived;
 import com.wangsy.ouraccounts.model.AccountModel;
-import com.wangsy.ouraccounts.model.TableConstant;
+import com.wangsy.ouraccounts.constants.TableConstants;
 
 import org.litepal.crud.DataSupport;
 
@@ -46,8 +46,9 @@ public class QueryDataTask extends AsyncTask<Map<String, Object>, Void, Map<Stri
         this.onQueryDataReceived = onQueryDataReceived;
     }
 
+    @SafeVarargs
     @Override
-    protected Map<String, Object> doInBackground(Map<String, Object>... params) {
+    protected final Map<String, Object> doInBackground(Map<String, Object>... params) {
         int page = (int) params[0].get(PAGE);
         String strType = (String) params[0].get(TYPE);
         String strStartDatetime = (String) params[0].get(START_DATETIME);
@@ -61,12 +62,12 @@ public class QueryDataTask extends AsyncTask<Map<String, Object>, Void, Map<Stri
                 && null != strStartDatetime && !"".equals(strStartDatetime)
                 && null != strEndDatetime && !"".equals(strEndDatetime)) {
 
-            totalCount = DataSupport.where(TableConstant.TYPE + " = ? and "
-                    + TableConstant.DATETIME + " between ? and ?", strType, strStartDatetime, strEndDatetime)
+            totalCount = DataSupport.where(TableConstants.TYPE + " = ? and "
+                    + TableConstants.DATETIME + " between ? and ?", strType, strStartDatetime, strEndDatetime)
                     .count(AccountModel.class);
             totalPages = totalCount % PER_PAGE_COUNT == 0 ? totalCount / PER_PAGE_COUNT : totalCount / PER_PAGE_COUNT + 1;
-            resultList = DataSupport.where(TableConstant.TYPE + " = ? and "
-                    + TableConstant.DATETIME + " between ? and ?", strType, strStartDatetime, strEndDatetime)
+            resultList = DataSupport.where(TableConstants.TYPE + " = ? and "
+                    + TableConstants.DATETIME + " between ? and ?", strType, strStartDatetime, strEndDatetime)
                     .order("datetime desc")
                     .limit(PER_PAGE_COUNT)
                     .offset(PER_PAGE_COUNT * page)
@@ -75,19 +76,19 @@ public class QueryDataTask extends AsyncTask<Map<String, Object>, Void, Map<Stri
         } else if (null != strStartDatetime && !"".equals(strStartDatetime)
                 && null != strEndDatetime && !"".equals(strEndDatetime)) {
 
-            totalCount = DataSupport.where(TableConstant.DATETIME + " between ? and ?", strStartDatetime, strEndDatetime)
+            totalCount = DataSupport.where(TableConstants.DATETIME + " between ? and ?", strStartDatetime, strEndDatetime)
                     .count(AccountModel.class);
             totalPages = totalCount % PER_PAGE_COUNT == 0 ? totalCount / PER_PAGE_COUNT : totalCount / PER_PAGE_COUNT + 1;
-            resultList = DataSupport.where(TableConstant.DATETIME + " between ? and ?", strStartDatetime, strEndDatetime)
+            resultList = DataSupport.where(TableConstants.DATETIME + " between ? and ?", strStartDatetime, strEndDatetime)
                     .order("datetime desc")
                     .limit(PER_PAGE_COUNT)
                     .offset(PER_PAGE_COUNT * page)
                     .find(AccountModel.class);
 
         } else if (null != strType && !"".equals(strType)) {
-            totalCount = DataSupport.where(TableConstant.TYPE + " = ?", strType).count(AccountModel.class);
+            totalCount = DataSupport.where(TableConstants.TYPE + " = ?", strType).count(AccountModel.class);
             totalPages = totalCount % PER_PAGE_COUNT == 0 ? totalCount / PER_PAGE_COUNT : totalCount / PER_PAGE_COUNT + 1;
-            resultList = DataSupport.where(TableConstant.TYPE + " = ?", strType)
+            resultList = DataSupport.where(TableConstants.TYPE + " = ?", strType)
                     .order("datetime desc")
                     .limit(PER_PAGE_COUNT)
                     .offset(PER_PAGE_COUNT * page)

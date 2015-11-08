@@ -1,4 +1,6 @@
-package com.wangsy.ouraccounts.model;
+package com.wangsy.ouraccounts.constants;
+
+import com.wangsy.ouraccounts.model.SearchTextModel;
 
 import java.util.ArrayList;
 import java.util.List;

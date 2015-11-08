@@ -15,12 +15,12 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.squareup.okhttp.Request;
-import com.wangsy.ouraccounts.Constants;
 import com.wangsy.ouraccounts.R;
+import com.wangsy.ouraccounts.constants.HttpParams;
+import com.wangsy.ouraccounts.constants.UrlConstants;
 import com.wangsy.ouraccounts.utils.NetworkUtils;
 import com.wangsy.ouraccounts.utils.OkHttpClientManager;
 
-import java.util.HashMap;
 import java.util.Map;
 
 /**
@@ -159,14 +159,12 @@ public class LoginActivity extends Activity implements View.OnClickListener {
     }
 
     private void login(final String username, final String password) {
-        Map<String, String> params = new HashMap<>();
-        params.put(USERNAME, username);
-        params.put(PASSWORD, password);
-        OkHttpClientManager.postAsyn(Constants.HTTP_USER_LOGIN, params,
+        Map<String, String> params = HttpParams.loginParams(username, password);
+        OkHttpClientManager.postAsyn(UrlConstants.HTTP_USER_LOGIN, params,
                 new OkHttpClientManager.ResultCallback<Integer>() {
                     @Override
                     public void onError(Request request, Exception e) {
-                        Toast.makeText(LoginActivity.this, "登录失败", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(LoginActivity.this, R.string.tip_login_error, Toast.LENGTH_SHORT).show();
                     }
 
                     @Override
@@ -183,7 +181,7 @@ public class LoginActivity extends Activity implements View.OnClickListener {
                                 break;
                             case 2:
                                 tvErrorTip.setVisibility(View.GONE);
-                                Toast.makeText(LoginActivity.this, "登录成功", Toast.LENGTH_SHORT).show();
+                                Toast.makeText(LoginActivity.this, R.string.tip_login_success, Toast.LENGTH_SHORT).show();
                                 // 使用SharedPreferences保存数据
                                 SharedPreferences sp = getSharedPreferences(USER_SharedPreferences, MODE_PRIVATE);
                                 SharedPreferences.Editor editor = sp.edit();
@@ -231,6 +229,12 @@ public class LoginActivity extends Activity implements View.OnClickListener {
      */
     private void forgetPassword() {
         // TODO
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        OkHttpClientManager.cancelTag(this);
     }
 
     @Override

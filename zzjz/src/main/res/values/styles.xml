@@ -207,4 +207,28 @@
         <item name="android:background">@color/lighter_gray</item>
     </style>
 
+    <!-- password style -->
+    <style name="style_password_edit" parent="style_edit_text">
+        <item name="android:inputType">textVisiblePassword</item>
+        <item name="android:maxLines">1</item>
+        <item name="android:maxLength">30</item>
+        <item name="android:padding">12dp</item>
+        <item name="android:textSize">16sp</item>
+    </style>
+
+    <style name="style_password_change_edit" parent="style_password_edit">
+        <item name="android:inputType">textVisiblePassword</item>
+        <item name="android:paddingTop">12dp</item>
+        <item name="android:paddingBottom">12dp</item>
+        <item name="android:paddingEnd">12dp</item>
+        <item name="android:paddingStart">0dp</item>
+    </style>
+
+    <style name="style_password_change_tab" parent="style_edit_tab">
+        <item name="android:paddingTop">12dp</item>
+        <item name="android:paddingBottom">12dp</item>
+        <item name="android:paddingStart">12dp</item>
+        <item name="android:paddingEnd">0dp</item>
+    </style>
+
 </resources>

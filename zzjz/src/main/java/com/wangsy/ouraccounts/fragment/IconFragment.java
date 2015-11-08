@@ -18,7 +18,7 @@ import com.wangsy.ouraccounts.adapter.IconGridViewAdapter;
 import com.wangsy.ouraccounts.adapter.IconFragmentPagerAdapter;
 import com.wangsy.ouraccounts.callback.IconSelectedCallback;
 import com.wangsy.ouraccounts.model.IconModel;
-import com.wangsy.ouraccounts.model.IconsList;
+import com.wangsy.ouraccounts.constants.IconConstants;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -90,7 +90,7 @@ public class IconFragment extends Fragment {
      * 计算当前页面要显示的第一个及最后一个icon的位置，生成相应的列表数据
      */
     private List<IconModel> getIconsList() {
-        List<IconModel> original = IconsList.getIconsList();
+        List<IconModel> original = IconConstants.getIconsList();
         List<IconModel> list = new ArrayList<>();
 
         int pagesNumber = original.size() % IconFragmentPagerAdapter.PER_PAGE_NUMBER == 0 ?

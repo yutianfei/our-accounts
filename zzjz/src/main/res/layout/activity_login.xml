@@ -29,7 +29,8 @@
         android:hint="@string/hint_username"
         android:imeOptions="actionNext"
         android:maxLines="1"
-        android:padding="12dp" />
+        android:padding="12dp"
+        android:textSize="16sp" />
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -42,13 +43,10 @@
 
         <EditText
             android:id="@+id/id_login_password"
-            style="@style/style_edit_text"
+            style="@style/style_password_edit"
             android:layout_width="0dp"
             android:layout_weight="1"
-            android:hint="@string/hint_password"
-            android:inputType="textVisiblePassword"
-            android:maxLines="1"
-            android:padding="12dp" />
+            android:hint="@string/hint_password" />
 
         <TextView
             android:id="@+id/id_password_visibility"

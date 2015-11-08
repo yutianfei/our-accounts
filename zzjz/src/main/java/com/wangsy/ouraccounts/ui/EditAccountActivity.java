@@ -17,8 +17,8 @@ import com.wangsy.ouraccounts.R;
 import com.wangsy.ouraccounts.adapter.IconGridViewAdapter;
 import com.wangsy.ouraccounts.model.AccountModel;
 import com.wangsy.ouraccounts.model.IconModel;
-import com.wangsy.ouraccounts.model.IconsList;
-import com.wangsy.ouraccounts.model.TableConstant;
+import com.wangsy.ouraccounts.constants.IconConstants;
+import com.wangsy.ouraccounts.constants.TableConstants;
 
 import org.litepal.crud.DataSupport;
 
@@ -101,7 +101,7 @@ public class EditAccountActivity extends Activity implements View.OnClickListene
 
     private void initIconType() {
         iconGridView = (GridView) findViewById(R.id.id_edit_icon);
-        iconsList = IconsList.getIconsList();
+        iconsList = IconConstants.getIconsList();
         adapter = new IconGridViewAdapter(iconsList, this);
         iconGridView.setAdapter(adapter);
 
@@ -203,12 +203,12 @@ public class EditAccountActivity extends Activity implements View.OnClickListene
 
         // 更新数据库数据
         ContentValues values = new ContentValues();
-        values.put(TableConstant.ISOUT, editAccount.isOut());
-        values.put(TableConstant.TYPE, editAccount.getType());
-        values.put(TableConstant.AMOUNT, editAccount.getAmount());
-        values.put(TableConstant.COMMENT, editAccount.getComment());
-        values.put(TableConstant.DATETIME, editAccount.getDatetime());
-        values.put(TableConstant.ICONIMAGENAME, editAccount.getIconImageName());
+        values.put(TableConstants.ISOUT, editAccount.isOut());
+        values.put(TableConstants.TYPE, editAccount.getType());
+        values.put(TableConstants.AMOUNT, editAccount.getAmount());
+        values.put(TableConstants.COMMENT, editAccount.getComment());
+        values.put(TableConstants.DATETIME, editAccount.getDatetime());
+        values.put(TableConstants.ICONIMAGENAME, editAccount.getIconImageName());
         int count = DataSupport.update(AccountModel.class, values, id);
         if (count > 0) {
             Toast.makeText(this, R.string.tip_modified_ok, Toast.LENGTH_SHORT).show();

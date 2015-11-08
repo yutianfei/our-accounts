@@ -17,11 +17,11 @@ import android.widget.Toast;
 
 import com.squareup.okhttp.Request;
 import com.wangsy.ouraccounts.R;
-import com.wangsy.ouraccounts.Constants;
+import com.wangsy.ouraccounts.constants.HttpParams;
+import com.wangsy.ouraccounts.constants.UrlConstants;
 import com.wangsy.ouraccounts.utils.NetworkUtils;
 import com.wangsy.ouraccounts.utils.OkHttpClientManager;
 
-import java.util.HashMap;
 import java.util.Map;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -39,8 +39,6 @@ public class FeedbackActivity extends Activity implements View.OnClickListener {
     private EditText etFeedbackAddress;
     // 是否发送错误日志
     private CheckBox cbSendErrorLog;
-    // 默认不发送错误日志
-    private boolean isSendErrorLog = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,17 +52,23 @@ public class FeedbackActivity extends Activity implements View.OnClickListener {
     }
 
     private void initViews() {
+        // 反馈内容
         etFeedbackContent = (EditText) findViewById(R.id.id_edit_feedback_content);
         etFeedbackAddress = (EditText) findViewById(R.id.id_edit_feedback_address);
 
+        // 错误日志
         LinearLayout cbSendErrorLogLayout = (LinearLayout) findViewById(R.id.id_select_error_log);
         cbSendErrorLogLayout.setOnClickListener(this);
         cbSendErrorLog = (CheckBox) findViewById(R.id.id_select_error_log_checkbox);
         cbSendErrorLog.setOnClickListener(this);
+        cbSendErrorLogLayout.setVisibility(View.GONE);
 
+        // 返回按钮
         ImageButton btnBack = (ImageButton) findViewById(R.id.id_title_left_btn);
         btnBack.setVisibility(View.VISIBLE);
         btnBack.setOnClickListener(this);
+
+        // 发送按钮
         ImageButton btnSend = (ImageButton) findViewById(R.id.id_title_right_btn);
         btnSend.setVisibility(View.VISIBLE);
         btnSend.setOnClickListener(this);
@@ -109,55 +113,71 @@ public class FeedbackActivity extends Activity implements View.OnClickListener {
             return;
         }
 
-        // 如果提交错误日志，检查网络是否为wifi，如果不是，提示用户是否继续
-        if (cbSendErrorLog.isChecked() && !NetworkUtils.isWifiConnected(this)) {
-            showIsUploadLogDialog();
-        } else if (cbSendErrorLog.isChecked()) {
-            isSendErrorLog = true;
-        }
+        // 提交反馈
+        if (!cbSendErrorLog.isChecked()) { // 不提交错误日志
+            // 提交反馈信息
+            submitFeedbackContent(feedbackContent, feedbackAddress);
 
-        if (isSendErrorLog) {
-            Toast.makeText(this, R.string.tip_send_log, Toast.LENGTH_SHORT).show();
-            // 上传错误日志
-            uploadErrorLog();
-        }
+        } else { // 提交错误日志
 
-        // 上传反馈信息
-        Map<String, String> params = new HashMap<>();
-        params.put("feedbackContent", feedbackContent);
-        params.put("feedbackAddress", feedbackAddress);
-        OkHttpClientManager.postAsyn(Constants.HTTP_USER_FEEDBACK, params, new OkHttpClientManager.ResultCallback() {
+            if (!NetworkUtils.isWifiConnected(this)) {
+                // 不是wifi网络，提示用户是否继续
+                showIsSendErrorLogDialog(feedbackContent, feedbackAddress);
+
+            } else {
+                // wifi网络，提交反馈信息，提交错误日志
+                submitFeedbackContent(feedbackContent, feedbackAddress);
+                sendErrorLog();
+            }
+        }
+    }
+
+    /**
+     * 提交反馈信息
+     */
+    private void submitFeedbackContent(String feedbackContent, String feedbackAddress) {
+        Map<String, String> params = HttpParams.feedbackParams(feedbackContent, feedbackAddress);
+        OkHttpClientManager.postAsyn(UrlConstants.HTTP_USER_FEEDBACK, params, new OkHttpClientManager.ResultCallback<Integer>() {
             @Override
             public void onError(Request request, Exception e) {
                 Toast.makeText(FeedbackActivity.this, R.string.tip_submit_error, Toast.LENGTH_SHORT).show();
             }
 
             @Override
-            public void onResponse(Object response) {
-                Toast.makeText(FeedbackActivity.this, R.string.tip_submit_success, Toast.LENGTH_SHORT).show();
+            public void onResponse(Integer response) {
+                // 0:反馈失败，1:反馈成功
+                if (response == 1) {
+                    Toast.makeText(FeedbackActivity.this, R.string.tip_submit_success, Toast.LENGTH_SHORT).show();
+                    // 关闭当前页面
+                    finish();
+                }
             }
         });
-
-        finish();
     }
 
-    private void uploadErrorLog() {
+    /**
+     * 发送错误日志
+     */
+    private void sendErrorLog() {
         // TODO
-//        OkHttpClientManager.getUploadDelegate().postAsyn(Constants.HTTP_USER_FEEDBACK_ERROR_LOG,
+//        OkHttpClientManager.getUploadDelegate().postAsyn(UrlConstants.HTTP_USER_FEEDBACK_ERROR_LOG,
 //                "error_log", file, new OkHttpClientManager.ResultCallback() {
 //                    @Override
 //                    public void onError(Request request, Exception e) {
-//                        Toast.makeText(FeedbackActivity.this, R.string.tip_send_log_error, Toast.LENGTH_SHORT).show();
+//                        Toast.makeText(getApplicationContext(), R.string.tip_send_log_error, Toast.LENGTH_SHORT).show();
 //                    }
 //
 //                    @Override
 //                    public void onResponse(Object response) {
-//                        Toast.makeText(FeedbackActivity.this, R.string.tip_send_log_success, Toast.LENGTH_SHORT).show();
+//                        Toast.makeText(getApplicationContext(), R.string.tip_send_log_success, Toast.LENGTH_SHORT).show();
 //                    }
 //                });
     }
 
-    private void showIsUploadLogDialog() {
+    /**
+     * 是否发送错误日志
+     */
+    private void showIsSendErrorLogDialog(final String feedbackContent, final String feedbackAddress) {
         final Dialog dialog = new Dialog(this, R.style.style_dialog_common);
         View view = View.inflate(this, R.layout.dialog_common, null);
 
@@ -177,7 +197,9 @@ public class FeedbackActivity extends Activity implements View.OnClickListener {
         btnOk.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                isSendErrorLog = true;
+                // 提交反馈信息，提交错误日志
+                submitFeedbackContent(feedbackContent, feedbackAddress);
+                sendErrorLog();
                 dialog.dismiss();
             }
         });
@@ -202,5 +224,17 @@ public class FeedbackActivity extends Activity implements View.OnClickListener {
                 inputManager.showSoftInput(etFeedbackContent, 0);
             }
         }, 200);
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        OkHttpClientManager.cancelTag(this);
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        finish();
     }
 }

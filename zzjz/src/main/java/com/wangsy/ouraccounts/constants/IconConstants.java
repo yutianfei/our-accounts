@@ -1,6 +1,7 @@
-package com.wangsy.ouraccounts.model;
+package com.wangsy.ouraccounts.constants;
 
 import com.wangsy.ouraccounts.R;
+import com.wangsy.ouraccounts.model.IconModel;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -10,7 +11,7 @@ import java.util.List;
  * <p/>
  * Created by wangsy on 15/10/21.
  */
-public class IconsList {
+public class IconConstants {
 
     /**
      * 获取所有的icon数据

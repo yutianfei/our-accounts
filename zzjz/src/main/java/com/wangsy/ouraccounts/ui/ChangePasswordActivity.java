@@ -1,7 +1,7 @@
 package com.wangsy.ouraccounts.ui;
 
 import android.app.Activity;
-import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.View;
@@ -21,33 +21,43 @@ import com.wangsy.ouraccounts.utils.OkHttpClientManager;
 import java.util.Map;
 
 /**
- * 注册
+ * 修改密码
  * <p/>
  * Created by wangsy on 15/11/6.
  */
-public class RegisterActivity extends Activity implements View.OnClickListener {
+public class ChangePasswordActivity extends Activity implements View.OnClickListener {
 
-    // 用户名
-    private EditText etUsername;
-    // 密码框
-    private EditText etPassword;
+    // 旧密码
+    private EditText etOldPassword;
+    // 新密码
+    private EditText etNewPassword;
     // 错误提示
     private TextView tvErrorTip;
+
+    // 用户名
+    private String username;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_register);
+        setContentView(R.layout.activity_change_password);
 
+        // 标题
         TextView tvTitle = (TextView) findViewById(R.id.id_title);
-        tvTitle.setText(R.string.title_register);
+        tvTitle.setText(R.string.title_change_password);
+
+        // 用户名
+        SharedPreferences sp = getSharedPreferences(LoginActivity.USER_SharedPreferences, MODE_PRIVATE);
+        username = sp.getString(LoginActivity.USERNAME, "");
+        TextView tvUsername = (TextView) findViewById(R.id.id_username);
+        tvUsername.setText(username);
 
         initViews();
     }
 
     private void initViews() {
-        etUsername = (EditText) findViewById(R.id.id_register_username);
-        etPassword = (EditText) findViewById(R.id.id_register_password);
+        etOldPassword = (EditText) findViewById(R.id.id_old_password);
+        etNewPassword = (EditText) findViewById(R.id.id_new_password);
         tvErrorTip = (TextView) findViewById(R.id.id_error_tip);
 
         // 左侧按钮：取消注册，返回
@@ -55,8 +65,8 @@ public class RegisterActivity extends Activity implements View.OnClickListener {
         btnBack.setVisibility(View.VISIBLE);
         btnBack.setOnClickListener(this);
 
-        // 注册按钮
-        Button btnRegister = (Button) findViewById(R.id.id_button_register);
+        // 修改按钮
+        Button btnRegister = (Button) findViewById(R.id.id_button_change_password);
         btnRegister.setOnClickListener(this);
     }
 
@@ -66,8 +76,8 @@ public class RegisterActivity extends Activity implements View.OnClickListener {
             case R.id.id_title_left_btn:
                 finish();
                 break;
-            case R.id.id_button_register:
-                register();
+            case R.id.id_button_change_password:
+                changePassword();
                 break;
             default:
                 break;
@@ -77,21 +87,21 @@ public class RegisterActivity extends Activity implements View.OnClickListener {
     /**
      * 进行注册
      */
-    private void register() {
+    private void changePassword() {
         tvErrorTip.setVisibility(View.GONE);
 
-        final String username = etUsername.getText().toString();
-        final String password = etPassword.getText().toString();
+        String oldPassword = etOldPassword.getText().toString();
+        final String newPassword = etNewPassword.getText().toString();
 
-        // 用户名、密码不能为空
-        if (TextUtils.isEmpty(username)) {
+        // 新、旧密码不能为空
+        if (TextUtils.isEmpty(oldPassword)) {
             tvErrorTip.setVisibility(View.VISIBLE);
-            tvErrorTip.setText(R.string.tip_username_null);
+            tvErrorTip.setText(R.string.tip_change_password_old_null);
             return;
         }
-        if (TextUtils.isEmpty(password)) {
+        if (TextUtils.isEmpty(newPassword)) {
             tvErrorTip.setVisibility(View.VISIBLE);
-            tvErrorTip.setText(R.string.tip_password_null);
+            tvErrorTip.setText(R.string.tip_change_password_new_null);
             return;
         }
 
@@ -101,30 +111,30 @@ public class RegisterActivity extends Activity implements View.OnClickListener {
             return;
         }
 
-        Map<String, String> params = HttpParams.registerParams(username, password);
+        Map<String, String> params = HttpParams.changePasswordParams(username, oldPassword, newPassword);
         OkHttpClientManager.postAsyn(UrlConstants.HTTP_USER_REGISTER, params,
                 new OkHttpClientManager.ResultCallback<Integer>() {
                     @Override
                     public void onError(Request request, Exception e) {
-                        Toast.makeText(RegisterActivity.this, R.string.tip_register_error, Toast.LENGTH_SHORT).show();
+                        Toast.makeText(ChangePasswordActivity.this, R.string.tip_change_password_error, Toast.LENGTH_SHORT).show();
                     }
 
                     @Override
                     public void onResponse(Integer response) {
-                        // 0:用户名存在，1:注册成功
+                        // 0:旧密码错误，1:修改成功
                         switch (response) {
                             case 0:
                                 tvErrorTip.setVisibility(View.VISIBLE);
-                                tvErrorTip.setText(R.string.tip_username_already);
+                                tvErrorTip.setText(R.string.tip_change_password_old_error);
                                 break;
                             case 1:
                                 tvErrorTip.setVisibility(View.GONE);
-                                Toast.makeText(RegisterActivity.this, R.string.tip_register_success, Toast.LENGTH_SHORT).show();
-                                // 将数据传回
-                                Intent data = new Intent();
-                                data.putExtra(LoginActivity.USERNAME, username);
-                                data.putExtra(LoginActivity.PASSWORD, password);
-                                setResult(RESULT_OK, data);
+                                Toast.makeText(ChangePasswordActivity.this, R.string.tip_change_password_success, Toast.LENGTH_SHORT).show();
+                                // 使用SharedPreferences保存新密码
+                                SharedPreferences sp = getSharedPreferences(LoginActivity.USER_SharedPreferences, MODE_PRIVATE);
+                                SharedPreferences.Editor editor = sp.edit();
+                                editor.putString(LoginActivity.PASSWORD, newPassword);
+                                editor.apply();
                                 // 关闭当前界面
                                 finish();
                                 break;

@@ -13,9 +13,9 @@ import android.widget.Toast;
 
 import com.wangsy.ouraccounts.R;
 import com.wangsy.ouraccounts.adapter.SearchConditionAdapter;
-import com.wangsy.ouraccounts.model.DateTimeConstants;
+import com.wangsy.ouraccounts.constants.DateTimeConstants;
 import com.wangsy.ouraccounts.model.SearchTextModel;
-import com.wangsy.ouraccounts.model.TypeConstants;
+import com.wangsy.ouraccounts.constants.TypeConstants;
 import com.wangsy.ouraccounts.utils.Utils;
 
 import java.util.List;
