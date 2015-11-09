@@ -13,14 +13,15 @@ android {
     }
     buildTypes {
         release {
-            minifyEnabled false
+            minifyEnabled true
+            shrinkResources true
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
 
     android.applicationVariants.all { variant ->
         variant.outputs.each { output ->
-            def apkName = 'zzjz-' + buildType.name + "-v" + defaultConfig.versionName + '-.apk'
+            def apkName = 'zzjz-' + buildType.name + "-v" + defaultConfig.versionName + '.apk'
             output.outputFile = new File(output.outputFile.parent, apkName);
         }
     }
