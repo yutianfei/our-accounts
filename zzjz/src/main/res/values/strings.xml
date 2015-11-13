@@ -134,7 +134,7 @@
     <string name="setting_about_introduction">随时随地方便您的记账需求</string>
     <string name="setting_about_copyright_have">版权所有</string>
     <string name="setting_about_version"> v</string>
-    <string name="update_version_string">当前版本：%1$s\n\n最新版本：%2$s</string>
+    <string name="update_version_string">当前版本：%1$s , 最新版本：%2$s%3$s</string>
     <string name="setting_logout">退出当前账号</string>
 
     <!-- 密码修改 -->

@@ -1,20 +1,20 @@
 package com.wangsy.ouraccounts.ui;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.squareup.okhttp.Request;
 import com.wangsy.ouraccounts.R;
 import com.wangsy.ouraccounts.constants.HttpParams;
 import com.wangsy.ouraccounts.constants.UrlConstants;
+import com.wangsy.ouraccounts.model.UserStatus;
 import com.wangsy.ouraccounts.utils.NetworkUtils;
 import com.wangsy.ouraccounts.utils.OkHttpClientManager;
 
@@ -25,7 +25,7 @@ import java.util.Map;
  * <p/>
  * Created by wangsy on 15/11/6.
  */
-public class RegisterActivity extends Activity implements View.OnClickListener {
+public class RegisterActivity extends BaseActivity implements View.OnClickListener {
 
     // 用户名
     private EditText etUsername;
@@ -97,29 +97,42 @@ public class RegisterActivity extends Activity implements View.OnClickListener {
 
         // 检查网络是否可用，如果不可用，取消注册
         if (!NetworkUtils.isNetworkAvailable(this)) {
-            Toast.makeText(this, R.string.tip_network_is_connected, Toast.LENGTH_SHORT).show();
+            toast.setText(R.string.tip_network_is_connected);
+            toast.show();
             return;
         }
 
         Map<String, String> params = HttpParams.registerParams(username, password);
         OkHttpClientManager.postAsyn(UrlConstants.HTTP_USER_REGISTER, params,
-                new OkHttpClientManager.ResultCallback<Integer>() {
+                new OkHttpClientManager.ResultCallback<UserStatus>() {
+
                     @Override
-                    public void onError(Request request, Exception e) {
-                        Toast.makeText(RegisterActivity.this, R.string.tip_register_error, Toast.LENGTH_SHORT).show();
+                    public void onBefore(Request request) {
+                        super.onBefore(request);
+                        toast.setText("正在进行注册...");
+                        toast.show();
                     }
 
                     @Override
-                    public void onResponse(Integer response) {
+                    public void onError(Request request, Exception e) {
+                        toast.setText(R.string.tip_register_error);
+                        toast.show();
+                        Log.i("Register", e.toString());
+                    }
+
+                    @Override
+                    public void onResponse(UserStatus response) {
                         // 0:用户名存在，1:注册成功
-                        switch (response) {
+                        switch (response.status) {
                             case 0:
+                                toast.cancel();
                                 tvErrorTip.setVisibility(View.VISIBLE);
                                 tvErrorTip.setText(R.string.tip_username_already);
                                 break;
                             case 1:
                                 tvErrorTip.setVisibility(View.GONE);
-                                Toast.makeText(RegisterActivity.this, R.string.tip_register_success, Toast.LENGTH_SHORT).show();
+                                toast.setText(R.string.tip_register_success);
+                                toast.show();
                                 // 将数据传回
                                 Intent data = new Intent();
                                 data.putExtra(LoginActivity.USERNAME, username);

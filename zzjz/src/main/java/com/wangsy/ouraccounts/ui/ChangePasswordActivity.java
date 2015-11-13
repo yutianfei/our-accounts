@@ -1,20 +1,20 @@
 package com.wangsy.ouraccounts.ui;
 
-import android.app.Activity;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.squareup.okhttp.Request;
 import com.wangsy.ouraccounts.R;
 import com.wangsy.ouraccounts.constants.HttpParams;
 import com.wangsy.ouraccounts.constants.UrlConstants;
+import com.wangsy.ouraccounts.model.UserStatus;
 import com.wangsy.ouraccounts.utils.NetworkUtils;
 import com.wangsy.ouraccounts.utils.OkHttpClientManager;
 
@@ -25,7 +25,7 @@ import java.util.Map;
  * <p/>
  * Created by wangsy on 15/11/6.
  */
-public class ChangePasswordActivity extends Activity implements View.OnClickListener {
+public class ChangePasswordActivity extends BaseActivity implements View.OnClickListener {
 
     // 旧密码
     private EditText etOldPassword;
@@ -107,29 +107,41 @@ public class ChangePasswordActivity extends Activity implements View.OnClickList
 
         // 检查网络是否可用，如果不可用，取消注册
         if (!NetworkUtils.isNetworkAvailable(this)) {
-            Toast.makeText(this, R.string.tip_network_is_connected, Toast.LENGTH_SHORT).show();
+            toast.setText(R.string.tip_network_is_connected);
+            toast.show();
             return;
         }
 
         Map<String, String> params = HttpParams.changePasswordParams(username, oldPassword, newPassword);
-        OkHttpClientManager.postAsyn(UrlConstants.HTTP_USER_REGISTER, params,
-                new OkHttpClientManager.ResultCallback<Integer>() {
+        OkHttpClientManager.postAsyn(UrlConstants.HTTP_USER_CHANGE_PASSWORD, params,
+                new OkHttpClientManager.ResultCallback<UserStatus>() {
                     @Override
-                    public void onError(Request request, Exception e) {
-                        Toast.makeText(ChangePasswordActivity.this, R.string.tip_change_password_error, Toast.LENGTH_SHORT).show();
+                    public void onBefore(Request request) {
+                        super.onBefore(request);
+                        toast.setText("正在提交...");
+                        toast.show();
                     }
 
                     @Override
-                    public void onResponse(Integer response) {
+                    public void onError(Request request, Exception e) {
+                        toast.setText(R.string.tip_change_password_error);
+                        toast.show();
+                        Log.i("ChangePassword", e.toString());
+                    }
+
+                    @Override
+                    public void onResponse(UserStatus response) {
                         // 0:旧密码错误，1:修改成功
-                        switch (response) {
+                        switch (response.status) {
                             case 0:
+                                toast.cancel();
                                 tvErrorTip.setVisibility(View.VISIBLE);
                                 tvErrorTip.setText(R.string.tip_change_password_old_error);
                                 break;
                             case 1:
                                 tvErrorTip.setVisibility(View.GONE);
-                                Toast.makeText(ChangePasswordActivity.this, R.string.tip_change_password_success, Toast.LENGTH_SHORT).show();
+                                toast.setText(R.string.tip_change_password_success);
+                                toast.show();
                                 // 使用SharedPreferences保存新密码
                                 SharedPreferences sp = getSharedPreferences(LoginActivity.USER_SharedPreferences, MODE_PRIVATE);
                                 SharedPreferences.Editor editor = sp.edit();

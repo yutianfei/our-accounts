@@ -12,11 +12,11 @@ public class HttpParams {
 
     /**
      * 检查更新
-     * 响应结果：{ versionCode : int, versionName : "", downloadUrl:"" }
+     * 响应结果：{ versionCode : int, versionName : "", updateMessage : "", downloadUrl : "" }
      */
 
     /**
-     * 登录参数
+     * 登录参数：String username, String password
      * <p/>
      * 响应结果：0:用户名不存在，1:密码错误，2:登录成功
      */
@@ -28,7 +28,7 @@ public class HttpParams {
     }
 
     /**
-     * 注册参数
+     * 注册参数：String username, String password
      * <p/>
      * 响应结果：0:用户名存在，1:注册成功
      */
@@ -40,7 +40,7 @@ public class HttpParams {
     }
 
     /**
-     * 修改密码参数
+     * 修改密码参数：String username, String oldPassword, String newPassword
      * <p/>
      * 响应结果：0:旧密码错误，1:修改成功
      */
@@ -53,7 +53,7 @@ public class HttpParams {
     }
 
     /**
-     * 信息反馈参数
+     * 信息反馈参数：String feedbackContent, String feedbackAddress(可为空)
      * <p/>
      * 响应结果：0:反馈失败，1:反馈成功
      */

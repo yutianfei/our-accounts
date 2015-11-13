@@ -8,6 +8,7 @@ package com.wangsy.ouraccounts.model;
 public class VersionModel {
     public int versionCode;
     public String versionName;
+    public String updateMessage;
     public String downloadUrl;
 
     @Override
@@ -15,6 +16,7 @@ public class VersionModel {
         return "VersionModel{" +
                 "versionCode=" + versionCode +
                 ", versionName='" + versionName + '\'' +
+                ", updateMessage='" + updateMessage + '\'' +
                 ", downloadUrl='" + downloadUrl + '\'' +
                 '}';
     }

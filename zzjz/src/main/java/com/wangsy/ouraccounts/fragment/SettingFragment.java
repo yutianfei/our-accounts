@@ -53,6 +53,9 @@ public class SettingFragment extends Fragment implements View.OnClickListener {
 
     private String username;
 
+    // Toast提示
+    private Toast toast;
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_setting, container, false);
@@ -62,6 +65,8 @@ public class SettingFragment extends Fragment implements View.OnClickListener {
 
         TextView title = (TextView) view.findViewById(R.id.id_title);
         title.setText(R.string.title_setting);
+
+        toast = Toast.makeText(getActivity(), "", Toast.LENGTH_SHORT);
 
         initViews(view);
 
@@ -158,10 +163,13 @@ public class SettingFragment extends Fragment implements View.OnClickListener {
         SharedPreferences.Editor editor = sp.edit();
         editor.remove(LoginActivity.USERNAME);
         editor.remove(LoginActivity.PASSWORD);
-        editor.apply();
-        // 设置相应的界面元素
-        btnLogout.setVisibility(View.GONE);
-        tvUsername.setText(R.string.click_to_login);
+        if (editor.commit()) {
+            // 设置相应的界面元素
+            settingChangePassword.setVisibility(View.GONE);
+            btnLogout.setVisibility(View.GONE);
+            username = "";
+            tvUsername.setText(R.string.click_to_login);
+        }
     }
 
     /**
@@ -205,19 +213,34 @@ public class SettingFragment extends Fragment implements View.OnClickListener {
     private void checkAppUpdate() {
         // 检查网络是否可用，如果不可用，取消更新操作
         if (!NetworkUtils.isNetworkAvailable(getActivity())) {
-            Toast.makeText(getActivity(), R.string.tip_network_is_connected, Toast.LENGTH_SHORT).show();
+            toast.setText(R.string.tip_network_is_connected);
+            toast.show();
             return;
         }
         // 从网络检测最新版本信息
         OkHttpClientManager.getAsyn(UrlConstants.HTTP_CHECK_UPDATE, new OkHttpClientManager.ResultCallback<VersionModel>() {
             @Override
+            public void onBefore(Request request) {
+                super.onBefore(request);
+                toast.setText("正在检查更新...");
+                toast.show();
+            }
+
+            @Override
             public void onError(Request request, Exception e) {
-                Toast.makeText(getActivity(), R.string.tip_check_update_error, Toast.LENGTH_SHORT).show();
+                toast.setText(R.string.tip_check_update_error);
+                toast.show();
+                Log.i("CheckUpdate", e.toString());
             }
 
             @Override
             public void onResponse(VersionModel response) {
-                checkUpdate(response);
+                if (response == null) {
+                    toast.setText("暂时没有新版本哦！");
+                    toast.show();
+                } else {
+                    checkUpdate(response);
+                }
             }
         });
     }
@@ -231,9 +254,11 @@ public class SettingFragment extends Fragment implements View.OnClickListener {
                 String currentVersionName = getActivity().getResources().getString(R.string.setting_about_version) + info.versionName;
 
                 if (lastedVersion.versionCode == currentVersionCode) {
-                    Toast.makeText(getActivity(), R.string.tip_current_lasted, Toast.LENGTH_SHORT).show();
+                    toast.setText(R.string.tip_current_lasted);
+                    toast.show();
                 } else {
-                    chooseUpdateDialog(currentVersionName, lastedVersion.versionName, lastedVersion.downloadUrl);
+                    toast.cancel();
+                    chooseUpdateDialog(currentVersionName, lastedVersion);
                 }
             } catch (PackageManager.NameNotFoundException e) {
                 Log.e("getPackageName", e.getMessage());
@@ -241,15 +266,16 @@ public class SettingFragment extends Fragment implements View.OnClickListener {
         }
     }
 
-    private void chooseUpdateDialog(String currentVersionName, String lastedVersionName, final String downloadUrl) {
+    private void chooseUpdateDialog(String currentVersionName, final VersionModel lastedVersion) {
         final Dialog dialog = new Dialog(getActivity(), R.style.style_dialog_common);
         View view = View.inflate(getActivity(), R.layout.dialog_common, null);
 
         TextView tvTitle = (TextView) view.findViewById(R.id.id_dialog_title);
         tvTitle.setText(R.string.tip_choose_update);
         TextView tvMessage = (TextView) view.findViewById(R.id.id_dialog_message);
+        String updateMessage = lastedVersion.updateMessage == null ? "" : "\n\n" + lastedVersion.updateMessage;
         tvMessage.setText(String.format(getActivity().getResources().getString(R.string.update_version_string),
-                currentVersionName, lastedVersionName));
+                currentVersionName, lastedVersion.versionName, updateMessage));
 
         Button btnCancel = (Button) view.findViewById(R.id.id_button_cancel);
         Button btnOk = (Button) view.findViewById(R.id.id_button_ok);
@@ -263,8 +289,9 @@ public class SettingFragment extends Fragment implements View.OnClickListener {
             @Override
             public void onClick(View v) {
                 // 调用浏览器进行下载
-                Toast.makeText(getActivity(), R.string.tip_going_download, Toast.LENGTH_SHORT).show();
-                Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(downloadUrl));
+                toast.setText(R.string.tip_going_download);
+                toast.show();
+                Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(lastedVersion.downloadUrl));
                 startActivity(intent);
 
                 dialog.dismiss();

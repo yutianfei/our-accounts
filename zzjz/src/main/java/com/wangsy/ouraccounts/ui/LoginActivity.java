@@ -1,23 +1,23 @@
 package com.wangsy.ouraccounts.ui;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.text.method.HideReturnsTransformationMethod;
 import android.text.method.PasswordTransformationMethod;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.squareup.okhttp.Request;
 import com.wangsy.ouraccounts.R;
 import com.wangsy.ouraccounts.constants.HttpParams;
 import com.wangsy.ouraccounts.constants.UrlConstants;
+import com.wangsy.ouraccounts.model.UserStatus;
 import com.wangsy.ouraccounts.utils.NetworkUtils;
 import com.wangsy.ouraccounts.utils.OkHttpClientManager;
 
@@ -28,7 +28,7 @@ import java.util.Map;
  * <p/>
  * Created by wangsy on 15/11/5.
  */
-public class LoginActivity extends Activity implements View.OnClickListener {
+public class LoginActivity extends BaseActivity implements View.OnClickListener {
 
     public static final int REQUEST_FOR_REGISTER = 1;
     public static final String USER_SharedPreferences = "user";
@@ -151,7 +151,8 @@ public class LoginActivity extends Activity implements View.OnClickListener {
 
         // 检查网络是否可用，如果不可用，取消登录
         if (!NetworkUtils.isNetworkAvailable(this)) {
-            Toast.makeText(this, R.string.tip_network_is_connected, Toast.LENGTH_SHORT).show();
+            toast.setText(R.string.tip_network_is_connected);
+            toast.show();
             return;
         }
 
@@ -161,40 +162,54 @@ public class LoginActivity extends Activity implements View.OnClickListener {
     private void login(final String username, final String password) {
         Map<String, String> params = HttpParams.loginParams(username, password);
         OkHttpClientManager.postAsyn(UrlConstants.HTTP_USER_LOGIN, params,
-                new OkHttpClientManager.ResultCallback<Integer>() {
+                new OkHttpClientManager.ResultCallback<UserStatus>() {
+
                     @Override
-                    public void onError(Request request, Exception e) {
-                        Toast.makeText(LoginActivity.this, R.string.tip_login_error, Toast.LENGTH_SHORT).show();
+                    public void onBefore(Request request) {
+                        super.onBefore(request);
+                        toast.setText("正在登录...");
+                        toast.show();
                     }
 
                     @Override
-                    public void onResponse(Integer response) {
+                    public void onError(Request request, Exception e) {
+                        toast.setText(R.string.tip_login_error);
+                        toast.show();
+                        Log.i("Login", e.toString());
+                    }
+
+                    @Override
+                    public void onResponse(UserStatus response) {
                         // 0:用户名不存在，1:密码错误，2:登录成功
-                        switch (response) {
+                        switch (response.status) {
                             case 0:
+                                toast.cancel();
                                 tvErrorTip.setVisibility(View.VISIBLE);
                                 tvErrorTip.setText(R.string.tip_username_empty);
                                 break;
                             case 1:
+                                toast.cancel();
                                 tvErrorTip.setVisibility(View.VISIBLE);
                                 tvErrorTip.setText(R.string.tip_password_error);
                                 break;
                             case 2:
                                 tvErrorTip.setVisibility(View.GONE);
-                                Toast.makeText(LoginActivity.this, R.string.tip_login_success, Toast.LENGTH_SHORT).show();
+                                toast.setText(R.string.tip_login_success);
+                                toast.show();
                                 // 使用SharedPreferences保存数据
                                 SharedPreferences sp = getSharedPreferences(USER_SharedPreferences, MODE_PRIVATE);
                                 SharedPreferences.Editor editor = sp.edit();
                                 editor.putString(USERNAME, username);
                                 editor.putString(PASSWORD, password);
-                                editor.apply();
-                                // 将数据传回
-                                Intent data = new Intent();
-                                data.putExtra(USERNAME, username);
-                                data.putExtra(PASSWORD, password);
-                                setResult(RESULT_OK, data);
-                                // 关闭当前界面
-                                finish();
+                                if (editor.commit()) {
+                                    // 将数据传回
+                                    Intent data = new Intent();
+                                    data.putExtra(USERNAME, username);
+                                    data.putExtra(PASSWORD, password);
+                                    setResult(RESULT_OK, data);
+                                    // 关闭当前界面
+                                    finish();
+                                }
                                 break;
                             default:
                                 break;
