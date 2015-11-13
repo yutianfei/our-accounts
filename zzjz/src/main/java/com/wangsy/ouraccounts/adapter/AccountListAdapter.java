@@ -77,11 +77,11 @@ public class AccountListAdapter extends BaseAdapter {
                     context.getResources().getColor(R.color.color_money_in));
         }
 
-        if (null == account.getComment() || "".equals(account.getComment())) {
+        if (null == account.getComment() || "".equals(account.getComment().trim())) {
             viewHolder.tvAccountComment.setVisibility(View.GONE);
         } else {
             viewHolder.tvAccountComment.setVisibility(View.VISIBLE);
-            viewHolder.tvAccountComment.setText(account.getComment());
+            viewHolder.tvAccountComment.setText(account.getComment().trim());
         }
 
         return convertView;

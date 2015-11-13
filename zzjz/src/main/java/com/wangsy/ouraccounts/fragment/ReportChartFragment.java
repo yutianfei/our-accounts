@@ -255,7 +255,10 @@ public class ReportChartFragment extends Fragment implements OnChartValueSelecte
         data.setValueTextSize(10f);
         data.setValueTextColor(Color.BLACK);
 
+        // 没有数据时不显示总金额
+        reportPieChart.setDrawCenterText(yValues.size() != 0);
         reportPieChart.setCenterText("总金额\n" + totalAmount + "\n元");
+
         reportPieChart.setData(data);
         reportPieChart.highlightValues(null);
         reportPieChart.invalidate();

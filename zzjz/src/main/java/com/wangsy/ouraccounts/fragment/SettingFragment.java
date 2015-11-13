@@ -1,7 +1,6 @@
 package com.wangsy.ouraccounts.fragment;
 
 import android.app.Activity;
-import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -23,6 +22,7 @@ import android.widget.Toast;
 
 import com.squareup.okhttp.Request;
 import com.wangsy.ouraccounts.R;
+import com.wangsy.ouraccounts.callback.CommonDialogEvent;
 import com.wangsy.ouraccounts.constants.UrlConstants;
 import com.wangsy.ouraccounts.model.VersionModel;
 import com.wangsy.ouraccounts.ui.AboutActivity;
@@ -31,6 +31,7 @@ import com.wangsy.ouraccounts.ui.FeedbackActivity;
 import com.wangsy.ouraccounts.ui.LoginActivity;
 import com.wangsy.ouraccounts.utils.NetworkUtils;
 import com.wangsy.ouraccounts.utils.OkHttpClientManager;
+import com.wangsy.ouraccounts.utils.Utils;
 
 import cn.sharesdk.framework.ShareSDK;
 import cn.sharesdk.onekeyshare.OnekeyShare;
@@ -158,18 +159,23 @@ public class SettingFragment extends Fragment implements View.OnClickListener {
      * 退出登录
      */
     private void logout() {
-        // 清除保存的账号密码
-        SharedPreferences sp = getActivity().getSharedPreferences(LoginActivity.USER_SharedPreferences, Context.MODE_PRIVATE);
-        SharedPreferences.Editor editor = sp.edit();
-        editor.remove(LoginActivity.USERNAME);
-        editor.remove(LoginActivity.PASSWORD);
-        if (editor.commit()) {
-            // 设置相应的界面元素
-            settingChangePassword.setVisibility(View.GONE);
-            btnLogout.setVisibility(View.GONE);
-            username = "";
-            tvUsername.setText(R.string.click_to_login);
-        }
+        Utils.getCommonDialog(getActivity(), "确认退出当前账号？", new CommonDialogEvent() {
+            @Override
+            public void onButtonOkClick() {
+                // 清除保存的账号密码
+                SharedPreferences sp = getActivity().getSharedPreferences(LoginActivity.USER_SharedPreferences, Context.MODE_PRIVATE);
+                SharedPreferences.Editor editor = sp.edit();
+                editor.remove(LoginActivity.USERNAME);
+                editor.remove(LoginActivity.PASSWORD);
+                if (editor.commit()) {
+                    // 设置相应的界面元素
+                    settingChangePassword.setVisibility(View.GONE);
+                    btnLogout.setVisibility(View.GONE);
+                    username = "";
+                    tvUsername.setText(R.string.click_to_login);
+                }
+            }
+        }).show();
     }
 
     /**
@@ -267,39 +273,20 @@ public class SettingFragment extends Fragment implements View.OnClickListener {
     }
 
     private void chooseUpdateDialog(String currentVersionName, final VersionModel lastedVersion) {
-        final Dialog dialog = new Dialog(getActivity(), R.style.style_dialog_common);
-        View view = View.inflate(getActivity(), R.layout.dialog_common, null);
-
-        TextView tvTitle = (TextView) view.findViewById(R.id.id_dialog_title);
-        tvTitle.setText(R.string.tip_choose_update);
-        TextView tvMessage = (TextView) view.findViewById(R.id.id_dialog_message);
+        String title = getString(R.string.tip_choose_update);
         String updateMessage = lastedVersion.updateMessage == null ? "" : "\n\n" + lastedVersion.updateMessage;
-        tvMessage.setText(String.format(getActivity().getResources().getString(R.string.update_version_string),
-                currentVersionName, lastedVersion.versionName, updateMessage));
-
-        Button btnCancel = (Button) view.findViewById(R.id.id_button_cancel);
-        Button btnOk = (Button) view.findViewById(R.id.id_button_ok);
-        btnCancel.setOnClickListener(new View.OnClickListener() {
+        String message = String.format(getActivity().getResources().getString(R.string.update_version_string),
+                currentVersionName, lastedVersion.versionName, updateMessage);
+        Utils.getCommonDialog(getActivity(), title, message, new CommonDialogEvent() {
             @Override
-            public void onClick(View v) {
-                dialog.dismiss();
-            }
-        });
-        btnOk.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
+            public void onButtonOkClick() {
                 // 调用浏览器进行下载
                 toast.setText(R.string.tip_going_download);
                 toast.show();
                 Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(lastedVersion.downloadUrl));
                 startActivity(intent);
-
-                dialog.dismiss();
             }
-        });
-        dialog.setContentView(view);
-        dialog.getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-        dialog.show();
+        }).show();
     }
 
     /**

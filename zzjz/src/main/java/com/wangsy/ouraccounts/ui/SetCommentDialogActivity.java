@@ -1,19 +1,15 @@
 package com.wangsy.ouraccounts.ui;
 
 import android.app.Activity;
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 
 import com.wangsy.ouraccounts.R;
-
-import java.util.Timer;
-import java.util.TimerTask;
+import com.wangsy.ouraccounts.utils.Utils;
 
 /**
  * 设置备注
@@ -40,25 +36,7 @@ public class SetCommentDialogActivity extends Activity {
         initButtons();
 
         // 弹出软键盘
-        showKeyBoard();
-    }
-
-    /**
-     * 自动弹出软键盘
-     * <p/>
-     * 在调用时showSoftInput时，可能界面还未加载完成，etInputComment可能还为空，所以加上一个延时任务，延迟显示
-     */
-    private void showKeyBoard() {
-        Timer timer = new Timer();
-        timer.schedule(new TimerTask() {
-            @Override
-            public void run() {
-                //调用系统输入法
-                InputMethodManager inputManager = (InputMethodManager) etInputComment
-                        .getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
-                inputManager.showSoftInput(etInputComment, 0);
-            }
-        }, 200);
+        Utils.showKeyBoard(etInputComment);
     }
 
     private void initButtons() {

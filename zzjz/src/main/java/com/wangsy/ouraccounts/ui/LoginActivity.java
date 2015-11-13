@@ -20,6 +20,7 @@ import com.wangsy.ouraccounts.constants.UrlConstants;
 import com.wangsy.ouraccounts.model.UserStatus;
 import com.wangsy.ouraccounts.utils.NetworkUtils;
 import com.wangsy.ouraccounts.utils.OkHttpClientManager;
+import com.wangsy.ouraccounts.utils.Utils;
 
 import java.util.Map;
 
@@ -82,6 +83,9 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
         // 忘记密码
         TextView tvForgetPassword = (TextView) findViewById(R.id.id_password_forget);
         tvForgetPassword.setOnClickListener(this);
+
+        // 弹出软键盘
+        Utils.showKeyBoard(etUsername);
     }
 
     @Override

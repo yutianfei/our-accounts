@@ -1,12 +1,25 @@
 package com.wangsy.ouraccounts.utils;
 
+import android.app.Dialog;
 import android.content.Context;
+import android.text.TextUtils;
+import android.view.View;
+import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.TextView;
+
+import com.wangsy.ouraccounts.R;
+import com.wangsy.ouraccounts.callback.CommonDialogEvent;
 
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
+import java.util.Timer;
+import java.util.TimerTask;
 
 /**
  * 工具方法类
@@ -87,7 +100,7 @@ public class Utils {
         final float scale = context.getResources().getDisplayMetrics().density;
         return (int) (dp * scale + 0.5f);
     }
-    
+
     /**
      * px转dp
      */
@@ -128,5 +141,70 @@ public class Utils {
         float convertNumber = number * 100;
         DecimalFormat format = new DecimalFormat("##0.0");
         return format.format(convertNumber) + "%";
+    }
+
+    /**
+     * 通用提示对话框
+     */
+
+    public static Dialog getCommonDialog(Context context, final CommonDialogEvent event) {
+        return getCommonDialog(context, null, null, event);
+    }
+
+    public static Dialog getCommonDialog(Context context, String message, final CommonDialogEvent event) {
+        return getCommonDialog(context, null, message, event);
+    }
+
+    public static Dialog getCommonDialog(Context context, String title, String message, final CommonDialogEvent event) {
+        final Dialog dialog = new Dialog(context, R.style.style_dialog_common);
+        View view = View.inflate(context, R.layout.dialog_common, null);
+
+        if (!TextUtils.isEmpty(title)) {
+            TextView tvTitle = (TextView) view.findViewById(R.id.id_dialog_title);
+            tvTitle.setText(title);
+        }
+
+        if (!TextUtils.isEmpty(message)) {
+            TextView tvMessage = (TextView) view.findViewById(R.id.id_dialog_message);
+            tvMessage.setText(message);
+        }
+
+        Button btnCancel = (Button) view.findViewById(R.id.id_button_cancel);
+        Button btnOk = (Button) view.findViewById(R.id.id_button_ok);
+        btnCancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
+            }
+        });
+        btnOk.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                event.onButtonOkClick();
+                dialog.dismiss();
+            }
+        });
+        dialog.setContentView(view);
+        dialog.getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+
+        return dialog;
+    }
+
+    /**
+     * 自动弹出软键盘
+     * <p/>
+     * 在调用时showSoftInput时，可能界面还未加载完成，etInputComment可能还为空，所以加上一个延时任务，延迟显示
+     */
+    public static void showKeyBoard(final EditText et) {
+        Timer timer = new Timer();
+        timer.schedule(new TimerTask() {
+            @Override
+            public void run() {
+                //调用系统输入法
+                InputMethodManager inputManager = (InputMethodManager) et.getContext()
+                        .getSystemService(Context.INPUT_METHOD_SERVICE);
+                inputManager.showSoftInput(et, 0);
+            }
+        }, 200);
     }
 }

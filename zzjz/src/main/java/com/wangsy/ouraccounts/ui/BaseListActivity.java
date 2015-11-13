@@ -1,13 +1,10 @@
 package com.wangsy.ouraccounts.ui;
 
 import android.app.Activity;
-import android.app.Dialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.AdapterView;
-import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.Toast;
@@ -16,6 +13,7 @@ import com.handmark.pulltorefresh.library.PullToRefreshBase;
 import com.wangsy.ouraccounts.R;
 import com.wangsy.ouraccounts.adapter.AccountListAdapter;
 import com.wangsy.ouraccounts.asynctask.QueryDataTask;
+import com.wangsy.ouraccounts.callback.CommonDialogEvent;
 import com.wangsy.ouraccounts.callback.OnQueryDataReceived;
 import com.wangsy.ouraccounts.model.AccountModel;
 import com.wangsy.ouraccounts.swipeMenuListView.SwipeMenu;
@@ -213,19 +211,9 @@ public class BaseListActivity extends Activity implements OnQueryDataReceived {
      * 删除提示
      */
     private void showDeleteDialog(final int position) {
-        final Dialog dialog = new Dialog(this, R.style.style_dialog_common);
-        View view = View.inflate(this, R.layout.dialog_common, null);
-        Button btnCancel = (Button) view.findViewById(R.id.id_button_cancel);
-        Button btnOk = (Button) view.findViewById(R.id.id_button_ok);
-        btnCancel.setOnClickListener(new View.OnClickListener() {
+        Utils.getCommonDialog(this, new CommonDialogEvent() {
             @Override
-            public void onClick(View v) {
-                dialog.dismiss();
-            }
-        });
-        btnOk.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
+            public void onButtonOkClick() {
                 // 从数据库中删除
                 accountsList.get(position).delete();
                 // 从显示的列表中移除
@@ -235,12 +223,8 @@ public class BaseListActivity extends Activity implements OnQueryDataReceived {
                 queryData();
 
                 Toast.makeText(BaseListActivity.this, R.string.tip_delete_ok, Toast.LENGTH_SHORT).show();
-                dialog.dismiss();
             }
-        });
-        dialog.setContentView(view);
-        dialog.getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-        dialog.show();
+        }).show();
     }
 
     /**

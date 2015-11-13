@@ -1,7 +1,6 @@
 package com.wangsy.ouraccounts.fragment;
 
 import android.app.Activity;
-import android.app.Dialog;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -12,7 +11,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
-import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -21,6 +19,8 @@ import android.widget.Toast;
 import com.handmark.pulltorefresh.library.PullToRefreshBase;
 import com.wangsy.ouraccounts.R;
 import com.wangsy.ouraccounts.adapter.AccountListAdapter;
+import com.wangsy.ouraccounts.asynctask.QueryDataTask;
+import com.wangsy.ouraccounts.callback.CommonDialogEvent;
 import com.wangsy.ouraccounts.callback.OnQueryDataReceived;
 import com.wangsy.ouraccounts.model.AccountModel;
 import com.wangsy.ouraccounts.swipeMenuListView.SwipeMenu;
@@ -29,7 +29,6 @@ import com.wangsy.ouraccounts.swipeMenuListView.SwipeMenuItem;
 import com.wangsy.ouraccounts.swipeMenuListView.SwipeMenuListView;
 import com.wangsy.ouraccounts.ui.EditAccountActivity;
 import com.wangsy.ouraccounts.ui.MainActivity;
-import com.wangsy.ouraccounts.asynctask.QueryDataTask;
 import com.wangsy.ouraccounts.ui.SearchConditionActivity;
 import com.wangsy.ouraccounts.utils.Utils;
 import com.wangsy.ouraccounts.view.PullToRefreshSlideListView;
@@ -172,19 +171,9 @@ public class ReportListFragment extends Fragment implements OnQueryDataReceived 
      * 删除提示
      */
     private void showDeleteDialog(final int position) {
-        final Dialog dialog = new Dialog(getActivity(), R.style.style_dialog_common);
-        View view = View.inflate(getActivity(), R.layout.dialog_common, null);
-        Button btnCancel = (Button) view.findViewById(R.id.id_button_cancel);
-        Button btnOk = (Button) view.findViewById(R.id.id_button_ok);
-        btnCancel.setOnClickListener(new View.OnClickListener() {
+        Utils.getCommonDialog(getActivity(), new CommonDialogEvent() {
             @Override
-            public void onClick(View v) {
-                dialog.dismiss();
-            }
-        });
-        btnOk.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
+            public void onButtonOkClick() {
                 // 从数据库中删除
                 accountsList.get(position).delete();
                 // 从显示的列表中移除
@@ -193,12 +182,8 @@ public class ReportListFragment extends Fragment implements OnQueryDataReceived 
                 sendBroadcastToRefreshData();
 
                 Toast.makeText(getActivity(), R.string.tip_delete_ok, Toast.LENGTH_SHORT).show();
-                dialog.dismiss();
             }
-        });
-        dialog.setContentView(view);
-        dialog.getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-        dialog.show();
+        }).show();
     }
 
     /**

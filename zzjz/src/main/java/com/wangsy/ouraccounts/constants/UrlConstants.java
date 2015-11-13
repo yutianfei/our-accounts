@@ -30,7 +30,7 @@ public class UrlConstants {
     /**
      * 注册
      */
-    public static final String HTTP_USER_REGISTER = "http://";
+    public static final String HTTP_USER_REGISTER = "http://133.130.89.237:8080/OurAccounts/user/register";
 
     /**
      * 修改密码

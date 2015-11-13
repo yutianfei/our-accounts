@@ -17,6 +17,7 @@ import com.wangsy.ouraccounts.constants.UrlConstants;
 import com.wangsy.ouraccounts.model.UserStatus;
 import com.wangsy.ouraccounts.utils.NetworkUtils;
 import com.wangsy.ouraccounts.utils.OkHttpClientManager;
+import com.wangsy.ouraccounts.utils.Utils;
 
 import java.util.Map;
 
@@ -58,6 +59,9 @@ public class RegisterActivity extends BaseActivity implements View.OnClickListen
         // 注册按钮
         Button btnRegister = (Button) findViewById(R.id.id_button_register);
         btnRegister.setOnClickListener(this);
+
+        // 弹出软键盘
+        Utils.showKeyBoard(etUsername);
     }
 
     @Override
@@ -109,7 +113,7 @@ public class RegisterActivity extends BaseActivity implements View.OnClickListen
                     @Override
                     public void onBefore(Request request) {
                         super.onBefore(request);
-                        toast.setText("正在进行注册...");
+                        toast.setText("正在注册...");
                         toast.show();
                     }
 

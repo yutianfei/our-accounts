@@ -1,13 +1,8 @@
 package com.wangsy.ouraccounts.ui;
 
-import android.app.Dialog;
-import android.content.Context;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
-import android.view.ViewGroup;
-import android.view.inputmethod.InputMethodManager;
-import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ImageButton;
@@ -16,15 +11,15 @@ import android.widget.TextView;
 
 import com.squareup.okhttp.Request;
 import com.wangsy.ouraccounts.R;
+import com.wangsy.ouraccounts.callback.CommonDialogEvent;
 import com.wangsy.ouraccounts.constants.HttpParams;
 import com.wangsy.ouraccounts.constants.UrlConstants;
 import com.wangsy.ouraccounts.model.UserStatus;
 import com.wangsy.ouraccounts.utils.NetworkUtils;
 import com.wangsy.ouraccounts.utils.OkHttpClientManager;
+import com.wangsy.ouraccounts.utils.Utils;
 
 import java.util.Map;
-import java.util.Timer;
-import java.util.TimerTask;
 
 /**
  * 用户意见反馈
@@ -74,7 +69,7 @@ public class FeedbackActivity extends BaseActivity implements View.OnClickListen
         btnSend.setOnClickListener(this);
 
         // 弹出软键盘
-        showKeyBoard();
+        Utils.showKeyBoard(etFeedbackContent);
     }
 
     @Override
@@ -193,52 +188,15 @@ public class FeedbackActivity extends BaseActivity implements View.OnClickListen
      * 是否发送错误日志
      */
     private void showIsSendErrorLogDialog(final String feedbackContent, final String feedbackAddress) {
-        final Dialog dialog = new Dialog(this, R.style.style_dialog_common);
-        View view = View.inflate(this, R.layout.dialog_common, null);
-
-        TextView tvTitle = (TextView) view.findViewById(R.id.id_dialog_title);
-        tvTitle.setText(R.string.dialog_tip);
-        TextView tvMessage = (TextView) view.findViewById(R.id.id_dialog_message);
-        tvMessage.setText(R.string.submit_log_confirm);
-
-        Button btnCancel = (Button) view.findViewById(R.id.id_button_cancel);
-        Button btnOk = (Button) view.findViewById(R.id.id_button_ok);
-        btnCancel.setOnClickListener(new View.OnClickListener() {
+        String message = getString(R.string.submit_log_confirm);
+        Utils.getCommonDialog(this, message, new CommonDialogEvent() {
             @Override
-            public void onClick(View v) {
-                dialog.dismiss();
-            }
-        });
-        btnOk.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
+            public void onButtonOkClick() {
                 // 提交反馈信息，提交错误日志
                 submitFeedbackContent(feedbackContent, feedbackAddress);
                 sendErrorLog();
-                dialog.dismiss();
             }
-        });
-        dialog.setContentView(view);
-        dialog.getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-        dialog.show();
-    }
-
-    /**
-     * 自动弹出软键盘
-     * <p/>
-     * 在调用时showSoftInput时，可能界面还未加载完成，etInputComment可能还为空，所以加上一个延时任务，延迟显示
-     */
-    private void showKeyBoard() {
-        Timer timer = new Timer();
-        timer.schedule(new TimerTask() {
-            @Override
-            public void run() {
-                //调用系统输入法
-                InputMethodManager inputManager = (InputMethodManager) etFeedbackContent
-                        .getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
-                inputManager.showSoftInput(etFeedbackContent, 0);
-            }
-        }, 200);
+        }).show();
     }
 
     @Override

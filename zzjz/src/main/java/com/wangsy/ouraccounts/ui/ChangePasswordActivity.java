@@ -17,6 +17,7 @@ import com.wangsy.ouraccounts.constants.UrlConstants;
 import com.wangsy.ouraccounts.model.UserStatus;
 import com.wangsy.ouraccounts.utils.NetworkUtils;
 import com.wangsy.ouraccounts.utils.OkHttpClientManager;
+import com.wangsy.ouraccounts.utils.Utils;
 
 import java.util.Map;
 
@@ -68,6 +69,9 @@ public class ChangePasswordActivity extends BaseActivity implements View.OnClick
         // 修改按钮
         Button btnRegister = (Button) findViewById(R.id.id_button_change_password);
         btnRegister.setOnClickListener(this);
+
+        // 弹出软键盘
+        Utils.showKeyBoard(etOldPassword);
     }
 
     @Override
