@@ -76,11 +76,13 @@ public class SettingFragment extends Fragment implements View.OnClickListener {
 
     private void initViews(View view) {
         tvUsername = (TextView) view.findViewById(R.id.id_user_name);
-        tvUsername.setText(TextUtils.isEmpty(username) ? getString(R.string.click_to_login) : username);
+        tvUsername.setText(R.string.app_name);
+        // tvUsername.setText(TextUtils.isEmpty(username) ? getString(R.string.click_to_login) : username);
 
         // 用户头像
         ImageView ivUserImage = (ImageView) view.findViewById(R.id.id_user_image);
-        ivUserImage.setOnClickListener(this);
+        // TODO 用于用户登录，可以网络备份数据
+        // ivUserImage.setOnClickListener(this);
 
         // 意见反馈
         View settingFeedback = view.findViewById(R.id.id_setting_feedback);
