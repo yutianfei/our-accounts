@@ -1,6 +1,10 @@
 package com.wangsy.ouraccounts.constants;
 
-import com.wangsy.ouraccounts.R;
+import android.content.ContentValues;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
+import android.util.Log;
+
 import com.wangsy.ouraccounts.model.IconModel;
 
 import java.util.ArrayList;
@@ -13,64 +17,53 @@ import java.util.List;
  */
 public class IconConstants {
 
+    private static SQLiteDatabase db;
+
     /**
      * 获取所有的icon数据
      */
     public static List<IconModel> getIconsList() {
+
         List<IconModel> iconsList = new ArrayList<>();
+        SQLiteDatabase database = getTypeDatabase();
+        Cursor cursor = database.query("account_type", null, null, null, null, null, "counts desc");
 
-        IconModel icon = new IconModel(false, TypeConstants.INCOME, R.mipmap.normal_income, R.mipmap.selected_income, "selected_income");
-        iconsList.add(icon);
+        if (cursor.moveToFirst()) {
+            do {
+                int id = cursor.getInt(cursor.getColumnIndex("id"));
+                boolean isOut = cursor.getInt(cursor.getColumnIndex("isout")) != 0;
+                String type = cursor.getString(cursor.getColumnIndex("type"));
+                String normalIcon = cursor.getString(cursor.getColumnIndex("normalicon"));
+                String selectedIcon = cursor.getString(cursor.getColumnIndex("selectedicon"));
+                int counts = cursor.getInt(cursor.getColumnIndex("counts"));
 
-        icon = new IconModel(TypeConstants.Food, R.mipmap.normal_food, R.mipmap.selected_food, "selected_food");
-        iconsList.add(icon);
+                IconModel icon = new IconModel(id, isOut, type, normalIcon, selectedIcon, counts);
+                iconsList.add(icon);
 
-        icon = new IconModel(TypeConstants.CLOTHES, R.mipmap.normal_clothes, R.mipmap.selected_clothes, "selected_clothes");
-        iconsList.add(icon);
-
-        icon = new IconModel(TypeConstants.CAR, R.mipmap.normal_car, R.mipmap.selected_car, "selected_car");
-        iconsList.add(icon);
-
-        icon = new IconModel(TypeConstants.HOME, R.mipmap.normal_home, R.mipmap.selected_home, "selected_home");
-        iconsList.add(icon);
-
-        icon = new IconModel(TypeConstants.TRAFFIC, R.mipmap.normal_traffic, R.mipmap.selected_traffic, "selected_traffic");
-        iconsList.add(icon);
-
-        icon = new IconModel(TypeConstants.MOBILE, R.mipmap.normal_mobile, R.mipmap.selected_mobile, "selected_mobile");
-        iconsList.add(icon);
-
-        icon = new IconModel(TypeConstants.HAIR_CUT, R.mipmap.normal_hair_cut, R.mipmap.selected_hair_cut, "selected_hair_cut");
-        iconsList.add(icon);
-
-        icon = new IconModel(TypeConstants.APPS, R.mipmap.normal_apps, R.mipmap.selected_apps, "selected_apps");
-        iconsList.add(icon);
-
-        icon = new IconModel(TypeConstants.HOTEL, R.mipmap.normal_hotel, R.mipmap.selected_hotel, "selected_hotel");
-        iconsList.add(icon);
-
-        icon = new IconModel(TypeConstants.LEISURE, R.mipmap.normal_leisure, R.mipmap.selected_leisure, "selected_leisure");
-        iconsList.add(icon);
-
-        icon = new IconModel(TypeConstants.SHOPPING, R.mipmap.normal_shopping, R.mipmap.selected_shopping, "selected_shopping");
-        iconsList.add(icon);
-
-        icon = new IconModel(TypeConstants.FILM, R.mipmap.normal_film, R.mipmap.selected_film, "selected_film");
-        iconsList.add(icon);
-
-        icon = new IconModel(TypeConstants.KIDS, R.mipmap.normal_kids, R.mipmap.selected_kids, "selected_kids");
-        iconsList.add(icon);
-
-        icon = new IconModel(TypeConstants.PET, R.mipmap.normal_pet, R.mipmap.selected_pet, "selected_pet");
-        iconsList.add(icon);
-
-        icon = new IconModel(TypeConstants.MEDICINE, R.mipmap.normal_medicine, R.mipmap.selected_medicine, "selected_medicine");
-        iconsList.add(icon);
-
-        icon = new IconModel(TypeConstants.GENERAL, R.mipmap.normal_general, R.mipmap.selected_general, "selected_general");
-        iconsList.add(icon);
-
+            } while (cursor.moveToNext());
+        }
+        cursor.close();
         return iconsList;
     }
 
+    /**
+     * 取得数据库连接
+     */
+    public static SQLiteDatabase getTypeDatabase() {
+        if (db == null) {
+            db = SQLiteDatabase.openOrCreateDatabase("data/data/com.wangsy.ouraccounts/databases/type_database.db", null);
+        }
+        return db;
+    }
+
+    /**
+     * 更新数据库中类型信息
+     */
+    public static void updateTypeCountsInDatabase(int id, int counts) {
+        SQLiteDatabase db = IconConstants.getTypeDatabase();
+        ContentValues values = new ContentValues();
+        values.put("counts", counts);
+        int result = db.update("account_type", values, "id = ?", new String[]{id + ""});
+        Log.i("TypeDatabase", "icon counts added : " + result);
+    }
 }

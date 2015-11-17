@@ -62,14 +62,14 @@ public class IconFragment extends Fragment {
         // 选择icon后的处理工作
         bindOnIconClickListener();
 
-        // 默认选择第一页第一个支出类型的icon
+        // 默认选择记录的icon
         setDefaultSelectedIcon();
 
         return view;
     }
 
     private void setDefaultSelectedIcon() {
-        setSelectIcon(0, 1);
+        setSelectIcon(0, 0);
         adapter.notifyDataSetChanged();
     }
 
@@ -140,7 +140,7 @@ public class IconFragment extends Fragment {
             iconModel.iconImageToShow = iconModel.selectedIcon;
 
             // 将需要的数据通过回调，返回给父fragment
-            iconSelectedCallback.onIconSelected(iconModel.isOut, iconModel.type, iconModel.iconImageName);
+            iconSelectedCallback.onIconSelected(iconModel);
         }
     }
 

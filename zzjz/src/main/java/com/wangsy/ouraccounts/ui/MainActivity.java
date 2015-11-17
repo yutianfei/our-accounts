@@ -16,6 +16,12 @@ import com.wangsy.ouraccounts.fragment.ReportChartFragment;
 import com.wangsy.ouraccounts.fragment.ReportListFragment;
 import com.wangsy.ouraccounts.fragment.SettingFragment;
 
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+
 import cn.sharesdk.framework.ShareSDK;
 
 public class MainActivity extends FragmentActivity implements View.OnClickListener {
@@ -57,6 +63,9 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
 
         initViews();
         fm = getSupportFragmentManager();
+
+        // 导入account_type数据库
+        importTypeDatabase();
 
         //默认第一次进入时显示第一个标签页
         setSelectFragment(TAB_ADD_INDEX);
@@ -209,5 +218,61 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
     public void onBackPressed() {
         super.onBackPressed();
         finish();
+    }
+
+    private void importTypeDatabase() {
+        String database_name = "type_database.db";
+        String database_path = "/data/data/com.wangsy.ouraccounts/databases";
+
+        // 输出路径
+        String outFileName = database_path + "/" + database_name;
+
+        // 检测是否已经引入，已经引入，返回
+        File dir = new File(outFileName);
+        if (dir.exists()) {
+            return;
+        }
+
+        // 没有引入，进行引入
+        dir = new File(database_path);
+        if (!dir.exists()) {
+            dir.mkdir();
+        }
+
+        InputStream inputStream = null;
+        OutputStream outputStream = null;
+
+        // 从资源中读取数据库流
+        inputStream = getResources().openRawResource(R.raw.type_database);
+
+        try {
+            outputStream = new FileOutputStream(outFileName);
+            // 拷贝到输出流
+            byte[] buffer = new byte[2048];
+            int len;
+            while ((len = inputStream.read(buffer)) > 0) {
+                outputStream.write(buffer, 0, len);
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        } finally {
+            // 关闭输出流
+            try {
+                if (null != outputStream) {
+                    outputStream.flush();
+                    outputStream.close();
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            // 关闭输入流
+            try {
+                if (null != inputStream) {
+                    inputStream.close();
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
     }
 }

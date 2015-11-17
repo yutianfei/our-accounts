@@ -18,7 +18,9 @@ import com.viewpagerindicator.CirclePageIndicator;
 import com.wangsy.ouraccounts.R;
 import com.wangsy.ouraccounts.adapter.IconFragmentPagerAdapter;
 import com.wangsy.ouraccounts.callback.IconSelectedCallback;
+import com.wangsy.ouraccounts.constants.IconConstants;
 import com.wangsy.ouraccounts.model.AccountModel;
+import com.wangsy.ouraccounts.model.IconModel;
 import com.wangsy.ouraccounts.ui.MainActivity;
 import com.wangsy.ouraccounts.ui.SetCommentDialogActivity;
 import com.wangsy.ouraccounts.ui.SetDatetimeDialogActivity;
@@ -43,6 +45,9 @@ public class AddFragment extends Fragment implements IconSelectedCallback {
     private String accountComment = "";
     private String accountDatetime = "";
     private String accountIconName;
+
+    private int typeId;
+    private int counts;
 
     @Override
     public void onAttach(Activity activity) {
@@ -124,12 +129,14 @@ public class AddFragment extends Fragment implements IconSelectedCallback {
     }
 
     @Override
-    public void onIconSelected(boolean isOut, String type, String iconName) {
-        accountIsOut = isOut;
-        accountType = type;
-        accountIconName = iconName;
+    public void onIconSelected(IconModel iconModel) {
+        accountIsOut = iconModel.isOut;
+        accountType = iconModel.type;
+        accountIconName = iconModel.iconImageToShow;
+        typeId = iconModel.getId();
+        counts = iconModel.getCounts();
 
-        if (isOut) {
+        if (iconModel.isOut) {
             etMoneyAmount.setTextColor(getResources().getColor(R.color.color_money_out));
         } else {
             etMoneyAmount.setTextColor(getResources().getColor(R.color.color_money_in));
@@ -176,6 +183,9 @@ public class AddFragment extends Fragment implements IconSelectedCallback {
         accountData.setType(accountType);
         accountData.setComment(accountComment);
         accountData.setIconImageName(accountIconName);
+
+        // 将选中的类型在数据库中的数目增加
+        IconConstants.updateTypeCountsInDatabase(typeId, counts + 1);
 
         // 保存数据
         boolean saveFlag = accountData.save();

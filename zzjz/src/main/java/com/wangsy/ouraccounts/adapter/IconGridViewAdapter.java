@@ -10,6 +10,7 @@ import android.widget.TextView;
 
 import com.wangsy.ouraccounts.R;
 import com.wangsy.ouraccounts.model.IconModel;
+import com.wangsy.ouraccounts.utils.Utils;
 
 import java.util.List;
 
@@ -66,7 +67,7 @@ public class IconGridViewAdapter extends BaseAdapter {
 
         viewHolder.tvIcon.setText(typeIcon.type);
         viewHolder.tvIcon.setTextColor(context.getResources().getColor(typeIcon.typeTextColor));
-        viewHolder.imgIcon.setImageResource(typeIcon.iconImageToShow);
+        viewHolder.imgIcon.setImageResource(Utils.getImageResourceId(context, typeIcon.iconImageToShow));
 
         return convertView;
     }

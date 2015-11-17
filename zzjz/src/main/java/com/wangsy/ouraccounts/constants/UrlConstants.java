@@ -40,7 +40,7 @@ public class UrlConstants {
     /**
      * 信息反馈
      */
-    public static final String HTTP_USER_FEEDBACK = "http://";
+    public static final String HTTP_USER_FEEDBACK = "http://133.130.89.237:8080/OurAccounts/feedback/feedback";
 
     /**
      * 上传错误日志

@@ -119,7 +119,7 @@ public class EditAccountActivity extends Activity implements View.OnClickListene
 
                 editAccount.setOut(iconModel.isOut);
                 editAccount.setType(iconModel.type);
-                editAccount.setIconImageName(iconModel.iconImageName);
+                editAccount.setIconImageName(iconModel.selectedIcon);
                 setEtAmountColor();
 
                 adapter.notifyDataSetChanged();
