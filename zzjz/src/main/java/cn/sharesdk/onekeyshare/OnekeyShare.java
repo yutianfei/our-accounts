@@ -589,7 +589,7 @@ public class OnekeyShare implements PlatformActionListener, Callback {
                         // 成功
                         int resId = getStringRes(context, "share_completed");
                         if (resId > 0) {
-                            showNotification(context.getString(resId));
+                            // showNotification(context.getString(resId));
                         }
                     }
                     break;
@@ -601,43 +601,43 @@ public class OnekeyShare implements PlatformActionListener, Callback {
                                 || "WechatFavoriteNotSupportedException".equals(expName)) {
                             int resId = getStringRes(context, "wechat_client_inavailable");
                             if (resId > 0) {
-                                showNotification(context.getString(resId));
+                                // showNotification(context.getString(resId));
                             }
                         } else if ("GooglePlusClientNotExistException".equals(expName)) {
                             int resId = getStringRes(context, "google_plus_client_inavailable");
                             if (resId > 0) {
-                                showNotification(context.getString(resId));
+                                // showNotification(context.getString(resId));
                             }
                         } else if ("QQClientNotExistException".equals(expName)) {
                             int resId = getStringRes(context, "qq_client_inavailable");
                             if (resId > 0) {
-                                showNotification(context.getString(resId));
+                                // showNotification(context.getString(resId));
                             }
                         } else if ("YixinClientNotExistException".equals(expName)
                                 || "YixinTimelineNotSupportedException".equals(expName)) {
                             int resId = getStringRes(context, "yixin_client_inavailable");
                             if (resId > 0) {
-                                showNotification(context.getString(resId));
+                                // showNotification(context.getString(resId));
                             }
                         } else if ("KakaoTalkClientNotExistException".equals(expName)) {
                             int resId = getStringRes(context, "kakaotalk_client_inavailable");
                             if (resId > 0) {
-                                showNotification(context.getString(resId));
+                                // showNotification(context.getString(resId));
                             }
                         } else if ("KakaoStoryClientNotExistException".equals(expName)) {
                             int resId = getStringRes(context, "kakaostory_client_inavailable");
                             if (resId > 0) {
-                                showNotification(context.getString(resId));
+                                // showNotification(context.getString(resId));
                             }
                         } else if ("WhatsAppClientNotExistException".equals(expName)) {
                             int resId = getStringRes(context, "whatsapp_client_inavailable");
                             if (resId > 0) {
-                                showNotification(context.getString(resId));
+                                // showNotification(context.getString(resId));
                             }
                         } else {
                             int resId = getStringRes(context, "share_failed");
                             if (resId > 0) {
-                                showNotification(context.getString(resId));
+                                // showNotification(context.getString(resId));
                             }
                         }
                     }
@@ -646,7 +646,7 @@ public class OnekeyShare implements PlatformActionListener, Callback {
                         // 取消
                         int resId = getStringRes(context, "share_canceled");
                         if (resId > 0) {
-                            showNotification(context.getString(resId));
+                            // showNotification(context.getString(resId));
                         }
                     }
                     break;
@@ -666,7 +666,7 @@ public class OnekeyShare implements PlatformActionListener, Callback {
 
     // 在状态栏提示分享操作
     private void showNotification(String text) {
-        // Toast.makeText(context, text, Toast.LENGTH_SHORT).show();
+        Toast.makeText(context, text, Toast.LENGTH_SHORT).show();
     }
 
     /**
